@@ -1,9 +1,8 @@
 package net.myacxy.retrotwitch.models;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
-public class Stream extends BaseModel
+public class Stream extends BaseModel<BaseModel.Links>
 {
     @SerializedName("game")
     public String game;
@@ -28,7 +27,13 @@ public class Stream extends BaseModel
     @SerializedName("_links")
     public Links links;
 
-    public class Preview extends BaseModel
+    @Override
+    public Links getLinks()
+    {
+        return links;
+    }
+
+    public class Preview
     {
         @SerializedName("small")
         public String small;
@@ -38,11 +43,16 @@ public class Stream extends BaseModel
         public String large;
         @SerializedName("template")
         public String template;
-    }
 
-    public class Links extends BaseModel
-    {
-        @SerializedName("self")
-        public String self;
+        @Override
+        public String toString()
+        {
+            return "{\n"
+                    + " \"small\": \"" + small + "\"\n"
+                    + " \"medium\": \"" + medium + "\"\n"
+                    + " \"large\": \"" + large + "\"\n"
+                    + " \"template\": \"" + template + "\"\n"
+                    + "}\n";
+        }
     }
 }
