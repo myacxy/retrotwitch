@@ -1,10 +1,8 @@
-package net.myacxy.retrotwitch.responses;
+package net.myacxy.retrotwitch.models;
 
 import com.google.gson.annotations.SerializedName;
-import net.myacxy.retrotwitch.models.BaseModel;
-import net.myacxy.retrotwitch.models.Stream;
 
-public class GetStreamResponse extends BaseModel<GetStreamResponse.Links>
+public class StreamContainer extends BaseModel<StreamContainer.Links>
 {
     @SerializedName("_links")
     public Links links;

@@ -6,7 +6,7 @@ import com.sun.istack.internal.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Streams extends BaseModel<Streams.Links>
+public class StreamsContainer extends BaseModel<StreamsContainer.Links>
 {
     @SerializedName("_total")
     public Integer total;

@@ -1,12 +1,8 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.api.Direction;
-import net.myacxy.retrotwitch.api.SortBy;
-import net.myacxy.retrotwitch.api.StreamType;
-import net.myacxy.retrotwitch.api.TwitchV3Service;
+import net.myacxy.retrotwitch.api.*;
 import net.myacxy.retrotwitch.models.*;
-import net.myacxy.retrotwitch.responses.GetStreamResponse;
-import net.myacxy.retrotwitch.utils.StringUtils;
+import net.myacxy.retrotwitch.utils.StringUtil;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -64,118 +60,134 @@ public class Caller
     }
 
     //<editor-fold desc="Public Methods">
-    public void getUserFollows(String url, final ResponseListener<Follows> listener)
+    public Call<FollowsContainer> getUserFollows(String url, final ResponseListener<FollowsContainer> listener)
     {
-        Call<Follows> response = mService.getUserFollows(url);
+        Call<FollowsContainer> call = mService.getUserFollows(url);
 
-        response.enqueue(new Callback<Follows>()
+        call.enqueue(new Callback<FollowsContainer>()
         {
             @Override
-            public void onResponse(Call<Follows> call, Response<Follows> response)
+            public void onResponse(Call<FollowsContainer> call, Response<FollowsContainer> response)
             {
                 listener.onSuccess(response.body());
             }
 
             @Override
-            public void onFailure(Call<Follows> call, Throwable t)
+            public void onFailure(Call<FollowsContainer> call, Throwable t)
             {
                 listener.onError();
             }
         });
+
+        return call;
     }
 
 
-    public void getUserFollows(String user, Integer limit, Integer offset, Direction direction, SortBy sortBy, final ResponseListener<Follows> listener)
+    public Call<FollowsContainer> getUserFollows(
+            final String user,
+            final Integer limit,
+            final Integer offset,
+            final Direction direction,
+            final SortBy sortBy,
+            final ResponseListener<FollowsContainer> listener)
     {
-        Call<Follows> response = mService.getUserFollows(user, limit, offset, direction, sortBy);
+        Call<FollowsContainer> call = mService.getUserFollows(user, limit, offset, direction, sortBy);
 
-        response.enqueue(new Callback<Follows>()
+        call.enqueue(new Callback<FollowsContainer>()
         {
             @Override
-            public void onResponse(Call<Follows> call, Response<Follows> response)
+            public void onResponse(Call<FollowsContainer> call, Response<FollowsContainer> response)
             {
-                listener.onSuccess(response.body());
+                FollowsContainer followsContainer = response.body();
+                followsContainer.user = user;
+                followsContainer.limit = limit == null ? TwitchV3Service.DEFAULT_LIMIT : limit;
+                followsContainer.offset = offset == null ? 0 : offset;
+                followsContainer.direction = direction == null ? Direction.DEFAULT : direction;
+                followsContainer.sortBy = sortBy == null ? SortBy.DEFAULT : sortBy;
+                listener.onSuccess(followsContainer);
             }
 
             @Override
-            public void onFailure(Call<Follows> call, Throwable t)
+            public void onFailure(Call<FollowsContainer> call, Throwable t)
             {
                 t.printStackTrace();
                 listener.onError();
             }
         });
+        return call;
     }
 
-    public void getUserFollowsRaw(String user, final ResponseListener<Follows> listener)
+    public void getAllUserFollows(final String user, final Direction direction, final SortBy sortBy, final ResponseListener<List<Follow>> listener)
     {
-        Call<Follows> response = mService.getUserFollows(user, null, null, null, null);
+        getAllUserFollowsRecursively(user, TwitchV3Service.MAX_LIMIT, 0, direction, sortBy, listener, new ArrayList<Follow>(TwitchV3Service.MAX_LIMIT));
+    }
 
-        response.enqueue(new Callback<Follows>()
+    private void getAllUserFollowsRecursively(
+            final String user,
+            final int limit,
+            final int offset,
+            final Direction direction,
+            final SortBy sortBy,
+            final ResponseListener<List<Follow>> listener,
+            final List<Follow> cache)
+    {
+        getUserFollows(user, limit, offset, direction, sortBy, new ResponseListener<FollowsContainer>()
         {
             @Override
-            public void onResponse(Call<Follows> call, Response<Follows> response)
+            public void onSuccess(FollowsContainer followsContainer)
             {
-                listener.onSuccess(response.body());
+                cache.addAll(followsContainer.follows);
+                if(followsContainer.total > offset + limit)
+                {
+                    getAllUserFollowsRecursively(user, limit, offset + limit, direction, sortBy, listener, cache);
+                }
+                else
+                {
+                    listener.onSuccess(cache);
+                }
             }
 
             @Override
-            public void onFailure(Call<Follows> call, Throwable t)
+            public void onError()
             {
                 listener.onError();
             }
         });
     }
 
-    public void getStream(String channel, final ResponseListener<Stream> listener)
+    public Call<StreamContainer> getStream(String channel, final ResponseListener<Stream> listener)
     {
-        Call<GetStreamResponse> response = mService.getStream(channel);
+        Call<StreamContainer> call = mService.getStream(channel);
 
-        response.enqueue(new Callback<GetStreamResponse>()
+        call.enqueue(new Callback<StreamContainer>()
         {
             @Override
-            public void onResponse(Call<GetStreamResponse> call, Response<GetStreamResponse> response)
+            public void onResponse(Call<StreamContainer> call, Response<StreamContainer> response)
             {
                 listener.onSuccess(response.body().stream);
             }
 
             @Override
-            public void onFailure(Call<GetStreamResponse> call, Throwable t)
+            public void onFailure(Call<StreamContainer> call, Throwable t)
             {
                 listener.onError();
             }
         });
+
+        return call;
     }
 
-    public void getStreamRaw(String channel, final ResponseListener<GetStreamResponse> listener)
-    {
-        Call<GetStreamResponse> response = mService.getStream(channel);
-
-        response.enqueue(new Callback<GetStreamResponse>()
-        {
-            @Override
-            public void onResponse(Call<GetStreamResponse> call, Response<GetStreamResponse> response)
-            {
-                listener.onSuccess(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<GetStreamResponse> call, Throwable t)
-            {
-                listener.onError();
-            }
-        });
-    }
-
-    public void getStreams(String game,
+    public Call<StreamsContainer> getStreams(String game,
                            List<Channel> channels,
                            Integer limit,
                            Integer offset,
                            String clientId,
                            StreamType streamType,
-                           final ResponseListener<Streams> listener)
+                           final ResponseListener<StreamsContainer> listener)
     {
         List<String> channelNames = null;
-        if(channels != null) {
+        if(channels != null)
+        {
             channelNames = new ArrayList<>(channels.size());
             for (Channel channel : channels)
             {
@@ -183,28 +195,30 @@ public class Caller
             }
         }
 
-        Call<Streams> response = mService.getStreams(
+        Call<StreamsContainer> call = mService.getStreams(
                 game,
-                channelNames != null ? StringUtils.joinStrings(channelNames, ",") : null,
+                channelNames != null ? StringUtil.joinStrings(channelNames, ",") : null,
                 limit,
                 offset,
                 clientId,
                 streamType);
 
-        response.enqueue(new Callback<Streams>()
+        call.enqueue(new Callback<StreamsContainer>()
         {
             @Override
-            public void onResponse(Call<Streams> call, Response<Streams> response)
+            public void onResponse(Call<StreamsContainer> call, Response<StreamsContainer> response)
             {
                 listener.onSuccess(response.body());
             }
 
             @Override
-            public void onFailure(Call<Streams> call, Throwable t)
+            public void onFailure(Call<StreamsContainer> call, Throwable t)
             {
                 listener.onError();
             }
         });
+
+        return null;
     }
     //</editor-fold>
 

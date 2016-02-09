@@ -2,15 +2,15 @@ package net.myacxy.retrotwitch.api;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
-import net.myacxy.retrotwitch.models.Follows;
-import net.myacxy.retrotwitch.models.Streams;
-import net.myacxy.retrotwitch.responses.GetStreamResponse;
+import net.myacxy.retrotwitch.models.*;
 import retrofit2.Call;
 import retrofit2.http.*;
 
 public interface TwitchV3Service
 {
     String BASE_URL = "https://api.twitch.tv/kraken/";
+    int DEFAULT_LIMIT = 25;
+    int MAX_LIMIT = 100;
 
     /**
      * @param limit default 25, max 100
@@ -19,7 +19,7 @@ public interface TwitchV3Service
      * @param sortBy default created_at
      */
     @GET("users/{user}/follows/channels")
-    Call<Follows> getUserFollows(
+    Call<FollowsContainer> getUserFollows(
             @NotNull @Path("user") String user,
             @Nullable @Query("limit") Integer limit,
             @Nullable @Query("offset") Integer offset,
@@ -29,17 +29,17 @@ public interface TwitchV3Service
     /**
      * used to move between paginated results
      *
-     * @param url   {@link net.myacxy.retrotwitch.models.Follows.Links#prev Follows.Links.prev}
-     *              or {@link net.myacxy.retrotwitch.models.Follows.Links#next Follows.Links.next}
+     * @param url   {@link FollowsContainer.Links#prev FollowsContainer.Links.prev}
+     *              or {@link FollowsContainer.Links#next FollowsContainer.Links.next}
      */
     @GET
-    Call<Follows> getUserFollows(@NotNull @Url String url);
+    Call<FollowsContainer> getUserFollows(@NotNull @Url String url);
 
     @GET("streams/{channel}")
-    Call<GetStreamResponse> getStream(@NotNull @Path("channel") String channel);
+    Call<StreamContainer> getStream(@NotNull @Path("channel") String channel);
 
     @GET("streams")
-    Call<Streams> getStreams(
+    Call<StreamsContainer> getStreams(
             @Nullable @Query("game") String game,
             @Nullable @Query("channel") String channelOrCommaSeparatedChannels,
             @Nullable @Query("limit") Integer limit,

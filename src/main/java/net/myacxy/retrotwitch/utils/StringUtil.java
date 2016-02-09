@@ -2,7 +2,7 @@ package net.myacxy.retrotwitch.utils;
 
 import java.util.List;
 
-public class StringUtils
+public class StringUtil
 {
     public static String joinStrings(List<String> strings, String separator)
     {
