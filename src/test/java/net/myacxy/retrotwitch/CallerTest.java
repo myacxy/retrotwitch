@@ -149,4 +149,29 @@ public class CallerTest extends BaseTest
         lock.await();
         System.out.println(lock.result);
     }
+
+    @Test
+    public void getAllStreams() throws Exception
+    {
+        final Lock<List<Stream>> lock = new Lock<>();
+
+        Caller.getInstance().getAllStreams(null, null, null, StreamType.LIVE, 500, new Caller.ResponseListener<List<Stream>>()
+        {
+            @Override
+            public void onSuccess(List<Stream> streams)
+            {
+                lock.succeed(streams);
+            }
+
+            @Override
+            public void onError()
+            {
+                lock.fail();
+            }
+        });
+
+        lock.await();
+        System.out.println(lock.result.size());
+        assertTrue(lock.result.size() == 500);
+    }
 }

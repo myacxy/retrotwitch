@@ -19,11 +19,11 @@ public class FollowsContainer extends BaseModel<FollowsContainer.Links>
     @SerializedName("follows")
     public List<Follow> follows = new ArrayList<>();
 
-    public String user = "";
-    public int limit = TwitchV3Service.DEFAULT_LIMIT;
-    public int offset = 0;
-    public Direction direction = Direction.DEFAULT;
-    public SortBy sortBy = SortBy.DEFAULT;
+    public transient String user = null;
+    public transient int limit = TwitchV3Service.DEFAULT_LIMIT;
+    public transient int offset = 0;
+    public transient Direction direction = Direction.DEFAULT;
+    public transient SortBy sortBy = SortBy.DEFAULT;
 
     @Override
     public Links getLinks()

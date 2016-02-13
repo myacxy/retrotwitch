@@ -20,18 +20,14 @@ import java.util.List;
 public class Caller
 {
     //<editor-fold desc="Members">
-    private static Caller sInstance;
+    private static Caller sInstance = new Caller();
 
     private final OkHttpClient mClient;
     private final Retrofit mRetrofit;
     private final TwitchV3Service mService;
     //</editor-fold>
 
-    public static Caller getInstance()
-    {
-        return sInstance == null ? sInstance = new Caller() : sInstance;
-    }
-
+    //<editor-fold desc="Constructor">
     private Caller()
     {
         mClient = new OkHttpClient.Builder()
@@ -58,9 +54,17 @@ public class Caller
 
         mService = mRetrofit.create(TwitchV3Service.class);
     }
+    //</editor-fold>
 
-    //<editor-fold desc="Public Methods">
-    public Call<FollowsContainer> getUserFollows(String url, final ResponseListener<FollowsContainer> listener)
+    public static Caller getInstance()
+    {
+        return sInstance;
+    }
+
+    //<editor-fold desc="User Follows">
+    public Call<FollowsContainer> getUserFollows(
+            String url,
+            final ResponseListener<FollowsContainer> listener)
     {
         Call<FollowsContainer> call = mService.getUserFollows(url);
 
@@ -117,7 +121,11 @@ public class Caller
         return call;
     }
 
-    public void getAllUserFollows(final String user, final Direction direction, final SortBy sortBy, final ResponseListener<List<Follow>> listener)
+    public void getAllUserFollows(
+            String user,
+            Direction direction,
+            SortBy sortBy,
+            ResponseListener<List<Follow>> listener)
     {
         getAllUserFollowsRecursively(user, TwitchV3Service.MAX_LIMIT, 0, direction, sortBy, listener, new ArrayList<Follow>(TwitchV3Service.MAX_LIMIT));
     }
@@ -154,7 +162,9 @@ public class Caller
             }
         });
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Stream(s)">
     public Call<StreamContainer> getStream(String channel, final ResponseListener<Stream> listener)
     {
         Call<StreamContainer> call = mService.getStream(channel);
@@ -177,13 +187,14 @@ public class Caller
         return call;
     }
 
-    public Call<StreamsContainer> getStreams(String game,
-                           List<Channel> channels,
-                           Integer limit,
-                           Integer offset,
-                           String clientId,
-                           StreamType streamType,
-                           final ResponseListener<StreamsContainer> listener)
+    public Call<StreamsContainer> getStreams(
+            final String game,
+            final List<Channel> channels,
+            final Integer limit,
+            final Integer offset,
+            final String clientId,
+            final StreamType streamType,
+            final ResponseListener<StreamsContainer> listener)
     {
         List<String> channelNames = null;
         if(channels != null)
@@ -208,6 +219,13 @@ public class Caller
             @Override
             public void onResponse(Call<StreamsContainer> call, Response<StreamsContainer> response)
             {
+                StreamsContainer streamsContainer = response.body();
+                streamsContainer.game = game;
+                streamsContainer.channels = channels;
+                streamsContainer.limit = limit == null ? TwitchV3Service.DEFAULT_LIMIT : limit;
+                streamsContainer.offset = offset == null ? 0 : offset;
+                streamsContainer.clientId = clientId;
+                streamsContainer.streamType = streamType == null ? StreamType.DEFAULT : streamType;
                 listener.onSuccess(response.body());
             }
 
@@ -217,8 +235,58 @@ public class Caller
                 listener.onError();
             }
         });
-
         return call;
+    }
+
+    public void getAllStreams(
+            String game,
+            List<Channel> channels,
+            String clientId,
+            StreamType streamType,
+            int resultLimit,
+            ResponseListener<List<Stream>> listener)
+    {
+        resultLimit = resultLimit < TwitchV3Service.DEFAULT_LIMIT ? TwitchV3Service.DEFAULT_LIMIT : resultLimit;
+        int perRequestLimit = TwitchV3Service.MAX_LIMIT;
+        if(resultLimit < perRequestLimit) {
+            perRequestLimit = resultLimit;
+        }
+        getAllStreamsRecursively(game, channels, perRequestLimit, 0, clientId, streamType, resultLimit, listener, new ArrayList<Stream>(resultLimit));
+    }
+
+    private void getAllStreamsRecursively(
+            final String game,
+            final List<Channel> channels,
+            final int perRequestLimit,
+            final int offset,
+            final String clientId,
+            final StreamType streamType,
+            final int resultLimit,
+            final ResponseListener<List<Stream>> listener,
+            final List<Stream> cache)
+    {
+        getStreams(game, channels, perRequestLimit, offset, clientId, streamType, new ResponseListener<StreamsContainer>()
+        {
+            @Override
+            public void onSuccess(StreamsContainer streamsContainer)
+            {
+                cache.addAll(streamsContainer.streams);
+                if(cache.size() < resultLimit && streamsContainer.total > offset + perRequestLimit)
+                {
+                    getAllStreamsRecursively(game, channels, perRequestLimit, offset + perRequestLimit, clientId, streamType, resultLimit, listener, cache);
+                }
+                else
+                {
+                    listener.onSuccess(cache);
+                }
+            }
+
+            @Override
+            public void onError()
+            {
+                listener.onError();
+            }
+        });
     }
     //</editor-fold>
 
