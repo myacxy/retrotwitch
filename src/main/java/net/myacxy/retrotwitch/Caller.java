@@ -61,23 +61,27 @@ public class Caller
         return sInstance;
     }
 
-    //<editor-fold desc="User Follows">
-    public Call<FollowsContainer> getUserFollows(
-            String url,
-            final ResponseListener<FollowsContainer> listener)
-    {
-        Call<FollowsContainer> call = mService.getUserFollows(url);
+    public TwitchV3Service getService() {
+        return mService;
+    }
 
-        call.enqueue(new Callback<FollowsContainer>()
+    //<editor-fold desc="User Follows">
+    public Call<UserFollowsContainer> getUserFollows(
+            String url,
+            final ResponseListener<UserFollowsContainer> listener)
+    {
+        Call<UserFollowsContainer> call = mService.getUserFollows(url);
+
+        call.enqueue(new Callback<UserFollowsContainer>()
         {
             @Override
-            public void onResponse(Call<FollowsContainer> call, Response<FollowsContainer> response)
+            public void onResponse(Call<UserFollowsContainer> call, Response<UserFollowsContainer> response)
             {
                 listener.onSuccess(response.body());
             }
 
             @Override
-            public void onFailure(Call<FollowsContainer> call, Throwable t)
+            public void onFailure(Call<UserFollowsContainer> call, Throwable t)
             {
                 listener.onError();
             }
@@ -87,34 +91,33 @@ public class Caller
     }
 
 
-    public Call<FollowsContainer> getUserFollows(
+    public Call<UserFollowsContainer> getUserFollows(
             final String user,
             final Integer limit,
             final Integer offset,
             final Direction direction,
             final SortBy sortBy,
-            final ResponseListener<FollowsContainer> listener)
+            final ResponseListener<UserFollowsContainer> listener)
     {
-        Call<FollowsContainer> call = mService.getUserFollows(user, limit, offset, direction, sortBy);
+        Call<UserFollowsContainer> call = mService.getUserFollows(user, limit, offset, direction, sortBy);
 
-        call.enqueue(new Callback<FollowsContainer>()
+        call.enqueue(new Callback<UserFollowsContainer>()
         {
             @Override
-            public void onResponse(Call<FollowsContainer> call, Response<FollowsContainer> response)
+            public void onResponse(Call<UserFollowsContainer> call, Response<UserFollowsContainer> response)
             {
-                FollowsContainer followsContainer = response.body();
-                followsContainer.user = user;
-                followsContainer.limit = limit == null ? TwitchV3Service.DEFAULT_LIMIT : limit;
-                followsContainer.offset = offset == null ? 0 : offset;
-                followsContainer.direction = direction == null ? Direction.DEFAULT : direction;
-                followsContainer.sortBy = sortBy == null ? SortBy.DEFAULT : sortBy;
-                listener.onSuccess(followsContainer);
+                UserFollowsContainer userFollowsContainer = response.body();
+                userFollowsContainer.user = user;
+                userFollowsContainer.limit = limit == null ? TwitchV3Service.DEFAULT_LIMIT : limit;
+                userFollowsContainer.offset = offset == null ? 0 : offset;
+                userFollowsContainer.direction = direction == null ? Direction.DEFAULT : direction;
+                userFollowsContainer.sortBy = sortBy == null ? SortBy.DEFAULT : sortBy;
+                listener.onSuccess(userFollowsContainer);
             }
 
             @Override
-            public void onFailure(Call<FollowsContainer> call, Throwable t)
+            public void onFailure(Call<UserFollowsContainer> call, Throwable t)
             {
-                t.printStackTrace();
                 listener.onError();
             }
         });
@@ -125,9 +128,9 @@ public class Caller
             String user,
             Direction direction,
             SortBy sortBy,
-            ResponseListener<List<Follow>> listener)
+            ResponseListener<List<UserFollow>> listener)
     {
-        getAllUserFollowsRecursively(user, TwitchV3Service.MAX_LIMIT, 0, direction, sortBy, listener, new ArrayList<Follow>(TwitchV3Service.MAX_LIMIT));
+        getAllUserFollowsRecursively(user, TwitchV3Service.MAX_LIMIT, 0, direction, sortBy, listener, new ArrayList<UserFollow>(TwitchV3Service.MAX_LIMIT));
     }
 
     private void getAllUserFollowsRecursively(
@@ -136,16 +139,16 @@ public class Caller
             final int offset,
             final Direction direction,
             final SortBy sortBy,
-            final ResponseListener<List<Follow>> listener,
-            final List<Follow> cache)
+            final ResponseListener<List<UserFollow>> listener,
+            final List<UserFollow> cache)
     {
-        getUserFollows(user, limit, offset, direction, sortBy, new ResponseListener<FollowsContainer>()
+        getUserFollows(user, limit, offset, direction, sortBy, new ResponseListener<UserFollowsContainer>()
         {
             @Override
-            public void onSuccess(FollowsContainer followsContainer)
+            public void onSuccess(UserFollowsContainer userFollowsContainer)
             {
-                cache.addAll(followsContainer.follows);
-                if(followsContainer.total > offset + limit)
+                cache.addAll(userFollowsContainer.userFollows);
+                if(userFollowsContainer.total > offset + limit)
                 {
                     getAllUserFollowsRecursively(user, limit, offset + limit, direction, sortBy, listener, cache);
                 }
@@ -205,6 +208,7 @@ public class Caller
                 channelNames.add(channel.name);
             }
         }
+
 
         Call<StreamsContainer> call = mService.getStreams(
                 game,
@@ -297,4 +301,12 @@ public class Caller
 
         void onError();
     }
+
+    public static abstract class CallBuilder<M extends BaseModel>
+    {
+        public abstract Call<M> build();
+        public abstract M buildAndExecute() throws IOException;
+        public abstract void buildAndEnqueue(ResponseListener<M> listener);
+    }
+    //</editor-fold>
 }

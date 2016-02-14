@@ -4,6 +4,7 @@ import net.myacxy.retrotwitch.api.*;
 import net.myacxy.retrotwitch.models.*;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +15,14 @@ public class CallerTest extends BaseTest
     @Test(timeout = 5000)
     public void getUserFollows() throws Exception
     {
-        final Lock<FollowsContainer> lock = new Lock<>();
+        final Lock<UserFollowsContainer> lock = new Lock<>();
 
-        Caller.getInstance().getUserFollows("myacxy", null, null, null, null, new Caller.ResponseListener<FollowsContainer>()
+        Caller.getInstance().getUserFollows("myacxy", null, null, null, null, new Caller.ResponseListener<UserFollowsContainer>()
         {
             @Override
-            public void onSuccess(FollowsContainer followsContainer)
+            public void onSuccess(UserFollowsContainer userFollowsContainer)
             {
-                lock.succeed(followsContainer);
+                lock.succeed(userFollowsContainer);
             }
 
             @Override
@@ -38,14 +39,14 @@ public class CallerTest extends BaseTest
     @Test(timeout = 10000)
     public void getAllUserFollows() throws Exception
     {
-        final Lock<List<Follow>> lock = new Lock<>();
+        final Lock<List<UserFollow>> lock = new Lock<>();
 
-        Caller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT, new Caller.ResponseListener<List<Follow>>()
+        Caller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT, new Caller.ResponseListener<List<UserFollow>>()
         {
             @Override
-            public void onSuccess(List<Follow> follows)
+            public void onSuccess(List<UserFollow> userFollows)
             {
-                lock.succeed(follows);
+                lock.succeed(userFollows);
             }
 
             @Override
@@ -89,15 +90,15 @@ public class CallerTest extends BaseTest
     {
         final Lock<StreamsContainer> lock = new Lock<>();
 
-        Caller.getInstance().getUserFollows("myacxy", null, null, null, null, new Caller.ResponseListener<FollowsContainer>()
+        Caller.getInstance().getUserFollows("myacxy", null, null, null, null, new Caller.ResponseListener<UserFollowsContainer>()
         {
             @Override
-            public void onSuccess(FollowsContainer followsContainer)
+            public void onSuccess(UserFollowsContainer userFollowsContainer)
             {
-                List<Channel> channels = new ArrayList<>(followsContainer.total);
-                for (Follow follow : followsContainer.follows)
+                List<Channel> channels = new ArrayList<>(userFollowsContainer.total);
+                for (UserFollow userFollow : userFollowsContainer.userFollows)
                 {
-                    channels.add(follow.channel);
+                    channels.add(userFollow.channel);
                 }
                 Caller.getInstance().getStreams(null, channels, null, null, null, null, new Caller.ResponseListener<StreamsContainer>()
                 {
@@ -173,5 +174,46 @@ public class CallerTest extends BaseTest
         lock.await();
         System.out.println(lock.result.size());
         assertTrue(lock.result.size() == 500);
+    }
+
+    @Test
+    public void getStreamsBuilder()
+    {
+        StreamsContainer streamsContainer = null;
+        try
+        {
+            streamsContainer = new StreamsContainer.CallBuilder().buildAndExecute();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        if (streamsContainer != null)
+        {
+            assertEquals(25, streamsContainer.streams.size());
+        }
+    }
+
+    @Test
+    public void getUserFollowsWithBuilder() throws Exception
+    {
+        final Lock<List<UserFollow>> lock = new Lock<>();
+
+        new UserFollowsContainer.CallBuilder("sodapoppin").withLimit(100).buildAndGetAll(new Caller.ResponseListener<List<UserFollow>>()
+        {
+            @Override
+            public void onSuccess(List<UserFollow> userFollows)
+            {
+                lock.succeed(userFollows);
+            }
+
+            @Override
+            public void onError()
+            {
+                lock.fail();
+            }
+        });
+
+        lock.await();
     }
 }

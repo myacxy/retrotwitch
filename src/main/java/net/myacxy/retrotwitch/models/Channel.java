@@ -49,6 +49,11 @@ public class Channel extends BaseModel<Channel.Links>
     @SerializedName("_links")
     public Links links;
 
+    private Channel()
+    {
+
+    }
+
     @Override
     public Links getLinks()
     {

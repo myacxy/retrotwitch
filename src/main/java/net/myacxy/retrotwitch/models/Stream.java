@@ -33,6 +33,11 @@ public class Stream extends BaseModel<BaseModel.Links>
         return links;
     }
 
+    private Stream()
+    {
+
+    }
+
     public class Preview
     {
         @SerializedName("small")

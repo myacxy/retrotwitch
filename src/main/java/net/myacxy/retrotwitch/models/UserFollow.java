@@ -2,7 +2,7 @@ package net.myacxy.retrotwitch.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Follow extends BaseModel<BaseModel.Links>
+public class UserFollow extends BaseModel<BaseModel.Links>
 {
     @SerializedName("created_at")
     public String createdAt;
@@ -12,6 +12,11 @@ public class Follow extends BaseModel<BaseModel.Links>
     public Boolean notifications;
     @SerializedName("channel")
     public Channel channel;
+
+    private UserFollow()
+    {
+
+    }
 
     @Override
     public Links getLinks()

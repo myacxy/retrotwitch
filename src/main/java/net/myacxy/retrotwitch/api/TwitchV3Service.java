@@ -19,7 +19,7 @@ public interface TwitchV3Service
      * @param sortBy default created_at
      */
     @GET("users/{user}/follows/channels")
-    Call<FollowsContainer> getUserFollows(
+    Call<UserFollowsContainer> getUserFollows(
             @NotNull @Path("user") String user,
             @Nullable @Query("limit") Integer limit,
             @Nullable @Query("offset") Integer offset,
@@ -29,11 +29,11 @@ public interface TwitchV3Service
     /**
      * used to move between paginated results
      *
-     * @param url   {@link FollowsContainer.Links#prev FollowsContainer.Links.prev}
-     *              or {@link FollowsContainer.Links#next FollowsContainer.Links.next}
+     * @param url   {@link UserFollowsContainer.Links#prev UserFollowsContainer.Links.prev}
+     *              or {@link UserFollowsContainer.Links#next UserFollowsContainer.Links.next}
      */
     @GET
-    Call<FollowsContainer> getUserFollows(@NotNull @Url String url);
+    Call<UserFollowsContainer> getUserFollows(@NotNull @Url String url);
 
     @GET("streams/{channel}")
     Call<StreamContainer> getStream(@NotNull @Path("channel") String channel);
