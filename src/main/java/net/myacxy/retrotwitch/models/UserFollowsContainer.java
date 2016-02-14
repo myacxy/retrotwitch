@@ -121,9 +121,7 @@ public class UserFollowsContainer extends BaseModel<UserFollowsContainer.Links>
         @Override
         public Call<UserFollowsContainer> build()
         {
-            return Caller.getInstance()
-                    .getService()
-                    .getUserFollows(user, limit, offset, direction, sortBy);
+            return build(user, limit, offset, direction, sortBy);
         }
 
         private Call<UserFollowsContainer> build(String user, int limit, int offset, Direction direction, SortBy sortBy)
@@ -176,32 +174,28 @@ public class UserFollowsContainer extends BaseModel<UserFollowsContainer.Links>
                 final Caller.ResponseListener<List<UserFollow>> listener,
                 final List<UserFollow> cache)
         {
-            Caller.getInstance()
-                    .getService()
-                    .getUserFollows(user, limit, offset, direction, sortBy)
-                    .enqueue(new Callback<UserFollowsContainer>()
+            build(user, limit, offset, direction, sortBy).enqueue(new Callback<UserFollowsContainer>()
+            {
+                @Override
+                public void onResponse(Call<UserFollowsContainer> call, Response<UserFollowsContainer> response)
+                {
+                    cache.addAll(response.body().userFollows);
+                    if(response.body().total > offset + limit)
                     {
-                        @Override
-                        public void onResponse(Call<UserFollowsContainer> call, Response<UserFollowsContainer> response)
-                        {
-                            cache.addAll(response.body().userFollows);
-                            System.out.println(response.body().total);
-                            if(response.body().total > offset + limit)
-                            {
-                                getAllUserFollowsRecursively(user, limit, offset + limit, direction, sortBy, listener, cache);
-                            }
-                            else
-                            {
-                                listener.onSuccess(cache);
-                            }
-                        }
+                        getAllUserFollowsRecursively(user, limit, offset + limit, direction, sortBy, listener, cache);
+                    }
+                    else
+                    {
+                        listener.onSuccess(cache);
+                    }
+                }
 
-                        @Override
-                        public void onFailure(Call<UserFollowsContainer> call, Throwable t)
-                        {
-                            listener.onError();
-                        }
-                    });
+                @Override
+                public void onFailure(Call<UserFollowsContainer> call, Throwable t)
+                {
+                    listener.onError();
+                }
+            });
         }
 
         private void assignCallParameters(UserFollowsContainer userFollowsContainer)

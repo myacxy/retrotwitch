@@ -34,11 +34,12 @@ public class StreamContainer extends BaseModel<StreamContainer.Links>
 
     public static class CallBuilder extends Caller.CallBuilder<StreamContainer>
     {
-        final String channel;
+        String channel = null;
 
-        public CallBuilder(String channel)
+        public CallBuilder withChannel(String channel)
         {
             this.channel = channel;
+            return this;
         }
 
         @Override
