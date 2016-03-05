@@ -68,7 +68,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                     });
         }
 
-        return FluentCaller.getInstance();
+        return FluentCaller.INSTANCE;
     }
 
     private Call<UserFollowsContainer> createCall(String user, int limit, int offset, Direction direction, SortBy sortBy)

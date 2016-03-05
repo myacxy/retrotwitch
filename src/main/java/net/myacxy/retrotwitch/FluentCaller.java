@@ -2,20 +2,11 @@ package net.myacxy.retrotwitch;
 
 import net.myacxy.retrotwitch.resources.StreamResource;
 import net.myacxy.retrotwitch.resources.UserFollowsResource;
+import okhttp3.logging.HttpLoggingInterceptor;
 
-public class FluentCaller
+public enum FluentCaller
 {
-    private static FluentCaller sInstance = new FluentCaller();
-
-    private FluentCaller()
-    {
-
-    }
-
-    public static FluentCaller getInstance()
-    {
-        return sInstance;
-    }
+    INSTANCE;
 
     public UserFollowsResource.Builder userFollows(String user)
     {

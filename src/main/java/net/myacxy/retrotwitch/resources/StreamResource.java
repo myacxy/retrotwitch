@@ -50,6 +50,6 @@ public class StreamResource extends BaseSingleResource<StreamResource, Stream>
             }
         });
 
-        return FluentCaller.getInstance();
+        return FluentCaller.INSTANCE;
     }
 }

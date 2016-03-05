@@ -43,8 +43,8 @@ public abstract class BaseTest
     {
         private final CountDownLatch latch;
 
-        public ConcurrentHashMap<String, List<? extends BaseModel>> multiResults = new ConcurrentHashMap<>();
-        public ConcurrentHashMap<String, ? super BaseModel> singleResults = new ConcurrentHashMap<>();
+        public HashMap<String, List<? extends BaseModel>> multiResults = new HashMap<>();
+        public HashMap<String, ? super BaseModel> singleResults = new HashMap<>();
         private boolean mHasFailed;
 
         public MultiLock(int count)
@@ -60,19 +60,19 @@ public abstract class BaseTest
             }
         }
 
-        public <M extends BaseModel> void succeed(String key, M result)
+        public synchronized  <M extends BaseModel> void succeed(String key, M result)
         {
             singleResults.put(key, result);
             latch.countDown();
         }
 
-        public void succeed(String key, List<? extends BaseModel> result)
+        public synchronized void succeed(String key, List<? extends BaseModel> result)
         {
             multiResults.put(key, result);
             latch.countDown();
         }
 
-        public void fail()
+        public synchronized void fail()
         {
             mHasFailed = true;
             latch.notifyAll();

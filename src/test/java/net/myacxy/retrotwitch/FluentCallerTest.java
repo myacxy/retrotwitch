@@ -3,25 +3,27 @@ package net.myacxy.retrotwitch;
 import net.myacxy.retrotwitch.api.*;
 import net.myacxy.retrotwitch.models.*;
 import net.myacxy.retrotwitch.resources.*;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
 
 public class FluentCallerTest extends BaseTest
 {
 
-    @Test
+    @Test(timeout = 15000)
     public void stream() throws Exception
     {
         final MultiLock multiLock = new MultiLock(3);
 
-        FluentCaller.getInstance()
-                .stream("ladyydeathstrike").build().enqueue(new Caller.ResponseListener<Stream>()
+        RetroTwitch.configure().setLogLevel(HttpLoggingInterceptor.Level.BASIC).apply().getCaller()
+                .stream("enns").build().enqueue(new Caller.ResponseListener<Stream>()
                     {
                         @Override
                         public void onSuccess(Stream stream)
@@ -66,8 +68,17 @@ public class FluentCallerTest extends BaseTest
 
         multiLock.await();
 
-        System.out.println(multiLock.getSingleResult("stream", Stream.class).channel.name);
-        System.out.println(multiLock.getMultiResult("limitedFollows", ArrayList.class).size());
-        System.out.println(multiLock.getMultiResult("allFollows", ArrayList.class).size());
+        Stream enns = multiLock.getSingleResult("stream", Stream.class);
+        if(enns != null) {
+            assertThat(enns.channel.name, is("enns"));
+        }
+
+        ArrayList<UserFollow> myacxyLimitedFollows = multiLock.getMultiResult("limitedFollows", ArrayList.class);
+        assertThat(myacxyLimitedFollows, is(notNullValue()));
+        assertThat(myacxyLimitedFollows.size() == 5, is(true));
+
+        ArrayList<UserFollow> sodapoppinAllFollows = multiLock.getMultiResult("allFollows", ArrayList.class);
+        assertThat(sodapoppinAllFollows, is(notNullValue()));
+        assertThat(sodapoppinAllFollows.size() > 350, is(true));
     }
 }

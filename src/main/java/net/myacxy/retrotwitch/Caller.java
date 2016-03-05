@@ -28,10 +28,9 @@ public class Caller
     //</editor-fold>
 
     //<editor-fold desc="Constructor">
-    private Caller()
-    {
+    private Caller(HttpLoggingInterceptor.Level level) {
         mClient = new OkHttpClient.Builder()
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(level))
                 .addInterceptor(new Interceptor()
                 {
                     @Override
@@ -54,11 +53,20 @@ public class Caller
 
         mService = mRetrofit.create(TwitchV3Service.class);
     }
+
+    private Caller()
+    {
+        this(HttpLoggingInterceptor.Level.NONE);
+    }
     //</editor-fold>
 
     public static Caller getInstance()
     {
         return sInstance;
+    }
+
+    public static Caller newInstance(HttpLoggingInterceptor.Level level) {
+        return sInstance = new Caller(level);
     }
 
     public TwitchV3Service getService() {
