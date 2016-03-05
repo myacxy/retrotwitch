@@ -1,12 +1,12 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.api.*;
+import net.myacxy.retrotwitch.helpers.Lock;
+import net.myacxy.retrotwitch.helpers.MultiLock;
 import net.myacxy.retrotwitch.models.*;
-import net.myacxy.retrotwitch.resources.*;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,64 +14,80 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
 
-public class FluentCallerTest extends BaseTest
+public class FluentCallerTest
 {
 
-    @Test(timeout = 15000)
+    @Before
+    public void setUp()
+    {
+        RetroTwitch.INSTANCE.configure()
+                .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
+                .apply();
+    }
+
+    @Test(timeout = 5000)
     public void stream() throws Exception
     {
-        final MultiLock multiLock = new MultiLock(3);
+        final Lock<Stream> lock = new Lock<>();
 
-        RetroTwitch.configure().setLogLevel(HttpLoggingInterceptor.Level.BASIC).apply().getCaller()
-                .stream("enns").build().enqueue(new Caller.ResponseListener<Stream>()
-                    {
-                        @Override
-                        public void onSuccess(Stream stream)
-                        {
-                            multiLock.succeed("stream", stream);
-                        }
+        RetroTwitch.INSTANCE.getCaller().stream("enns").build().enqueue(new Caller.ResponseListener<Stream>()
+        {
+            @Override
+            public void onSuccess(Stream stream)
+            {
+                lock.succeed(stream);
+            }
 
-                        @Override
-                        public void onError()
-                        {
-                            multiLock.fail();
-                        }
-                    })
-                .userFollows("myacxy").limited().withLimit(5).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
-                    {
-                        @Override
-                        public void onSuccess(List<UserFollow> userFollows)
-                        {
-                            multiLock.succeed("limitedFollows", userFollows);
-                        }
+            @Override
+            public void onError()
+            {
+                lock.fail();
+            }
+        });
 
-                        @Override
-                        public void onError()
-                        {
-                            multiLock.fail();
-                        }
-                    })
+        lock.await();
+
+        if (lock.result != null)
+        {
+            assertThat(lock.result.channel.name, is("enns"));
+        }
+    }
+
+    @Test(timeout = 10000)
+    public void userFollows() throws Exception
+    {
+        final MultiLock multiLock = new MultiLock(2);
+
+        RetroTwitch.INSTANCE.getCaller().userFollows("myacxy").limited().withLimit(5).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
+        {
+            @Override
+            public void onSuccess(List<UserFollow> userFollows)
+            {
+                multiLock.succeed("limitedFollows", userFollows);
+            }
+
+            @Override
+            public void onError()
+            {
+                multiLock.fail();
+            }
+        })
                 .userFollows("sodapoppin").all().withLimit(100).withMaximum(100).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
-                    {
-                        @Override
-                        public void onSuccess(List<UserFollow> userFollows)
-                        {
-                            multiLock.succeed("allFollows", userFollows);
-                        }
+        {
+            @Override
+            public void onSuccess(List<UserFollow> userFollows)
+            {
+                multiLock.succeed("allFollows", userFollows);
+            }
 
-                        @Override
-                        public void onError()
-                        {
-                            multiLock.fail();
-                        }
-                    });
+            @Override
+            public void onError()
+            {
+                multiLock.fail();
+            }
+        });
 
         multiLock.await();
-
-        Stream enns = multiLock.getSingleResult("stream", Stream.class);
-        if(enns != null) {
-            assertThat(enns.channel.name, is("enns"));
-        }
 
         ArrayList<UserFollow> myacxyLimitedFollows = multiLock.getMultiResult("limitedFollows", ArrayList.class);
         assertThat(myacxyLimitedFollows, is(notNullValue()));

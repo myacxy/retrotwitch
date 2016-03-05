@@ -1,6 +1,7 @@
 package net.myacxy.retrotwitch;
 
 import net.myacxy.retrotwitch.api.*;
+import net.myacxy.retrotwitch.helpers.Lock;
 import net.myacxy.retrotwitch.models.*;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class CallerTest extends BaseTest
+public class CallerTest
 {
     @Test(timeout = 5000)
     public void getUserFollows() throws Exception
