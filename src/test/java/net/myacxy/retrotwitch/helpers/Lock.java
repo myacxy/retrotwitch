@@ -7,12 +7,11 @@ public class Lock<T>
     public T result;
     private boolean mHasFailed;
 
-    public void await() throws Exception
+    public synchronized void await() throws Exception
     {
-        synchronized (this) {
-            if(mHasFailed) {
-                Assert.fail();
-            }
+        wait();
+        if(mHasFailed) {
+            Assert.fail();
         }
     }
 
