@@ -57,6 +57,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                         public void onResponse(Call<UserFollowsContainer> call, Response<UserFollowsContainer> response)
                         {
                             UserFollowsContainer userFollowsContainer = response.body();
+                            builder.total = userFollowsContainer.total;
                             listener.onSuccess(userFollowsContainer.userFollows);
                         }
 
@@ -69,6 +70,38 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
         }
 
         return FluentCaller.INSTANCE;
+    }
+
+    public void getPrevious(Caller.ResponseListener<List<UserFollow>> listener)
+    {
+        if(hasPrevious())
+        {
+            builder.offset = builder.offset - builder.limit;
+            enqueue(listener);
+            return;
+        }
+        listener.onError();
+    }
+
+    public void getNext(Caller.ResponseListener<List<UserFollow>> listener)
+    {
+        if(hasNext())
+        {
+            builder.offset = builder.offset + builder.limit;
+            enqueue(listener);
+            return;
+        }
+        listener.onError();
+    }
+
+    private boolean hasPrevious()
+    {
+        return builder.total != null && builder.offset > 0 && builder.offset < builder.total;
+    }
+
+    private boolean hasNext()
+    {
+        return builder.total != null && builder.total > builder.offset + builder.limit;
     }
 
     private Call<UserFollowsContainer> createCall(String user, int limit, int offset, Direction direction, SortBy sortBy)
@@ -102,6 +135,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                         }
                         else
                         {
+                            builder.total = response.body().total;
                             listener.onSuccess(cache);
                         }
                     }
@@ -117,6 +151,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
     private static abstract class BuilderBase
     {
         final String user;
+        Integer total = null;
         int limit = TwitchV3Service.DEFAULT_LIMIT;
         int offset = 0;
         Direction direction = Direction.DEFAULT;

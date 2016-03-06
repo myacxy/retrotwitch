@@ -72,7 +72,7 @@ public class UserFollowsContainer extends BaseModel<UserFollowsContainer.Links>
 
     public boolean hasNext()
     {
-        return total != null && total < offset + limit;
+        return total != null && total > offset + limit;
     }
 
     public class Links extends BaseModel.Links

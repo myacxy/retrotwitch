@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <!--User Name-->
+    <EditText
+        android:id="@+id/et_uf_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:hint="User name"
+        style="@style/EditText"
+        />
+
+    <!--Search-->
+    <Button
+        android:id="@+id/btn_uf_search"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_below="@id/et_uf_user_name"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:text="Search"
+        />
+
+    <!--Total-->
+    <TextView
+        android:id="@+id/tv_uf_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_uf_search"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Total: 0"
+        />
+
+    <!--Currently Loaded-->
+    <TextView
+        android:id="@+id/tv_uf_currently_loaded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_uf_search"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Currently loaded: 0"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tv_uf_total"
+        android:layout_marginTop="8dp"
+        >
+
+        <!--Results-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_uf_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="100dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            />
+
+        <!--Progress-->
+        <ProgressBar
+            android:id="@+id/pb_uf_progress"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:indeterminate="true"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+
+    </FrameLayout>
+
+</RelativeLayout>
