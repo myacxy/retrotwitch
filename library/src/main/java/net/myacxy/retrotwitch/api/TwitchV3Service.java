@@ -1,7 +1,5 @@
 package net.myacxy.retrotwitch.api;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import net.myacxy.retrotwitch.models.*;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -20,11 +18,11 @@ public interface TwitchV3Service
      */
     @GET("users/{user}/follows/channels")
     Call<UserFollowsContainer> getUserFollows(
-            @NotNull @Path("user") String user,
-            @Nullable @Query("limit") Integer limit,
-            @Nullable @Query("offset") Integer offset,
-            @Nullable @Query("direction") Direction direction,
-            @Nullable @Query("sortby") SortBy sortBy);
+            @Path("user") String user,
+            @Query("limit") Integer limit,
+            @Query("offset") Integer offset,
+            @Query("direction") Direction direction,
+            @Query("sortby") SortBy sortBy);
 
     /**
      * used to move between paginated results
@@ -33,17 +31,17 @@ public interface TwitchV3Service
      *              or {@link UserFollowsContainer.Links#next UserFollowsContainer.Links.next}
      */
     @GET
-    Call<UserFollowsContainer> getUserFollows(@NotNull @Url String url);
+    Call<UserFollowsContainer> getUserFollows(@Url String url);
 
     @GET("streams/{channel}")
-    Call<StreamContainer> getStream(@NotNull @Path("channel") String channel);
+    Call<StreamContainer> getStream( @Path("channel") String channel);
 
     @GET("streams")
     Call<StreamsContainer> getStreams(
-            @Nullable @Query("game") String game,
-            @Nullable @Query("channel") String channelOrCommaSeparatedChannels,
-            @Nullable @Query("limit") Integer limit,
-            @Nullable @Query("offset") Integer offset,
-            @Nullable @Query("client_id") String clientId,
-            @Nullable @Query("stream_type") StreamType streamType);
+            @Query("game") String game,
+            @Query("channel") String channelOrCommaSeparatedChannels,
+            @Query("limit") Integer limit,
+            @Query("offset") Integer offset,
+            @Query("client_id") String clientId,
+            @Query("stream_type") StreamType streamType);
 }

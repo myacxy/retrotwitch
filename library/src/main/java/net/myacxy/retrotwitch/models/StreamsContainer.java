@@ -1,7 +1,6 @@
 package net.myacxy.retrotwitch.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.sun.istack.internal.Nullable;
 import net.myacxy.retrotwitch.Caller;
 import net.myacxy.retrotwitch.api.StreamType;
 import net.myacxy.retrotwitch.api.TwitchV3Service;
@@ -82,7 +81,6 @@ public class StreamsContainer extends BaseModel<StreamsContainer.Links>
         public String summary;
         @SerializedName("followed")
         public String followed;
-        @Nullable
         @SerializedName("prev")
         public String prev;
         @SerializedName("next")

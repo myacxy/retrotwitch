@@ -1,7 +1,6 @@
 package net.myacxy.retrotwitch.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.sun.istack.internal.Nullable;
 import net.myacxy.retrotwitch.Caller;
 import net.myacxy.retrotwitch.api.Direction;
 import net.myacxy.retrotwitch.api.SortBy;
@@ -78,7 +77,6 @@ public class UserFollowsContainer extends BaseModel<UserFollowsContainer.Links>
 
     public class Links extends BaseModel.Links
     {
-        @Nullable
         @SerializedName("prev")
         public String prev;
         @SerializedName("next")

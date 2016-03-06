@@ -1,6 +1,5 @@
 package net.myacxy.retrotwitch.resources;
 
-import com.sun.istack.internal.NotNull;
 import net.myacxy.retrotwitch.Caller;
 import net.myacxy.retrotwitch.FluentCaller;
 import net.myacxy.retrotwitch.models.Stream;
@@ -22,7 +21,7 @@ public class StreamResource extends BaseSingleResource<StreamResource, Stream>
     {
         final String channel;
 
-        public Builder(@NotNull String channel)
+        public Builder(String channel)
         {
             this.channel = channel;
         }

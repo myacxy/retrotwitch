@@ -1,6 +1,5 @@
 package net.myacxy.retrotwitch;
 
-import com.sun.istack.internal.NotNull;
 import net.myacxy.retrotwitch.api.Scope;
 import net.myacxy.retrotwitch.api.TwitchV3Service;
 import net.myacxy.retrotwitch.utils.StringUtil;
@@ -35,7 +34,7 @@ public enum RetroTwitch
         String clientId = "75gzbgqhk0tg6dhjbqtsphmy8sdayrr";
         String redirectUri = "http://localhost";
 
-        public AuthenticationBuilder addScopes(@NotNull Scope... scopes)
+        public AuthenticationBuilder addScopes(Scope... scopes)
         {
             this.scopes = scopes;
             return this;
