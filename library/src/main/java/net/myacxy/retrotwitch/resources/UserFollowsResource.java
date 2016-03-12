@@ -11,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,6 +105,10 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
         return builder.total != null && builder.total > builder.offset + builder.limit;
     }
 
+    public Integer getTotal() {
+        return builder.total;
+    }
+
     private Call<UserFollowsContainer> createCall(String user, int limit, int offset, Direction direction, SortBy sortBy)
     {
         return Caller.getInstance()
@@ -128,6 +133,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                     public void onResponse(Call<UserFollowsContainer> call, Response<UserFollowsContainer> response)
                     {
                         cache.addAll(response.body().userFollows);
+                        builder.total = response.body().total;
                         // TODO maximum
                         if(cache.size() != response.body().total && response.body().total > offset + limit)
                         {
@@ -135,7 +141,6 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                         }
                         else
                         {
-                            builder.total = response.body().total;
                             listener.onSuccess(cache);
                         }
                     }
@@ -148,7 +153,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                 });
     }
 
-    private static abstract class BuilderBase
+    private static abstract class BuilderBase implements Serializable
     {
         final String user;
         Integer total = null;
@@ -163,7 +168,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
         }
     }
 
-    public static class Builder extends BuilderBase implements BaseSingleResource.Start
+    public static class Builder extends BuilderBase
     {
         public Builder(String user)
         {

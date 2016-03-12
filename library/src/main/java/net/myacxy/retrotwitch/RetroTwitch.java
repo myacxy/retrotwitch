@@ -28,11 +28,16 @@ public enum RetroTwitch
         return FluentCaller.INSTANCE;
     }
 
-    protected static class AuthenticationBuilder
+    public static class AuthenticationBuilder
     {
         Scope[] scopes = new Scope[0];
-        String clientId = "75gzbgqhk0tg6dhjbqtsphmy8sdayrr";
+        String clientId = "";
         String redirectUri = "http://localhost";
+
+        public AuthenticationBuilder setClientId(String clientId) {
+            this.clientId = clientId;
+            return this;
+        }
 
         public AuthenticationBuilder addScopes(Scope... scopes)
         {
@@ -79,7 +84,7 @@ public enum RetroTwitch
         }
     }
 
-    protected static class ConfigurationBuilder
+    public static class ConfigurationBuilder
     {
         private HttpLoggingInterceptor.Level level = HttpLoggingInterceptor.Level.NONE;
 

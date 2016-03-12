@@ -17,6 +17,7 @@ public class RetroTwitchTest
     public void authenticateWithCallback() throws Exception
     {
         RetroTwitch.INSTANCE.authenticate()
+                .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
                 .addScopes(Scope.USER_READ)
                 .build(new RetroTwitch.AuthenticationBuilder.Callback()
@@ -34,6 +35,7 @@ public class RetroTwitchTest
     {
 
         String url = RetroTwitch.INSTANCE.authenticate()
+                .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
                 .addScopes(Scope.USER_READ)
                 .buildUrl();
