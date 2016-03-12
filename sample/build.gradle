@@ -4,15 +4,11 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.0.0-beta6'
     }
-}
-
-repositories {
-    mavenCentral()
-    maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 android {
@@ -35,10 +31,12 @@ android {
 }
 
 dependencies {
+    Map<String, String> dependencies = rootProject.ext.dependencies;
+
     compile project(':library')
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:design:23.2.0'
-    compile 'com.android.support:recyclerview-v7:23.2.0'
-    testCompile 'junit:junit:4.12'
+    compile dependencies.butterKnife
+    compile dependencies.appCompat
+    compile dependencies.design
+    compile dependencies.recyclerView
+    testCompile dependencies.junit
 }
