@@ -3,16 +3,17 @@ package net.myacxy.retrotwitch;
 import net.myacxy.retrotwitch.helpers.Lock;
 import net.myacxy.retrotwitch.helpers.MultiLock;
 import net.myacxy.retrotwitch.models.*;
+
 import okhttp3.logging.HttpLoggingInterceptor;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 
 public class FluentCallerTest
 {

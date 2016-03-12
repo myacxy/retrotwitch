@@ -71,11 +71,15 @@ public class UserFollowsFragment extends Fragment
 
         mSearchResults.addOnScrollListener(new ScrollListener());
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null)
+        {
             ArrayList<UserFollow> userFollows = (ArrayList<UserFollow>) savedInstanceState.getSerializable("test");
             mAdapter.setUserFollows(userFollows);
             mUserFollowsResource = (UserFollowsResource) savedInstanceState.getSerializable("test2");
             setInformation(mUserFollowsResource.getTotal(), userFollows.size());
+        } else
+        {
+            setInformation(0, 0);
         }
     }
 
@@ -101,6 +105,8 @@ public class UserFollowsFragment extends Fragment
         if (!StringUtil.isBlank(userName))
         {
             showProgress(true);
+            mAdapter.getUserFollows().clear();
+            setInformation(0, 0);
             mUserFollowsResource = RetroTwitch.INSTANCE.getCaller()
                     .userFollows(userName)
                     .limited()
@@ -194,11 +200,13 @@ public class UserFollowsFragment extends Fragment
             return mUserFollows.size() + (mShowProgress ? 1 : 0);
         }
 
-        public int getRealItemCount() {
+        public int getRealItemCount()
+        {
             return mUserFollows.size();
         }
 
-        public ArrayList<UserFollow> getUserFollows() {
+        public ArrayList<UserFollow> getUserFollows()
+        {
             return mUserFollows;
         }
 

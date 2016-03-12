@@ -4,8 +4,16 @@ import net.myacxy.retrotwitch.api.Scope;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
+
 public class RetroTwitchTest
 {
+    private String mAuthenticationUrl = "https://api.twitch.tv/kraken/oauth2/authorize"
+            + "?response_type=token"
+            + "&redirect_uri=http://localhost/retrotwitchtest"
+            + "&client_id=75gzbgqhk0tg6dhjbqtsphmy8sdayrr"
+            + "&scope=user_read";
 
     @Before
     public void setUp() throws Exception
@@ -25,7 +33,7 @@ public class RetroTwitchTest
                     @Override
                     public void authenticate(String url)
                     {
-                        System.out.println(url);
+                        assertThat(url, equalTo(mAuthenticationUrl));
                     }
                 });
     }
@@ -40,6 +48,6 @@ public class RetroTwitchTest
                 .addScopes(Scope.USER_READ)
                 .buildUrl();
 
-        System.out.println(url);
+        assertThat(url, equalTo(mAuthenticationUrl));
     }
 }

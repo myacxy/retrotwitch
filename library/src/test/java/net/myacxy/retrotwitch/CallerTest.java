@@ -3,6 +3,7 @@ package net.myacxy.retrotwitch;
 import net.myacxy.retrotwitch.api.*;
 import net.myacxy.retrotwitch.helpers.Lock;
 import net.myacxy.retrotwitch.models.*;
+
 import org.junit.Test;
 
 import java.io.IOException;

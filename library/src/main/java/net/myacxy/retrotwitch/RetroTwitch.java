@@ -1,11 +1,10 @@
 package net.myacxy.retrotwitch;
 
 import net.myacxy.retrotwitch.api.Scope;
-import net.myacxy.retrotwitch.api.TwitchV3Service;
 import net.myacxy.retrotwitch.utils.StringUtil;
+
 import okhttp3.HttpUrl;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
 
 import java.util.ArrayList;
 
@@ -34,7 +33,8 @@ public enum RetroTwitch
         String clientId = "";
         String redirectUri = "http://localhost";
 
-        public AuthenticationBuilder setClientId(String clientId) {
+        public AuthenticationBuilder setClientId(String clientId)
+        {
             this.clientId = clientId;
             return this;
         }
