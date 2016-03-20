@@ -177,45 +177,4 @@ public class CallerTest
         System.out.println(lock.result.size());
         assertTrue(lock.result.size() == 500);
     }
-
-    @Test
-    public void getStreamsBuilder()
-    {
-        StreamsContainer streamsContainer = null;
-        try
-        {
-            streamsContainer = new StreamsContainer.CallBuilder().buildAndExecute();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        if (streamsContainer != null)
-        {
-            assertEquals(25, streamsContainer.streams.size());
-        }
-    }
-
-    @Test
-    public void getUserFollowsWithBuilder() throws Exception
-    {
-        final Lock<List<UserFollow>> lock = new Lock<>();
-
-        new UserFollowsContainer.CallBuilder("sodapoppin").withLimit(100).buildAndGetAll(new Caller.ResponseListener<List<UserFollow>>()
-        {
-            @Override
-            public void onSuccess(List<UserFollow> userFollows)
-            {
-                lock.succeed(userFollows);
-            }
-
-            @Override
-            public void onError()
-            {
-                lock.fail();
-            }
-        });
-
-        lock.await();
-    }
 }

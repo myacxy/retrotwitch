@@ -1,1 +1,1 @@
-include ':sample', ':library'
+include ':samples:android', ':library', ':adapters:rxjava'

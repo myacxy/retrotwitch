@@ -12,15 +12,20 @@ ext {
     sourceCompatibility = JavaVersion.VERSION_1_7
 
     supportLibraryVersion = '23.2.0'
-    retrofitVersion = '2.0.0-SNAPSHOT'
+    retrofitVersion = '2.0.0'
 
     dependencies = [
+            // common
             gson: 'com.google.code.gson:gson:2.5',
             retrofit: "com.squareup.retrofit2:retrofit:$retrofitVersion",
             retrofitConverterGson: "com.squareup.retrofit2:converter-gson:$retrofitVersion",
-            okHttpLoggingInterceptor: 'com.squareup.okhttp3:logging-interceptor:3.0.0-RC1',
+            okHttpLoggingInterceptor: 'com.squareup.okhttp3:logging-interceptor:3.0.0',
             hamcrestCore: 'org.hamcrest:hamcrest-core:1.3',
             junit: 'junit:junit:4.12',
+            // rxjava
+            rxjava: 'io.reactivex:rxjava:1.0.14',
+            retrofitAdapterRxJava: "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion",
+            // android
             butterKnife:  'com.jakewharton:butterknife:7.0.1',
             appCompat: "com.android.support:appcompat-v7:$supportLibraryVersion",
             design:  "com.android.support:design:$supportLibraryVersion",

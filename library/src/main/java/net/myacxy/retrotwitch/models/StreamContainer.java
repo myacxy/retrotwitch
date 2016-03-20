@@ -31,46 +31,4 @@ public class StreamContainer extends BaseModel<StreamContainer.Links>
         @SerializedName("channel")
         public String channel;
     }
-
-    public static class CallBuilder extends Caller.CallBuilder<StreamContainer>
-    {
-        String channel = null;
-
-        public CallBuilder withChannel(String channel)
-        {
-            this.channel = channel;
-            return this;
-        }
-
-        @Override
-        public Call<StreamContainer> build()
-        {
-               return Caller.getInstance().getService().getStream(channel);
-        }
-
-        @Override
-        public StreamContainer buildAndExecute() throws IOException
-        {
-            return build().execute().body();
-        }
-
-        @Override
-        public void buildAndEnqueue(final Caller.ResponseListener<StreamContainer> listener)
-        {
-            build().enqueue(new Callback<StreamContainer>()
-            {
-                @Override
-                public void onResponse(Call<StreamContainer> call, Response<StreamContainer> response)
-                {
-                    listener.onSuccess(response.body());
-                }
-
-                @Override
-                public void onFailure(Call<StreamContainer> call, Throwable t)
-                {
-                    listener.onError();
-                }
-            });
-        }
-    }
 }

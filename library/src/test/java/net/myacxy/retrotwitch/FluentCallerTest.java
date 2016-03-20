@@ -59,34 +59,35 @@ public class FluentCallerTest
     {
         final MultiLock multiLock = new MultiLock(2);
 
-        RetroTwitch.INSTANCE.getCaller().userFollows("myacxy").limited().withLimit(5).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
-        {
-            @Override
-            public void onSuccess(List<UserFollow> userFollows)
-            {
-                multiLock.succeed("limitedFollows", userFollows);
-            }
+        RetroTwitch.INSTANCE.getCaller()
+                .userFollows("myacxy").limited().withLimit(5).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
+                    {
+                        @Override
+                        public void onSuccess(List<UserFollow> userFollows)
+                        {
+                            multiLock.succeed("limitedFollows", userFollows);
+                        }
 
-            @Override
-            public void onError()
-            {
-                multiLock.fail();
-            }
-        })
+                        @Override
+                        public void onError()
+                        {
+                            multiLock.fail();
+                        }
+                    })
                 .userFollows("sodapoppin").all().withLimit(100).withMaximum(100).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
-        {
-            @Override
-            public void onSuccess(List<UserFollow> userFollows)
-            {
-                multiLock.succeed("allFollows", userFollows);
-            }
+                    {
+                        @Override
+                        public void onSuccess(List<UserFollow> userFollows)
+                        {
+                            multiLock.succeed("allFollows", userFollows);
+                        }
 
-            @Override
-            public void onError()
-            {
-                multiLock.fail();
-            }
-        });
+                        @Override
+                        public void onError()
+                        {
+                            multiLock.fail();
+                        }
+                    });
 
         multiLock.await();
 

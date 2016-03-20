@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+dependencies {
+    Map<String, String> dependencies = rootProject.ext.dependencies;
+
+    compile project(':library')
+    compile dependencies.rxjava
+    compile dependencies.retrofitAdapterRxJava
+    testCompile dependencies.junit
+    testCompile dependencies.hamcrestCore
+}

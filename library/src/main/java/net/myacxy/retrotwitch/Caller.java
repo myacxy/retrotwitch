@@ -3,6 +3,7 @@ package net.myacxy.retrotwitch;
 import net.myacxy.retrotwitch.api.*;
 import net.myacxy.retrotwitch.models.*;
 import net.myacxy.retrotwitch.utils.StringUtil;
+
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,46 +18,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Caller
+public class Caller extends BaseCaller
 {
-    //<editor-fold desc="Members">
-    private static Caller sInstance = new Caller();
-
-    private final OkHttpClient mClient;
-    private final Retrofit mRetrofit;
-    private final TwitchV3Service mService;
-    //</editor-fold>
+    private static Caller sInstance = new Caller(HttpLoggingInterceptor.Level.NONE);
 
     //<editor-fold desc="Constructor">
-    private Caller(HttpLoggingInterceptor.Level level) {
-        mClient = new OkHttpClient.Builder()
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(level))
-                .addInterceptor(new Interceptor()
-                {
-                    @Override
-                    public okhttp3.Response intercept(Chain chain) throws IOException
-                    {
-                        Request request = chain.request()
-                                .newBuilder()
-                                .addHeader("Accept", "application/vnd.twitchtv.v3+json")
-                                .build();
-                        return chain.proceed(request);
-                    }
-                })
-                .build();
-
-        mRetrofit = new Retrofit.Builder()
-                .baseUrl(TwitchV3Service.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(mClient)
-                .build();
-
-        mService = mRetrofit.create(TwitchV3Service.class);
-    }
-
-    private Caller()
+    Caller(HttpLoggingInterceptor.Level level)
     {
-        this(HttpLoggingInterceptor.Level.NONE);
+        super(level);
     }
     //</editor-fold>
 
@@ -65,40 +34,7 @@ public class Caller
         return sInstance;
     }
 
-    public static Caller newInstance(HttpLoggingInterceptor.Level level) {
-        return sInstance = new Caller(level);
-    }
-
-    public TwitchV3Service getService() {
-        return mService;
-    }
-
     //<editor-fold desc="User Follows">
-    public Call<UserFollowsContainer> getUserFollows(
-            String url,
-            final ResponseListener<UserFollowsContainer> listener)
-    {
-        Call<UserFollowsContainer> call = mService.getUserFollows(url);
-
-        call.enqueue(new Callback<UserFollowsContainer>()
-        {
-            @Override
-            public void onResponse(Call<UserFollowsContainer> call, Response<UserFollowsContainer> response)
-            {
-                listener.onSuccess(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<UserFollowsContainer> call, Throwable t)
-            {
-                listener.onError();
-            }
-        });
-
-        return call;
-    }
-
-
     public Call<UserFollowsContainer> getUserFollows(
             final String user,
             final Integer limit,
@@ -107,7 +43,7 @@ public class Caller
             final SortBy sortBy,
             final ResponseListener<UserFollowsContainer> listener)
     {
-        Call<UserFollowsContainer> call = mService.getUserFollows(user, limit, offset, direction, sortBy);
+        Call<UserFollowsContainer> call = getService().getUserFollows(user, limit, offset, direction, sortBy);
 
         call.enqueue(new Callback<UserFollowsContainer>()
         {
@@ -156,11 +92,10 @@ public class Caller
             public void onSuccess(UserFollowsContainer userFollowsContainer)
             {
                 cache.addAll(userFollowsContainer.userFollows);
-                if(userFollowsContainer.total > offset + limit)
+                if (userFollowsContainer.total > offset + limit)
                 {
                     getAllUserFollowsRecursively(user, limit, offset + limit, direction, sortBy, listener, cache);
-                }
-                else
+                } else
                 {
                     listener.onSuccess(cache);
                 }
@@ -178,7 +113,7 @@ public class Caller
     //<editor-fold desc="Stream(s)">
     public Call<StreamContainer> getStream(String channel, final ResponseListener<Stream> listener)
     {
-        Call<StreamContainer> call = mService.getStream(channel);
+        Call<StreamContainer> call = getService().getStream(channel);
 
         call.enqueue(new Callback<StreamContainer>()
         {
@@ -208,7 +143,7 @@ public class Caller
             final ResponseListener<StreamsContainer> listener)
     {
         List<String> channelNames = null;
-        if(channels != null)
+        if (channels != null)
         {
             channelNames = new ArrayList<>(channels.size());
             for (Channel channel : channels)
@@ -218,7 +153,7 @@ public class Caller
         }
 
 
-        Call<StreamsContainer> call = mService.getStreams(
+        Call<StreamsContainer> call = getService().getStreams(
                 game,
                 channelNames != null ? StringUtil.joinStrings(channelNames, ",") : null,
                 limit,
@@ -260,7 +195,8 @@ public class Caller
     {
         resultLimit = resultLimit < TwitchV3Service.DEFAULT_LIMIT ? TwitchV3Service.DEFAULT_LIMIT : resultLimit;
         int perRequestLimit = TwitchV3Service.MAX_LIMIT;
-        if(resultLimit < perRequestLimit) {
+        if (resultLimit < perRequestLimit)
+        {
             perRequestLimit = resultLimit;
         }
         getAllStreamsRecursively(game, channels, perRequestLimit, 0, clientId, streamType, resultLimit, listener, new ArrayList<Stream>(resultLimit));
@@ -283,11 +219,10 @@ public class Caller
             public void onSuccess(StreamsContainer streamsContainer)
             {
                 cache.addAll(streamsContainer.streams);
-                if(cache.size() < resultLimit && streamsContainer.total > offset + perRequestLimit)
+                if (cache.size() < resultLimit && streamsContainer.total > offset + perRequestLimit)
                 {
                     getAllStreamsRecursively(game, channels, perRequestLimit, offset + perRequestLimit, clientId, streamType, resultLimit, listener, cache);
-                }
-                else
+                } else
                 {
                     listener.onSuccess(cache);
                 }
@@ -308,13 +243,6 @@ public class Caller
         void onSuccess(T t);
 
         void onError();
-    }
-
-    public static abstract class CallBuilder<M extends BaseModel>
-    {
-        public abstract Call<M> build();
-        public abstract M buildAndExecute() throws IOException;
-        public abstract void buildAndEnqueue(ResponseListener<M> listener);
     }
     //</editor-fold>
 }

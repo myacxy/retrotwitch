@@ -96,7 +96,7 @@ public enum RetroTwitch
 
         public RetroTwitch apply()
         {
-            Caller.newInstance(level);
+            Caller.getInstance().setLoggingLevel(level);
             return INSTANCE;
         }
     }
