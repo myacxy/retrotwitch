@@ -11,11 +11,11 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public abstract class BaseCaller
+public abstract class BaseCaller<S>
 {
     final OkHttpClient mClient;
     final Retrofit mRetrofit;
-    final TwitchV3Service mService;
+    final S mService;
     private HttpLoggingInterceptor mLoggingInterceptor;
 
     BaseCaller(HttpLoggingInterceptor.Level level) {
@@ -50,11 +50,9 @@ public abstract class BaseCaller
                 .build();
     }
 
-    public final TwitchV3Service createService(Retrofit retrofit) {
-        return retrofit.create(TwitchV3Service.class);
-    }
+    public abstract S createService(Retrofit retrofit);
 
-    public final TwitchV3Service getService() {
+    public final S getService() {
         return mService;
     }
 

@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Caller extends BaseCaller
+public class Caller extends BaseCaller<TwitchV3Service>
 {
     private static Caller sInstance = new Caller(HttpLoggingInterceptor.Level.NONE);
 
@@ -32,6 +32,11 @@ public class Caller extends BaseCaller
     public static Caller getInstance()
     {
         return sInstance;
+    }
+
+    @Override
+    public TwitchV3Service createService(Retrofit retrofit) {
+        return retrofit.create(TwitchV3Service.class);
     }
 
     //<editor-fold desc="User Follows">

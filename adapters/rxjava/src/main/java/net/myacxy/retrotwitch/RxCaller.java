@@ -1,6 +1,7 @@
 package net.myacxy.retrotwitch;
 
 import net.myacxy.retrotwitch.api.Direction;
+import net.myacxy.retrotwitch.api.RxTwitchV3Service;
 import net.myacxy.retrotwitch.api.TwitchV3Service;
 import net.myacxy.retrotwitch.api.SortBy;
 import net.myacxy.retrotwitch.api.StreamType;
@@ -18,21 +19,19 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
-import rx.Scheduler;
-import rx.schedulers.Schedulers;
 
-public class Caller extends BaseCaller
+public class RxCaller extends BaseCaller<RxTwitchV3Service>
 {
-    private static Caller sInstance = new Caller(HttpLoggingInterceptor.Level.NONE);
+    private static RxCaller sInstance = new RxCaller(HttpLoggingInterceptor.Level.NONE);
 
     //<editor-fold desc="Constructor">
-    Caller(HttpLoggingInterceptor.Level level)
+    RxCaller(HttpLoggingInterceptor.Level level)
     {
         super(level);
     }
     //</editor-fold>
 
-    public static Caller getInstance()
+    public static RxCaller getInstance()
     {
         return sInstance;
     }
@@ -46,6 +45,11 @@ public class Caller extends BaseCaller
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(mClient)
                 .build();
+    }
+
+    @Override
+    public RxTwitchV3Service createService(Retrofit retrofit) {
+        return retrofit.create(RxTwitchV3Service.class);
     }
 
     //<editor-fold desc="User Follows">

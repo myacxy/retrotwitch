@@ -16,17 +16,17 @@ import rx.observables.BlockingObservable;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-public class CallerTest
+public class RxCallerTest
 {
     @Before
     public void setUp() {
-        Caller.getInstance().setLoggingLevel(HttpLoggingInterceptor.Level.BASIC);
+        RxCaller.getInstance().setLoggingLevel(HttpLoggingInterceptor.Level.BASIC);
     }
 
     @Test(timeout = 5000)
     public void getUserFollows() throws Exception
     {
-        BlockingObservable<UserFollowsContainer> observable = Caller.getInstance().getUserFollows("myacxy", null, null, null, null).toBlocking();
+        BlockingObservable<UserFollowsContainer> observable = RxCaller.getInstance().getUserFollows("myacxy", null, null, null, null).toBlocking();
 
         System.out.println(observable.first().userFollows.size());
     }
@@ -35,7 +35,7 @@ public class CallerTest
     public void getAllUserFollows() throws Exception
     {
         List<UserFollow> follows = new ArrayList<>(300);
-        BlockingObservable<UserFollowsContainer> observable = Caller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT)
+        BlockingObservable<UserFollowsContainer> observable = RxCaller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT)
                 .doOnNext(userFollowsContainer -> follows.addAll(userFollowsContainer.userFollows))
                 .toBlocking();
 
@@ -47,7 +47,7 @@ public class CallerTest
     @Test(timeout = 5000)
     public void getStream() throws Exception
     {
-        BlockingObservable<StreamContainer> observable = Caller.getInstance().getStream("merlinidota").toBlocking();
+        BlockingObservable<StreamContainer> observable = RxCaller.getInstance().getStream("merlinidota").toBlocking();
 
         Stream merlini = observable.first().stream;
         System.out.print(merlini);
@@ -59,8 +59,8 @@ public class CallerTest
     @Test(timeout = 5000)
     public void getUserFollowsStreams() throws Exception
     {
-        BlockingObservable<StreamsContainer> observable = Caller.getInstance().getUserFollows("myacxy", null, null, null, null)
-                .flatMap(userFollowsContainer -> Caller.getInstance().getStreams(null,
+        BlockingObservable<StreamsContainer> observable = RxCaller.getInstance().getUserFollows("myacxy", null, null, null, null)
+                .flatMap(userFollowsContainer -> RxCaller.getInstance().getStreams(null,
                         userFollowsContainer.userFollows.stream().map(userFollow -> userFollow.channel).collect(Collectors.toList()),
                         null, null, null, null))
                 .toBlocking();
@@ -71,7 +71,7 @@ public class CallerTest
     @Test(timeout = 5000)
     public void getStreams() throws Exception
     {
-        BlockingObservable<StreamsContainer> observable = Caller.getInstance().getStreams(null, null, null, null, null, null).toBlocking();
+        BlockingObservable<StreamsContainer> observable = RxCaller.getInstance().getStreams(null, null, null, null, null, null).toBlocking();
 
         StreamsContainer streamsContainer = observable.first();
         System.out.println(observable.first().streams);
@@ -82,7 +82,7 @@ public class CallerTest
     public void get500LiveStreams() throws Exception
     {
         List<Stream> streams = new ArrayList<>(500);
-        BlockingObservable<StreamsContainer> observable = Caller.getInstance().getAllStreams(null, null, null, StreamType.LIVE, 500)
+        BlockingObservable<StreamsContainer> observable = RxCaller.getInstance().getAllStreams(null, null, null, StreamType.LIVE, 500)
                 .doOnNext(streamsContainer -> streams.addAll(streamsContainer.streams))
                 .toBlocking();
 

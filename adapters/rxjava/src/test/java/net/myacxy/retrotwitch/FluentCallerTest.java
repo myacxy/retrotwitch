@@ -16,18 +16,19 @@ import static org.hamcrest.MatcherAssert.*;
 public class FluentCallerTest
 {
 
-//    @Before
-//    public void setUp()
-//    {
-//        RetroTwitch.INSTANCE.configure()
-//                .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
-//                .apply();
-//    }
-//
+    @Before
+    public void setUp()
+    {
+        RetroTwitch.INSTANCE.configure()
+                .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
+                .apply();
+    }
+
 //    @Test(timeout = 5000)
 //    public void stream() throws Exception
 //    {
-//        RetroTwitch.INSTANCE.getCaller().stream("enns").build().enqueue(new Caller.ResponseListener<Stream>()
+//        Lock<Stream> lock = new Lock<>();
+//        RetroTwitch.INSTANCE.getFluent().stream("enns").build().enqueue(new Caller.ResponseListener<Stream>()
 //        {
 //            @Override
 //            public void onSuccess(Stream stream)
@@ -55,7 +56,7 @@ public class FluentCallerTest
 //    {
 //        final MultiLock multiLock = new MultiLock(2);
 //
-//        RetroTwitch.INSTANCE.getCaller().userFollows("myacxy").limited().withLimit(5).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
+//        RetroTwitch.INSTANCE.getFluent().userFollows("myacxy").limited().withLimit(5).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
 //        {
 //            @Override
 //            public void onSuccess(List<UserFollow> userFollows)

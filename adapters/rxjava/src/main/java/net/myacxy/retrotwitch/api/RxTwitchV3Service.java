@@ -10,7 +10,7 @@ import retrofit2.http.Query;
 import retrofit2.http.Url;
 import rx.Observable;
 
-public interface TwitchV3Service
+public interface RxTwitchV3Service
 {
     String BASE_URL = "https://api.twitch.tv/kraken/";
     int DEFAULT_LIMIT = 25;

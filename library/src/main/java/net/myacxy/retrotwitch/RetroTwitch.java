@@ -22,10 +22,12 @@ public enum RetroTwitch
         return new ConfigurationBuilder();
     }
 
-    public FluentCaller getCaller()
+    public FluentCaller getFluent()
     {
         return FluentCaller.INSTANCE;
     }
+
+    public Caller getDefault() { return Caller.getInstance(); }
 
     public static class AuthenticationBuilder
     {

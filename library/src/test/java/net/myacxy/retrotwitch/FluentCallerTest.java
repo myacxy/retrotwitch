@@ -31,7 +31,7 @@ public class FluentCallerTest
     {
         final Lock<Stream> lock = new Lock<>();
 
-        RetroTwitch.INSTANCE.getCaller().stream("enns").build().enqueue(new Caller.ResponseListener<Stream>()
+        RetroTwitch.INSTANCE.getFluent().stream("enns").build().enqueue(new Caller.ResponseListener<Stream>()
         {
             @Override
             public void onSuccess(Stream stream)
@@ -59,7 +59,7 @@ public class FluentCallerTest
     {
         final MultiLock multiLock = new MultiLock(2);
 
-        RetroTwitch.INSTANCE.getCaller()
+        RetroTwitch.INSTANCE.getFluent()
                 .userFollows("myacxy").limited().withLimit(5).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
                     {
                         @Override

@@ -28,14 +28,7 @@ public class RetroTwitchTest
                 .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
                 .addScopes(Scope.USER_READ)
-                .build(new RetroTwitch.AuthenticationBuilder.Callback()
-                {
-                    @Override
-                    public void authenticate(String url)
-                    {
-                        assertThat(url, equalTo(mAuthenticationUrl));
-                    }
-                });
+                .build(url -> assertThat(url, equalTo(mAuthenticationUrl)));
     }
 
     @Test

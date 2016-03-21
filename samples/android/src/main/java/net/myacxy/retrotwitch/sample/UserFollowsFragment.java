@@ -107,7 +107,7 @@ public class UserFollowsFragment extends Fragment
             showProgress(true);
             mAdapter.getUserFollows().clear();
             setInformation(0, 0);
-            mUserFollowsResource = RetroTwitch.INSTANCE.getCaller()
+            mUserFollowsResource = RetroTwitch.INSTANCE.getFluent()
                     .userFollows(userName)
                     .limited()
                     .withSortBy(SortBy.LAST_BROADCAST)
