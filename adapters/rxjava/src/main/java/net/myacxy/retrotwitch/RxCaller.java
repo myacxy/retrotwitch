@@ -48,7 +48,8 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
     }
 
     @Override
-    public RxTwitchV3Service createService(Retrofit retrofit) {
+    public RxTwitchV3Service createService(Retrofit retrofit)
+    {
         return retrofit.create(RxTwitchV3Service.class);
     }
 
@@ -60,15 +61,15 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
             final Direction direction,
             final SortBy sortBy)
     {
-        Observable<UserFollowsContainer> observable = getService().getUserFollows(user, limit, offset, direction, sortBy)
+        return getService().getUserFollows(user, limit, offset, direction, sortBy)
                 .doOnNext(userFollowsContainer -> {
+                    if (userFollowsContainer == null) return;
                     userFollowsContainer.user = user;
                     userFollowsContainer.limit = limit == null ? net.myacxy.retrotwitch.api.TwitchV3Service.DEFAULT_LIMIT : limit;
                     userFollowsContainer.offset = offset == null ? 0 : offset;
                     userFollowsContainer.direction = direction == null ? Direction.DEFAULT : direction;
                     userFollowsContainer.sortBy = sortBy == null ? SortBy.DEFAULT : sortBy;
-            });
-        return observable;
+                });
     }
 
     public Observable<UserFollowsContainer> getAllUserFollows(
@@ -78,8 +79,10 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
     {
         return getUserFollows(user, TwitchV3Service.MAX_LIMIT, 0, direction, sortBy)
                 .concatMap(userFollowsContainer -> {
+                    if (userFollowsContainer == null) return Observable.empty();
                     int pages = (int) (userFollowsContainer.total / (float) userFollowsContainer.limit);
-                    if(userFollowsContainer.total > userFollowsContainer.offset + userFollowsContainer.limit) {
+                    if (userFollowsContainer.total > userFollowsContainer.offset + userFollowsContainer.limit)
+                    {
                         return Observable.just(userFollowsContainer)
                                 .concatWith(Observable.range(1, pages)
                                         .concatMap(page -> getUserFollows(user, userFollowsContainer.limit, page * userFollowsContainer.limit, direction, sortBy)));
@@ -113,21 +116,22 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
             }
         }
 
-        Observable<StreamsContainer> observable = mService.getStreams(
+        return mService.getStreams(
                 game,
                 channelNames != null ? StringUtil.joinStrings(channelNames, ",") : null,
                 limit,
                 offset,
                 clientId,
-                streamType).doOnNext(streamsContainer -> {
+                streamType)
+                .doOnNext(streamsContainer -> {
+                    if (streamsContainer == null) return;
                     streamsContainer.game = game;
                     streamsContainer.channels = channels;
                     streamsContainer.limit = limit == null ? net.myacxy.retrotwitch.api.TwitchV3Service.DEFAULT_LIMIT : limit;
                     streamsContainer.offset = offset == null ? 0 : offset;
                     streamsContainer.clientId = clientId;
                     streamsContainer.streamType = streamType == null ? StreamType.DEFAULT : streamType;
-            });
-        return observable;
+                });
     }
 
     public Observable<StreamsContainer> getAllStreams(
@@ -135,38 +139,37 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
             List<Channel> channels,
             String clientId,
             StreamType streamType,
-            int maximum)
+            final int maximum)
     {
-        if (maximum > TwitchV3Service.MAX_LIMIT)
-        {
-            return getAllStreamsRecursively(game, channels, clientId, streamType, maximum, 0);
-        } else
-        {
-            return getStreams(game, channels, maximum, 0, clientId, streamType);
-        }
+
+        return getStreams(
+                game,
+                channels,
+                maximum > TwitchV3Service.MAX_LIMIT ? TwitchV3Service.MAX_LIMIT : maximum,
+                0,
+                clientId,
+                streamType)
+                .concatMap(initialContainer ->
+                {
+                    // first request
+                    if (initialContainer == null) return Observable.empty();
+                    else if (initialContainer.total > initialContainer.streams.size())
+                    {
+                        int additionalPages = Math.round(maximum / TwitchV3Service.MAX_LIMIT + 0.5f) - 1;
+
+                        return Observable.just(initialContainer)
+                                .concatWith(Observable.range(1, additionalPages)
+                                        .concatMap(page ->
+                                        {
+                                            int limit = initialContainer.limit;
+                                            if(page == additionalPages) {
+                                                limit = maximum - page * initialContainer.limit;
+                                            }
+                                            return getStreams(game, channels, limit, page * initialContainer.limit, clientId, streamType);
+                                        }));
+                    }
+                    return Observable.just(initialContainer);
+                });
     }
-
-
-    private Observable<StreamsContainer> getAllStreamsRecursively(String game, List<Channel> channels, String clientId, StreamType streamType, int maximum, int currentPage)
-    {
-        return getStreams(game, channels, TwitchV3Service.MAX_LIMIT, currentPage * TwitchV3Service.MAX_LIMIT, clientId, streamType).concatMap(streamsContainer -> {
-            int pages = 0;
-            if (maximum < streamsContainer.total)
-            {
-                pages = (int) (maximum / ((float) streamsContainer.limit) + 0.5f);
-            } else
-            {
-                pages = (int) (streamsContainer.total / ((float) streamsContainer.limit) + 0.5f);
-            }
-            int nextPage = (streamsContainer.offset + streamsContainer.limit) / streamsContainer.limit;
-            if (nextPage >= pages)
-            {
-                return Observable.just(streamsContainer);
-            }
-
-            return Observable.just(streamsContainer).concatWith(getAllStreamsRecursively(game, channels, clientId, streamType, maximum, nextPage));
-        });
-    }
-
     //</editor-fold>
 }

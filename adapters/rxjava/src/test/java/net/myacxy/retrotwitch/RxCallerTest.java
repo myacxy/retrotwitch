@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import okhttp3.logging.HttpLoggingInterceptor;
+import rx.Observer;
 import rx.observables.BlockingObservable;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -21,27 +22,6 @@ public class RxCallerTest
     @Before
     public void setUp() {
         RxCaller.getInstance().setLoggingLevel(HttpLoggingInterceptor.Level.BASIC);
-    }
-
-    @Test(timeout = 5000)
-    public void getUserFollows() throws Exception
-    {
-        BlockingObservable<UserFollowsContainer> observable = RxCaller.getInstance().getUserFollows("myacxy", null, null, null, null).toBlocking();
-
-        System.out.println(observable.first().userFollows.size());
-    }
-
-    @Test(timeout = 50000)
-    public void getAllUserFollows() throws Exception
-    {
-        List<UserFollow> follows = new ArrayList<>(300);
-        BlockingObservable<UserFollowsContainer> observable = RxCaller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT)
-                .doOnNext(userFollowsContainer -> follows.addAll(userFollowsContainer.userFollows))
-                .toBlocking();
-
-        observable.last();
-        System.out.println(follows.size());
-        assertTrue(follows.size() > 300);
     }
 
     @Test(timeout = 5000)
@@ -78,17 +58,42 @@ public class RxCallerTest
         assertThat(streamsContainer.streams.size(), equalTo(TwitchV3Service.DEFAULT_LIMIT));
     }
 
+
     @Test
-    public void get500LiveStreams() throws Exception
+    public void getLiveStreams() throws Exception
     {
-        List<Stream> streams = new ArrayList<>(500);
-        BlockingObservable<StreamsContainer> observable = RxCaller.getInstance().getAllStreams(null, null, null, StreamType.LIVE, 500)
-                .doOnNext(streamsContainer -> streams.addAll(streamsContainer.streams))
-                .toBlocking();
+        getLiveStreams(1);
+        getLiveStreams(99);
+        getLiveStreams(101);
+        getLiveStreams(123);
+        getLiveStreams(321);
+    }
 
-        observable.last();
-        assertThat(streams.size(), equalTo(500));
-        streams.forEach(stream -> assertThat(stream, notNullValue()));
+    private void getLiveStreams(int count) throws Exception
+    {
+        List<Stream> streams = new ArrayList<>(count);
+        RxCaller.getInstance().getAllStreams(null, null, null, StreamType.LIVE, count)
+                .toBlocking()
+                .subscribe(new Observer<StreamsContainer>()
+                {
+                    @Override
+                    public void onCompleted()
+                    {
+                        assertThat(streams.size(), equalTo(count));
+                        streams.forEach(stream -> assertThat(stream, notNullValue()));
+                    }
 
+                    @Override
+                    public void onError(Throwable e)
+                    {
+                        fail(ErrorFactory.fromThrowable(e).toString());
+                    }
+
+                    @Override
+                    public void onNext(StreamsContainer streamsContainer)
+                    {
+                        streams.addAll(streamsContainer.streams);
+                    }
+                });
     }
 }

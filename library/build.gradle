@@ -14,5 +14,5 @@ dependencies {
     compile dependencies.retrofitConverterGson
     compile dependencies.okHttpLoggingInterceptor
     testCompile dependencies.junit
-    testCompile dependencies.hamcrestCore
+    testCompile dependencies.hamcrestAll
 }
