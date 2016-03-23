@@ -75,19 +75,37 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
     public Observable<UserFollowsContainer> getAllUserFollows(
             String user,
             Direction direction,
-            SortBy sortBy)
+            SortBy sortBy,
+            int maximum)
     {
-        return getUserFollows(user, TwitchV3Service.MAX_LIMIT, 0, direction, sortBy)
-                .concatMap(userFollowsContainer -> {
-                    if (userFollowsContainer == null) return Observable.empty();
-                    int pages = (int) (userFollowsContainer.total / (float) userFollowsContainer.limit);
-                    if (userFollowsContainer.total > userFollowsContainer.offset + userFollowsContainer.limit)
+        return getUserFollows(
+                user,
+                maximum > TwitchV3Service.MAX_LIMIT ? TwitchV3Service.MAX_LIMIT : maximum,
+                0,
+                direction,
+                sortBy)
+                .concatMap(initialContainer ->
+                {
+                    if (initialContainer == null) return Observable.empty();
+                    else if (initialContainer.limit != maximum)
                     {
-                        return Observable.just(userFollowsContainer)
-                                .concatWith(Observable.range(1, pages)
-                                        .concatMap(page -> getUserFollows(user, userFollowsContainer.limit, page * userFollowsContainer.limit, direction, sortBy)));
+                        int actualMaximum = maximum > initialContainer.total ? initialContainer.total : maximum;
+                        int additionalPages = calculateAdditionalPages(actualMaximum);
+                        System.out.println("additionalPages=" + additionalPages + ", maximum=" + maximum + ", actual=" + actualMaximum);
+
+                        return Observable.just(initialContainer)
+                                .concatWith(Observable.range(1, additionalPages)
+                                        .concatMap(page ->
+                                        {
+                                            int limit = initialContainer.limit;
+                                            if(page == additionalPages) {
+                                                limit = actualMaximum - page * initialContainer.limit;
+                                            }
+                                            System.out.println("limit=" + limit + ", page=" + page);
+                                            return getUserFollows(user, limit, page * initialContainer.limit, direction, sortBy);
+                                        }));
                     }
-                    return Observable.just(userFollowsContainer);
+                    return Observable.just(initialContainer);
                 });
     }
     //</editor-fold>
@@ -139,7 +157,7 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
             List<Channel> channels,
             String clientId,
             StreamType streamType,
-            final int maximum)
+            int maximum)
     {
 
         return getStreams(
@@ -151,11 +169,12 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
                 streamType)
                 .concatMap(initialContainer ->
                 {
-                    // first request
                     if (initialContainer == null) return Observable.empty();
-                    else if (initialContainer.total > initialContainer.streams.size())
+                    else if (initialContainer.limit != maximum)
                     {
-                        int additionalPages = Math.round(maximum / TwitchV3Service.MAX_LIMIT + 0.5f) - 1;
+                        int actualMaximum = maximum > initialContainer.total ? initialContainer.total : maximum;
+                        int additionalPages = calculateAdditionalPages(actualMaximum);
+                        System.out.println("additionalPages=" + additionalPages + ", maximum=" + maximum + ", actual=" + actualMaximum);
 
                         return Observable.just(initialContainer)
                                 .concatWith(Observable.range(1, additionalPages)
@@ -163,8 +182,9 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
                                         {
                                             int limit = initialContainer.limit;
                                             if(page == additionalPages) {
-                                                limit = maximum - page * initialContainer.limit;
+                                                limit = actualMaximum - page * initialContainer.limit;
                                             }
+                                            System.out.println("limit=" + limit + ", page=" + page);
                                             return getStreams(game, channels, limit, page * initialContainer.limit, clientId, streamType);
                                         }));
                     }
@@ -172,4 +192,12 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
                 });
     }
     //</editor-fold>
+
+    private int calculateAdditionalPages(int totalOrMaximum) {
+        float allPages = totalOrMaximum / (float) TwitchV3Service.MAX_LIMIT;
+        if((allPages * 100) % 100 > 0) {
+            return (int) allPages;
+        }
+        return (int) (allPages - 1);
+    }
 }

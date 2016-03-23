@@ -64,6 +64,7 @@ public class RxCallerTest
     {
         getLiveStreams(1);
         getLiveStreams(99);
+        getLiveStreams(100);
         getLiveStreams(101);
         getLiveStreams(123);
         getLiveStreams(321);

@@ -104,7 +104,7 @@ public class RxCallerUserFollowsTest
     public void getAllUserFollows() throws Exception
     {
         List<UserFollow> follows = new ArrayList<>(300);
-        RxCaller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT)
+        RxCaller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT, 500)
                 .toBlocking()
                 .subscribe(new Observer<UserFollowsContainer>()
                 {
@@ -113,6 +113,35 @@ public class RxCallerUserFollowsTest
                     {
                         System.out.println(follows.size());
                         assertThat(follows.size(), is(greaterThan(300)));
+                    }
+
+                    @Override
+                    public void onError(Throwable e)
+                    {
+                        fail(ErrorFactory.fromThrowable(e).toString());
+                    }
+
+                    @Override
+                    public void onNext(UserFollowsContainer userFollowsContainer)
+                    {
+                        follows.addAll(userFollowsContainer.userFollows);
+                    }
+                });
+    }
+
+    @Test(timeout = 5000)
+    public void getAllUserFollowsWithMaximum() throws Exception
+    {
+        List<UserFollow> follows = new ArrayList<>(300);
+        RxCaller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT, 300)
+                .toBlocking()
+                .subscribe(new Observer<UserFollowsContainer>()
+                {
+                    @Override
+                    public void onCompleted()
+                    {
+                        System.out.println(follows.size());
+                        assertThat(follows.size(), is(equalTo(300)));
                     }
 
                     @Override
