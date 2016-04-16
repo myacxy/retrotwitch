@@ -14,17 +14,19 @@ public class ErrorFactory
 {
     private static Gson mGson = new GsonBuilder().create();
 
-    public static Error fromJson(String json) {
+    public static Error fromJson(String json)
+    {
         try
         {
             return mGson.fromJson(json, Error.class);
         } catch (JsonSyntaxException e)
         {
-           return unexpected();
+            return unexpected();
         }
     }
 
-    public static Error fromHttpException(HttpException exception) {
+    public static Error fromHttpException(HttpException exception)
+    {
         try
         {
             return fromJson(exception.response().errorBody().string());
@@ -35,15 +37,17 @@ public class ErrorFactory
         }
     }
 
-    public static Error fromThrowable(Throwable throwable) {
-        if(throwable instanceof HttpException) {
+    public static Error fromThrowable(Throwable throwable)
+    {
+        if (throwable instanceof HttpException)
+        {
             return fromHttpException((HttpException) throwable);
         }
         return unexpected();
     }
 
-
-    public static Error unexpected() {
+    public static Error unexpected()
+    {
         return new Error("Unexpected", -1, "An unexpected error occurred.");
     }
 }
