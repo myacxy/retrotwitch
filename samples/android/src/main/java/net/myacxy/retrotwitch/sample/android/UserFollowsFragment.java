@@ -18,6 +18,7 @@ import android.widget.Toast;
 import net.myacxy.retrotwitch.Caller;
 import net.myacxy.retrotwitch.RetroTwitch;
 import net.myacxy.retrotwitch.api.SortBy;
+import net.myacxy.retrotwitch.models.Error;
 import net.myacxy.retrotwitch.models.UserFollow;
 import net.myacxy.retrotwitch.resources.UserFollowsResource;
 import net.myacxy.retrotwitch.utils.StringUtil;
@@ -124,10 +125,10 @@ public class UserFollowsFragment extends Fragment
                 }
 
                 @Override
-                public void onError()
+                public void onError(Error error)
                 {
-                    // has no next
                     showProgress(false);
+                    Toast.makeText(getContext(), error.message, Toast.LENGTH_SHORT).show();
                 }
             });
         } else
@@ -296,10 +297,10 @@ public class UserFollowsFragment extends Fragment
                             }
 
                             @Override
-                            public void onError()
+                            public void onError(Error error)
                             {
                                 showProgress(false);
-                                Toast.makeText(getContext(), "request error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), error.message, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
