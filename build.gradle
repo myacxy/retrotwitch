@@ -11,8 +11,9 @@ ext {
     targetCompatibility = JavaVersion.VERSION_1_7
     sourceCompatibility = JavaVersion.VERSION_1_7
 
-    supportLibraryVersion = '23.2.0'
+    supportLibraryVersion = '23.3.0'
     retrofitVersion = '2.0.0'
+    rxBindingVersion = '0.4.0'
 
     dependencies = [
             // common
@@ -29,6 +30,12 @@ ext {
             butterKnife:  'com.jakewharton:butterknife:7.0.1',
             appCompat: "com.android.support:appcompat-v7:$supportLibraryVersion",
             design:  "com.android.support:design:$supportLibraryVersion",
-            recyclerView: "com.android.support:recyclerview-v7:$supportLibraryVersion"
+            recyclerView: "com.android.support:recyclerview-v7:$supportLibraryVersion",
+            materialEditText: 'com.rengwuxian.materialedittext:library:2.1.4',
+            // android-rxjava
+            rxBinding: "com.jakewharton.rxbinding:rxbinding:$rxBindingVersion",
+            rxBindingAppCompat: "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$rxBindingVersion",
+            rxBindingDesign: "com.jakewharton.rxbinding:rxbinding-design:$rxBindingVersion",
+            rxBindingRecyclerView: "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$rxBindingVersion"
     ]
 }

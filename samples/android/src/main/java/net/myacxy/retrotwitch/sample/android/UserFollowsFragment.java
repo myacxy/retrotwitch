@@ -1,4 +1,4 @@
-package net.myacxy.retrotwitch.sample;
+package net.myacxy.retrotwitch.sample.android;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

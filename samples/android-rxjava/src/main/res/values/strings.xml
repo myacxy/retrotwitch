@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RetroTwitchSample</string>
+    <string name="app_name">RetroTwitchRxSample</string>
     <string name="total">Total: %d</string>
     <string name="currently_loaded">Currently loaded: %d</string>
     <string name="no_search_results">no search results</string>

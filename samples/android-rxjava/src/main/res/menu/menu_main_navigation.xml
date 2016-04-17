@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/mi_nv_user_follows"
+        android:title="User Follows"
+        />
+
+    <item
+        android:id="@+id/mi_nv_stream"
+        android:title="Stream"
+        />
+</menu>

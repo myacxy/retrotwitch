@@ -16,7 +16,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "net.myacxy.retrotwitch.sample.android"
+        applicationId "net.myacxy.retrotwitch.sample.android.rxjava"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
@@ -35,9 +35,9 @@ dependencies {
 
     compile project(':library')
     compile dependencies.butterKnife
-    compile dependencies.appCompat
-    compile dependencies.design
-    compile dependencies.recyclerView
-    compile dependencies.materialEditText
+    compile dependencies.rxBinding
+    compile dependencies.rxBindingAppCompat
+    compile dependencies.rxBindingDesign
+    compile dependencies.rxBindingRecyclerView
     testCompile dependencies.junit
 }

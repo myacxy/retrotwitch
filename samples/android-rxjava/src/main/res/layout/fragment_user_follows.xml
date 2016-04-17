@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <!--User Name-->
+    <EditText
+        android:id="@+id/et_uf_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/user_name"
+        style="@style/EditText"
+        />
+
+    <!--Search-->
+    <Button
+        android:id="@+id/btn_uf_search"
+        android:layout_below="@id/et_uf_user_name"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:text="@string/search"
+        style="@style/Button.Default"
+        />
+
+    <!--Total-->
+    <TextView
+        android:id="@+id/tv_uf_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_uf_search"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        tools:text="Total: 9"
+        />
+
+    <!--Currently Loaded-->
+    <TextView
+        android:id="@+id/tv_uf_currently_loaded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_uf_search"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        tools:text="Currently loaded: 9"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tv_uf_total"
+        android:layout_marginTop="8dp"
+        >
+
+        <!--Results-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_uf_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbarStyle="outsideOverlay"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            />
+
+        <!--Empty-->
+        <TextView
+            android:id="@+id/tv_iuf_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_search_results"
+            android:textColor="?colorPrimaryDark"
+            />
+
+    </FrameLayout>
+
+</RelativeLayout>
