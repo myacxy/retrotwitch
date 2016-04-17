@@ -5,8 +5,11 @@ import net.myacxy.retrotwitch.FluentCaller;
 import net.myacxy.retrotwitch.api.Direction;
 import net.myacxy.retrotwitch.api.SortBy;
 import net.myacxy.retrotwitch.api.TwitchV3Service;
+import net.myacxy.retrotwitch.helpers.ErrorFactory;
+import net.myacxy.retrotwitch.models.Error;
 import net.myacxy.retrotwitch.models.UserFollow;
 import net.myacxy.retrotwitch.models.UserFollowsContainer;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,7 +40,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
     @Override
     public FluentCaller enqueue(final Caller.ResponseListener<List<UserFollow>> listener)
     {
-        if(builder instanceof AllBuilder)
+        if (builder instanceof AllBuilder)
         {
             getAllUserFollowsRecursively(
                     builder.user,
@@ -48,8 +51,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                     builder.sortBy,
                     listener,
                     new ArrayList<UserFollow>(TwitchV3Service.MAX_LIMIT));
-        }
-        else if(builder instanceof LimitedBuilder)
+        } else if (builder instanceof LimitedBuilder)
         {
             createCall(builder.user, builder.limit, builder.offset, builder.direction, builder.sortBy)
                     .enqueue(new Callback<UserFollowsContainer>()
@@ -57,15 +59,22 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                         @Override
                         public void onResponse(Call<UserFollowsContainer> call, Response<UserFollowsContainer> response)
                         {
-                            UserFollowsContainer userFollowsContainer = response.body();
-                            builder.total = userFollowsContainer.total;
-                            listener.onSuccess(userFollowsContainer.userFollows);
+                            Error error = ErrorFactory.fromResponse(response);
+                            if (error == null)
+                            {
+                                UserFollowsContainer userFollowsContainer = response.body();
+                                builder.total = userFollowsContainer.total;
+                                listener.onSuccess(userFollowsContainer.userFollows);
+                            } else
+                            {
+                                listener.onError(error);
+                            }
                         }
 
                         @Override
                         public void onFailure(Call<UserFollowsContainer> call, Throwable t)
                         {
-                            listener.onError();
+                            listener.onError(ErrorFactory.fromThrowable(t));
                         }
                     });
         }
@@ -75,24 +84,26 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
 
     public void getPrevious(Caller.ResponseListener<List<UserFollow>> listener)
     {
-        if(hasPrevious())
+        if (hasPrevious())
         {
             builder.offset = builder.offset - builder.limit;
             enqueue(listener);
             return;
         }
-        listener.onError();
+        // TODO
+//        listener.onError();
     }
 
     public void getNext(Caller.ResponseListener<List<UserFollow>> listener)
     {
-        if(hasNext())
+        if (hasNext())
         {
             builder.offset = builder.offset + builder.limit;
             enqueue(listener);
             return;
         }
-        listener.onError();
+        // TODO
+//        listener.onError();
     }
 
     private boolean hasPrevious()
@@ -105,7 +116,8 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
         return builder.total != null && builder.total > builder.offset + builder.limit;
     }
 
-    public Integer getTotal() {
+    public Integer getTotal()
+    {
         return builder.total;
     }
 
@@ -135,11 +147,10 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                         cache.addAll(response.body().userFollows);
                         builder.total = response.body().total;
                         // TODO maximum
-                        if(cache.size() != response.body().total && response.body().total > offset + limit)
+                        if (cache.size() != response.body().total && response.body().total > offset + limit)
                         {
                             getAllUserFollowsRecursively(user, limit, offset + limit, maximum, direction, sortBy, listener, cache);
-                        }
-                        else
+                        } else
                         {
                             listener.onSuccess(cache);
                         }
@@ -148,7 +159,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                     @Override
                     public void onFailure(Call<UserFollowsContainer> call, Throwable t)
                     {
-                        listener.onError();
+                        listener.onError(ErrorFactory.fromThrowable(t));
                     }
                 });
     }
@@ -193,22 +204,26 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
             super(user);
         }
 
-        public LimitedBuilder withLimit(int limit) {
+        public LimitedBuilder withLimit(int limit)
+        {
             this.limit = limit;
             return this;
         }
 
-        public LimitedBuilder withOffset(int offset) {
+        public LimitedBuilder withOffset(int offset)
+        {
             this.offset = offset;
             return this;
         }
 
-        public LimitedBuilder withDirection(Direction direction) {
+        public LimitedBuilder withDirection(Direction direction)
+        {
             this.direction = direction;
             return this;
         }
 
-        public LimitedBuilder withSortBy(SortBy sortBy) {
+        public LimitedBuilder withSortBy(SortBy sortBy)
+        {
             this.sortBy = sortBy;
             return this;
         }
@@ -228,27 +243,32 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
             super(user);
         }
 
-        public AllBuilder withMaximum(int maximum) {
+        public AllBuilder withMaximum(int maximum)
+        {
             this.maximum = maximum;
             return this;
         }
 
-        public AllBuilder withLimit(int limit) {
+        public AllBuilder withLimit(int limit)
+        {
             this.limit = limit;
             return this;
         }
 
-        public AllBuilder withOffset(int offset) {
+        public AllBuilder withOffset(int offset)
+        {
             this.offset = offset;
             return this;
         }
 
-        public AllBuilder withDirection(Direction direction) {
+        public AllBuilder withDirection(Direction direction)
+        {
             this.direction = direction;
             return this;
         }
 
-        public AllBuilder withSortBy(SortBy sortBy) {
+        public AllBuilder withSortBy(SortBy sortBy)
+        {
             this.sortBy = sortBy;
             return this;
         }

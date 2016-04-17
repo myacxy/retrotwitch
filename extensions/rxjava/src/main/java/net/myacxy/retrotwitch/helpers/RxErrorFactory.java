@@ -1,4 +1,4 @@
-package net.myacxy.retrotwitch;
+package net.myacxy.retrotwitch.helpers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import retrofit2.adapter.rxjava.HttpException;
 
-public class ErrorFactory
+public class RxErrorFactory extends ErrorFactory
 {
     private static Gson mGson = new GsonBuilder().create();
 
@@ -43,11 +43,6 @@ public class ErrorFactory
         {
             return fromHttpException((HttpException) throwable);
         }
-        return unexpected();
-    }
-
-    public static Error unexpected()
-    {
-        return new Error("Unexpected", -1, "An unexpected error occurred.");
+        return unexpected(-1, throwable.toString());
     }
 }

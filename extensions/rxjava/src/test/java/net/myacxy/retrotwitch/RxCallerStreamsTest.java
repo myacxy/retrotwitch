@@ -1,6 +1,7 @@
 package net.myacxy.retrotwitch;
 
 import net.myacxy.retrotwitch.api.*;
+import net.myacxy.retrotwitch.helpers.RxErrorFactory;
 import net.myacxy.retrotwitch.models.*;
 import net.myacxy.retrotwitch.models.Stream;
 
@@ -47,7 +48,7 @@ public class RxCallerStreamsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        fail(ErrorFactory.fromThrowable(e).toString());
+                        fail(RxErrorFactory.fromThrowable(e).toString());
                     }
 
                     @Override
@@ -88,7 +89,7 @@ public class RxCallerStreamsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        fail(ErrorFactory.fromThrowable(e).toString());
+                        fail(RxErrorFactory.fromThrowable(e).toString());
                     }
 
                     @Override
@@ -117,7 +118,7 @@ public class RxCallerStreamsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        fail(ErrorFactory.fromThrowable(e).toString());
+                        fail(RxErrorFactory.fromThrowable(e).toString());
                     }
 
                     @Override
@@ -162,7 +163,7 @@ public class RxCallerStreamsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        fail(ErrorFactory.fromThrowable(e).toString());
+                        fail(RxErrorFactory.fromThrowable(e).toString());
                     }
 
                     @Override

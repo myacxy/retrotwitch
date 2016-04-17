@@ -1,6 +1,7 @@
 package net.myacxy.retrotwitch;
 
 import net.myacxy.retrotwitch.api.*;
+import net.myacxy.retrotwitch.helpers.RxErrorFactory;
 import net.myacxy.retrotwitch.models.*;
 import net.myacxy.retrotwitch.models.Error;
 
@@ -37,7 +38,7 @@ public class RxCallerUserFollowsTest
 
                     @Override
                     public void onError(Throwable e) {
-                        fail(ErrorFactory.fromThrowable(e).toString());
+                        fail(RxErrorFactory.fromThrowable(e).toString());
                     }
 
                     @Override
@@ -62,7 +63,7 @@ public class RxCallerUserFollowsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        Error error = ErrorFactory.fromThrowable(e);
+                        Error error = RxErrorFactory.fromThrowable(e);
                         assertThat(error.getType(), is(equalTo(Error.Type.NOT_FOUND)));
                     }
 
@@ -86,7 +87,7 @@ public class RxCallerUserFollowsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        Error error = ErrorFactory.fromThrowable(e);
+                        Error error = RxErrorFactory.fromThrowable(e);
                         assertThat(error.getType(), is(equalTo(Error.Type.UNPROCESSABLE_ENTITY)));
                     }
 
@@ -116,7 +117,7 @@ public class RxCallerUserFollowsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        fail(ErrorFactory.fromThrowable(e).toString());
+                        fail(RxErrorFactory.fromThrowable(e).toString());
                     }
 
                     @Override
@@ -145,7 +146,7 @@ public class RxCallerUserFollowsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        fail(ErrorFactory.fromThrowable(e).toString());
+                        fail(RxErrorFactory.fromThrowable(e).toString());
                     }
 
                     @Override

@@ -1,7 +1,9 @@
 package net.myacxy.retrotwitch;
 
 import net.myacxy.retrotwitch.api.*;
+import net.myacxy.retrotwitch.helpers.ErrorFactory;
 import net.myacxy.retrotwitch.models.*;
+import net.myacxy.retrotwitch.models.Error;
 import net.myacxy.retrotwitch.utils.StringUtil;
 
 import okhttp3.Interceptor;
@@ -35,7 +37,8 @@ public class Caller extends BaseCaller<TwitchV3Service>
     }
 
     @Override
-    public TwitchV3Service createService(Retrofit retrofit) {
+    public TwitchV3Service createService(Retrofit retrofit)
+    {
         return retrofit.create(TwitchV3Service.class);
     }
 
@@ -55,19 +58,26 @@ public class Caller extends BaseCaller<TwitchV3Service>
             @Override
             public void onResponse(Call<UserFollowsContainer> call, Response<UserFollowsContainer> response)
             {
-                UserFollowsContainer userFollowsContainer = response.body();
-                userFollowsContainer.user = user;
-                userFollowsContainer.limit = limit == null ? TwitchV3Service.DEFAULT_LIMIT : limit;
-                userFollowsContainer.offset = offset == null ? 0 : offset;
-                userFollowsContainer.direction = direction == null ? Direction.DEFAULT : direction;
-                userFollowsContainer.sortBy = sortBy == null ? SortBy.DEFAULT : sortBy;
-                listener.onSuccess(userFollowsContainer);
+                Error error = ErrorFactory.fromResponse(response);
+                if (error == null)
+                {
+                    UserFollowsContainer userFollowsContainer = response.body();
+                    userFollowsContainer.user = user;
+                    userFollowsContainer.limit = limit == null ? TwitchV3Service.DEFAULT_LIMIT : limit;
+                    userFollowsContainer.offset = offset == null ? 0 : offset;
+                    userFollowsContainer.direction = direction == null ? Direction.DEFAULT : direction;
+                    userFollowsContainer.sortBy = sortBy == null ? SortBy.DEFAULT : sortBy;
+                    listener.onSuccess(userFollowsContainer);
+                } else
+                {
+                    listener.onError(error);
+                }
             }
 
             @Override
             public void onFailure(Call<UserFollowsContainer> call, Throwable t)
             {
-                listener.onError();
+                listener.onError(ErrorFactory.fromThrowable(t));
             }
         });
         return call;
@@ -107,9 +117,9 @@ public class Caller extends BaseCaller<TwitchV3Service>
             }
 
             @Override
-            public void onError()
+            public void onError(Error error)
             {
-                listener.onError();
+                listener.onError(error);
             }
         });
     }
@@ -125,13 +135,20 @@ public class Caller extends BaseCaller<TwitchV3Service>
             @Override
             public void onResponse(Call<StreamContainer> call, Response<StreamContainer> response)
             {
-                listener.onSuccess(response.body().stream);
+                Error error = ErrorFactory.fromResponse(response);
+                if (error == null)
+                {
+                    listener.onSuccess(response.body().stream);
+                } else
+                {
+                    listener.onError(error);
+                }
             }
 
             @Override
             public void onFailure(Call<StreamContainer> call, Throwable t)
             {
-                listener.onError();
+                listener.onError(ErrorFactory.fromThrowable(t));
             }
         });
 
@@ -171,20 +188,27 @@ public class Caller extends BaseCaller<TwitchV3Service>
             @Override
             public void onResponse(Call<StreamsContainer> call, Response<StreamsContainer> response)
             {
-                StreamsContainer streamsContainer = response.body();
-                streamsContainer.game = game;
-                streamsContainer.channels = channels;
-                streamsContainer.limit = limit == null ? TwitchV3Service.DEFAULT_LIMIT : limit;
-                streamsContainer.offset = offset == null ? 0 : offset;
-                streamsContainer.clientId = clientId;
-                streamsContainer.streamType = streamType == null ? StreamType.DEFAULT : streamType;
-                listener.onSuccess(response.body());
+                Error error = ErrorFactory.fromResponse(response);
+                if (error == null)
+                {
+                    StreamsContainer streamsContainer = response.body();
+                    streamsContainer.game = game;
+                    streamsContainer.channels = channels;
+                    streamsContainer.limit = limit == null ? TwitchV3Service.DEFAULT_LIMIT : limit;
+                    streamsContainer.offset = offset == null ? 0 : offset;
+                    streamsContainer.clientId = clientId;
+                    streamsContainer.streamType = streamType == null ? StreamType.DEFAULT : streamType;
+                    listener.onSuccess(response.body());
+                } else
+                {
+                    listener.onError(error);
+                }
             }
 
             @Override
             public void onFailure(Call<StreamsContainer> call, Throwable t)
             {
-                listener.onError();
+                listener.onError(ErrorFactory.fromThrowable(t));
             }
         });
         return call;
@@ -234,9 +258,9 @@ public class Caller extends BaseCaller<TwitchV3Service>
             }
 
             @Override
-            public void onError()
+            public void onError(Error error)
             {
-                listener.onError();
+                listener.onError(error);
             }
         });
     }
@@ -247,7 +271,7 @@ public class Caller extends BaseCaller<TwitchV3Service>
     {
         void onSuccess(T t);
 
-        void onError();
+        void onError(Error error);
     }
     //</editor-fold>
 }

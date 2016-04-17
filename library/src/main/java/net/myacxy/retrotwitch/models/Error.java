@@ -34,6 +34,7 @@ public class Error
     public enum Type
     {
         NOT_FOUND(404),
+        UNKNOWN_HOST(0),
         UNPROCESSABLE_ENTITY(422),
         SERVICE_UNAVAILABLE(503),
         UNEXPECTED(-1);

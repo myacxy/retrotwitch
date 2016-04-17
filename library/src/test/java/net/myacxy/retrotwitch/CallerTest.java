@@ -3,6 +3,7 @@ package net.myacxy.retrotwitch;
 import net.myacxy.retrotwitch.api.*;
 import net.myacxy.retrotwitch.helpers.Lock;
 import net.myacxy.retrotwitch.models.*;
+import net.myacxy.retrotwitch.models.Error;
 
 import org.junit.Test;
 
@@ -28,8 +29,9 @@ public class CallerTest
             }
 
             @Override
-            public void onError()
+            public void onError(Error error)
             {
+                System.err.println(error);
                 lock.fail();
             }
         });
@@ -52,8 +54,9 @@ public class CallerTest
             }
 
             @Override
-            public void onError()
+            public void onError(Error error)
             {
+                System.err.println(error);
                 lock.fail();
             }
         });
@@ -77,8 +80,9 @@ public class CallerTest
             }
 
             @Override
-            public void onError()
+            public void onError(Error error)
             {
+                System.err.println(error);
                 lock.fail();
             }
         });
@@ -111,16 +115,18 @@ public class CallerTest
                     }
 
                     @Override
-                    public void onError()
+                    public void onError(Error error)
                     {
+                        System.err.println(error);
                         lock.fail();
                     }
                 });
             }
 
             @Override
-            public void onError()
+            public void onError(Error error)
             {
+                System.err.println(error);
                 lock.fail();
             }
         });
@@ -143,8 +149,9 @@ public class CallerTest
             }
 
             @Override
-            public void onError()
+            public void onError(Error error)
             {
+                System.err.println(error);
                 lock.fail();
             }
         });
@@ -167,8 +174,9 @@ public class CallerTest
             }
 
             @Override
-            public void onError()
+            public void onError(Error error)
             {
+                System.err.println(error);
                 lock.fail();
             }
         });
