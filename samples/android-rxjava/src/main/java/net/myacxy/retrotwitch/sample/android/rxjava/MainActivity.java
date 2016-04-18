@@ -1,12 +1,15 @@
 package net.myacxy.retrotwitch.sample.android.rxjava;
 
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.tb_main)
     protected Toolbar mToolbar;
 
+    private ActionBarDrawerToggle mDrawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -33,8 +38,23 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mDrawer.setScrimColor(Color.TRANSPARENT);
         initToolbar();
         changeFragment();
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState)
+    {
+        super.onPostCreate(savedInstanceState, persistentState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void changeFragment()
@@ -55,18 +75,19 @@ public class MainActivity extends AppCompatActivity
     private void initToolbar()
     {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.app_name, R.string.app_name);
+        mDrawer.setDrawerListener(mDrawerToggle);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_menu_black_24dp);
         drawable.setTint(ContextCompat.getColor(this, R.color.color15));
-        getSupportActionBar().setLogo(drawable);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+        mToolbar.setNavigationIcon(drawable);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if(item.getItemId() == android.R.id.home) {
-            mDrawer.openDrawer(GravityCompat.START);
+        if (mDrawerToggle.onOptionsItemSelected(item))
+        {
             return true;
         }
         return super.onOptionsItemSelected(item);

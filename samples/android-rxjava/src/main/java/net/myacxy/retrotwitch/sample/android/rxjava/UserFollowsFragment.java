@@ -64,7 +64,6 @@ public class UserFollowsFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-
         mAdapter = new UserFollowAdapter();
         mLayoutManager = new LinearLayoutManager(getContext());
         mSearchResults.setLayoutManager(mLayoutManager);
