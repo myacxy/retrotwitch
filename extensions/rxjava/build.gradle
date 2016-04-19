@@ -1,4 +1,18 @@
 apply plugin: 'java'
+apply plugin: 'me.tatarka.retrolambda'
+
+targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+    }
+}
 
 dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;

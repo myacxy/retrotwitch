@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 buildscript {
     repositories {
@@ -6,8 +7,10 @@ buildscript {
         mavenCentral()
         maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0-beta1'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     }
 }
 
@@ -22,19 +25,26 @@ android {
         versionCode 1
         versionName "0.1"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;
 
-    compile project(':library')
+    compile project(':extensions:rxjava')
     compile dependencies.butterKnife
+    compile dependencies.rxAndroid
     compile dependencies.rxBinding
     compile dependencies.rxBindingAppCompat
     compile dependencies.rxBindingDesign
