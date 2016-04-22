@@ -1,4 +1,4 @@
-package net.myacxy.retrotwitch.sample.android.rxjava;
+package net.myacxy.retrotwitch.sample.android.rxjava.views;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import net.myacxy.retrotwitch.RetroTwitch;
+import net.myacxy.retrotwitch.sample.android.rxjava.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        RetroTwitch.INSTANCE.configure().setLogLevel(HttpLoggingInterceptor.Level.BASIC).apply();
+        RetroTwitch.INSTANCE.configure().setLogLevel(HttpLoggingInterceptor.Level.BODY).apply();
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
