@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        RetroTwitch.INSTANCE.configure().setLogLevel(HttpLoggingInterceptor.Level.BASIC).apply();
+        RetroTwitch.getInstance().configure().setLogLevel(HttpLoggingInterceptor.Level.BASIC).apply();
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

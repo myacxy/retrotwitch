@@ -20,21 +20,11 @@ import java.util.List;
 
 public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, List<UserFollow>>
 {
-    private BuilderBase builder;
+    private BuilderBase<? extends BuilderBase> builder;
 
-    private UserFollowsResource(BuilderBase builder)
+    private UserFollowsResource(BuilderBase<? extends BuilderBase> builder)
     {
         this.builder = builder;
-    }
-
-    private UserFollowsResource(LimitedBuilder builder)
-    {
-        this((BuilderBase) builder);
-    }
-
-    private UserFollowsResource(AllBuilder builder)
-    {
-        this((BuilderBase) builder);
     }
 
     @Override
@@ -79,7 +69,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                     });
         }
 
-        return FluentCaller.INSTANCE;
+        return FluentCaller.getInstance();
     }
 
     public void getPrevious(Caller.ResponseListener<List<UserFollow>> listener)
@@ -164,7 +154,7 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
                 });
     }
 
-    private static abstract class BuilderBase implements Serializable
+    private static abstract class BuilderBase<B extends BuilderBase> implements Serializable
     {
         final String user;
         Integer total = null;
@@ -176,6 +166,35 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
         public BuilderBase(String user)
         {
             this.user = user;
+        }
+
+        public B withLimit(int limit)
+        {
+            this.limit = limit;
+            return (B) this;
+        }
+
+        public B withOffset(int offset)
+        {
+            this.offset = offset;
+            return (B) this;
+        }
+
+        public B withDirection(Direction direction)
+        {
+            this.direction = direction;
+            return (B) this;
+        }
+
+        public B withSortBy(SortBy sortBy)
+        {
+            this.sortBy = sortBy;
+            return (B) this;
+        }
+
+        public UserFollowsResource build()
+        {
+            return new UserFollowsResource(this);
         }
     }
 
@@ -197,44 +216,15 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
         }
     }
 
-    public static class LimitedBuilder extends BuilderBase
+    public static class LimitedBuilder extends BuilderBase<LimitedBuilder>
     {
         public LimitedBuilder(String user)
         {
             super(user);
         }
-
-        public LimitedBuilder withLimit(int limit)
-        {
-            this.limit = limit;
-            return this;
-        }
-
-        public LimitedBuilder withOffset(int offset)
-        {
-            this.offset = offset;
-            return this;
-        }
-
-        public LimitedBuilder withDirection(Direction direction)
-        {
-            this.direction = direction;
-            return this;
-        }
-
-        public LimitedBuilder withSortBy(SortBy sortBy)
-        {
-            this.sortBy = sortBy;
-            return this;
-        }
-
-        public UserFollowsResource build()
-        {
-            return new UserFollowsResource(this);
-        }
     }
 
-    public static class AllBuilder extends BuilderBase
+    public static class AllBuilder extends BuilderBase<AllBuilder>
     {
         Integer maximum;
 
@@ -247,35 +237,6 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
         {
             this.maximum = maximum;
             return this;
-        }
-
-        public AllBuilder withLimit(int limit)
-        {
-            this.limit = limit;
-            return this;
-        }
-
-        public AllBuilder withOffset(int offset)
-        {
-            this.offset = offset;
-            return this;
-        }
-
-        public AllBuilder withDirection(Direction direction)
-        {
-            this.direction = direction;
-            return this;
-        }
-
-        public AllBuilder withSortBy(SortBy sortBy)
-        {
-            this.sortBy = sortBy;
-            return this;
-        }
-
-        public UserFollowsResource build()
-        {
-            return new UserFollowsResource(this);
         }
     }
 }

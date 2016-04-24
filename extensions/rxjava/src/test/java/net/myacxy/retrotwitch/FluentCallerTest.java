@@ -19,7 +19,7 @@ public class FluentCallerTest
     @Before
     public void setUp()
     {
-        RetroTwitch.INSTANCE.configure()
+        RetroTwitch.getInstance().configure()
                 .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
                 .apply();
     }

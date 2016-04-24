@@ -15,6 +15,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 
 public class FluentCallerTest
 {
@@ -22,7 +24,7 @@ public class FluentCallerTest
     @Before
     public void setUp()
     {
-        RetroTwitch.INSTANCE.configure()
+        RetroTwitch.getInstance().configure()
                 .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
                 .apply();
     }
@@ -32,7 +34,7 @@ public class FluentCallerTest
     {
         final Lock<Stream> lock = new Lock<>();
 
-        RetroTwitch.INSTANCE.getFluent().stream("enns").build().enqueue(new Caller.ResponseListener<Stream>()
+        RetroTwitch.getInstance().getFluent().stream("enns").build().enqueue(new Caller.ResponseListener<Stream>()
         {
             @Override
             public void onSuccess(Stream stream)
@@ -61,7 +63,7 @@ public class FluentCallerTest
     {
         final MultiLock multiLock = new MultiLock(2);
 
-        RetroTwitch.INSTANCE.getFluent()
+        RetroTwitch.getInstance().getFluent()
                 .userFollows("myacxy").limited().withLimit(5).build().enqueue(new Caller.ResponseListener<List<UserFollow>>()
                     {
                         @Override
@@ -97,10 +99,10 @@ public class FluentCallerTest
 
         ArrayList<UserFollow> myacxyLimitedFollows = multiLock.getMultiResult("limitedFollows", ArrayList.class);
         assertThat(myacxyLimitedFollows, is(notNullValue()));
-        assertThat(myacxyLimitedFollows.size() == 5, is(true));
+        assertThat(myacxyLimitedFollows, hasSize(5));
 
         ArrayList<UserFollow> sodapoppinAllFollows = multiLock.getMultiResult("allFollows", ArrayList.class);
         assertThat(sodapoppinAllFollows, is(notNullValue()));
-        assertThat(sodapoppinAllFollows.size() > 350, is(true));
+        assertThat(sodapoppinAllFollows.size(), greaterThan(350));
     }
 }

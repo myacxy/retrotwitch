@@ -44,7 +44,7 @@ public class StreamResource extends BaseSingleResource<StreamResource, Stream>
             }
         });
 
-        return FluentCaller.INSTANCE;
+        return FluentCaller.getInstance();
     }
 
     public static class Builder extends BaseSingleResource.Builder<StreamResource>

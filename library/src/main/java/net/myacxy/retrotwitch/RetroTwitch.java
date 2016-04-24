@@ -8,9 +8,17 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.util.ArrayList;
 
-public enum RetroTwitch
+public class RetroTwitch
 {
-    INSTANCE;
+    private static RetroTwitch sInstance;
+
+    RetroTwitch() {
+
+    }
+
+    public static RetroTwitch getInstance() {
+        return sInstance == null ? sInstance = new RetroTwitch() : sInstance;
+    }
 
     public AuthenticationBuilder authenticate()
     {
@@ -24,7 +32,7 @@ public enum RetroTwitch
 
     public FluentCaller getFluent()
     {
-        return FluentCaller.INSTANCE;
+        return FluentCaller.getInstance();
     }
 
     public Caller getDefault() { return Caller.getInstance(); }
@@ -56,7 +64,7 @@ public enum RetroTwitch
         public RetroTwitch build(Callback callback)
         {
             callback.authenticate(buildUrl());
-            return INSTANCE;
+            return getInstance();
         }
 
         public String buildUrl()
@@ -99,7 +107,7 @@ public enum RetroTwitch
         public RetroTwitch apply()
         {
             Caller.getInstance().setLoggingLevel(level);
-            return INSTANCE;
+            return getInstance();
         }
     }
 }

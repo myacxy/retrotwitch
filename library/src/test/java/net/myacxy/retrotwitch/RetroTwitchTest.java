@@ -24,7 +24,7 @@ public class RetroTwitchTest
     @Test
     public void authenticateWithCallback() throws Exception
     {
-        RetroTwitch.INSTANCE.authenticate()
+        RetroTwitch.getInstance().authenticate()
                 .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
                 .addScopes(Scope.USER_READ)
@@ -42,7 +42,7 @@ public class RetroTwitchTest
     public void authenticate() throws Exception
     {
 
-        String url = RetroTwitch.INSTANCE.authenticate()
+        String url = RetroTwitch.getInstance().authenticate()
                 .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
                 .addScopes(Scope.USER_READ)
