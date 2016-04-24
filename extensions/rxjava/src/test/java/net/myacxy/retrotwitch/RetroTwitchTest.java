@@ -41,6 +41,8 @@ public class RetroTwitchTest
                 .addScopes(Scope.USER_READ)
                 .buildUrl();
 
+        System.out.println(url);
+
         assertThat(url, equalTo(mAuthenticationUrl));
     }
 }

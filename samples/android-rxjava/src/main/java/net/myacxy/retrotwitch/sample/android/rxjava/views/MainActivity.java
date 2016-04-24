@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.PersistableBundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,19 +14,19 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import net.myacxy.retrotwitch.RetroTwitch;
 import net.myacxy.retrotwitch.sample.android.rxjava.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.logging.HttpLoggingInterceptor;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     @Bind(R.id.dl_main_drawer)
     protected DrawerLayout mDrawer;
     @Bind(R.id.tb_main)
     protected Toolbar mToolbar;
+    @Bind(R.id.nv_main)
+    protected NavigationView mNavigation;
 
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -34,14 +35,13 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        RetroTwitch.getInstance().configure().setLogLevel(HttpLoggingInterceptor.Level.BODY).apply();
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mDrawer.setScrimColor(Color.TRANSPARENT);
         initToolbar();
-        changeFragment();
+        mDrawer.setScrimColor(Color.TRANSPARENT);
+        mNavigation.setNavigationItemSelectedListener(this);
+        changeFragment(FragmentFactory.getFragment(this, FragmentFactory.Type.USER_FOLLOWS), FragmentFactory.Type.USER_FOLLOWS.getTag());
     }
 
     @Override
@@ -58,15 +58,8 @@ public class MainActivity extends AppCompatActivity
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private void changeFragment()
+    private void changeFragment(Fragment fragment, String tag)
     {
-
-        String tag = UserFollowsFragment.class.getSimpleName();
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if (fragment == null)
-        {
-            fragment = new UserFollowsFragment();
-        }
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fl_main_container, fragment, tag)
@@ -80,7 +73,6 @@ public class MainActivity extends AppCompatActivity
         mDrawer.setDrawerListener(mDrawerToggle);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_menu_black_24dp);
         drawable.setTint(ContextCompat.getColor(this, R.color.color15));
-//        getSupportActionBar().setHomeButtonEnabled(true);
         mToolbar.setNavigationIcon(drawable);
     }
 
@@ -92,5 +84,18 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.mi_nv_authentication:
+                changeFragment(FragmentFactory.getFragment(this, FragmentFactory.Type.AUTHENTICATION),
+                        FragmentFactory.Type.AUTHENTICATION.getTag());
+                return true;
+        }
+        return false;
     }
 }

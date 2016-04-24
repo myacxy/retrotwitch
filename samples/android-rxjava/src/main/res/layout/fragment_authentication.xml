@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <import type="net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.AuthenticationViewModel" />
+        <variable name="viewModel" type="AuthenticationViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <!--Search-->
+        <Button
+            android:id="@+id/btn_uf_search"
+            android:layout_centerInParent="true"
+            android:text="Authenticate"
+            android:onClick="@{viewModel::onAuthenticateClicked}"
+            style="@style/Button.Default"
+            />
+
+    </RelativeLayout>
+
+</layout>

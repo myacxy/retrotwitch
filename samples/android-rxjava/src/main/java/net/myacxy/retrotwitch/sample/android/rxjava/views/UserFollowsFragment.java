@@ -10,25 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.myacxy.retrotwitch.RxCaller;
-import net.myacxy.retrotwitch.models.UserFollowsContainer;
 import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel;
 import net.myacxy.retrotwitch.sample.android.rxjava.databinding.FragmentUserFollowsBinding;
 
 public class UserFollowsFragment extends Fragment
 {
     protected RecyclerView mSearchResults;
-
     private UserFollowsAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private FragmentUserFollowsBinding mBinding;
     private UserFollowsViewModel mViewModel;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-    }
 
     @Nullable
     @Override
@@ -50,22 +41,6 @@ public class UserFollowsFragment extends Fragment
         mSearchResults.setAdapter(mAdapter = new UserFollowsAdapter(mViewModel));
 
         mSearchResults.addOnScrollListener(new ScrollListener());
-
-        if (savedInstanceState != null)
-        {
-//            ArrayList<UserFollow> userFollows = (ArrayList<UserFollow>) savedInstanceState.getSerializable("test");
-//            mAdapter.setUserFollows(userFollows);
-//            mUserFollowsResource = (UserFollowsResource) savedInstanceState.getSerializable("test2");
-//            setInformation(mUserFollowsResource.getTotal(), userFollows.size());
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
-        super.onSaveInstanceState(outState);
-//        outState.putSerializable("test", mAdapter.getUserFollows());
-//        outState.putSerializable("test2", mUserFollowsResource);
     }
 
     @Override
@@ -76,8 +51,6 @@ public class UserFollowsFragment extends Fragment
     }
 
     //<editor-fold desc="Inner Classes">
-
-
     private class ScrollListener extends OnScrollListener
     {
         @Override

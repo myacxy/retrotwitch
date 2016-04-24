@@ -9,4 +9,9 @@
         android:id="@+id/mi_nv_stream"
         android:title="Stream"
         />
+
+    <item
+        android:id="@+id/mi_nv_authentication"
+        android:title="Authentication"
+        />
 </menu>

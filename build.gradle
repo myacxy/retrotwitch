@@ -3,6 +3,7 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url = "https://jitpack.io" }
         maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 }
@@ -37,6 +38,7 @@ ext {
             rxBinding: "com.jakewharton.rxbinding:rxbinding:$rxBindingVersion",
             rxBindingAppCompat: "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$rxBindingVersion",
             rxBindingDesign: "com.jakewharton.rxbinding:rxbinding-design:$rxBindingVersion",
-            rxBindingRecyclerView: "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$rxBindingVersion"
+            rxBindingRecyclerView: "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$rxBindingVersion",
+            logger: 'com.github.orhanobut:logger:1.12'
     ]
 }

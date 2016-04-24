@@ -53,5 +53,6 @@ dependencies {
     compile dependencies.rxBindingAppCompat
     compile dependencies.rxBindingDesign
     compile dependencies.rxBindingRecyclerView
+    compile dependencies.logger
     testCompile dependencies.junit
 }
