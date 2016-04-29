@@ -247,7 +247,20 @@ public class Caller extends BaseCaller<TwitchV3Service>
             @Override
             public void onSuccess(StreamsContainer streamsContainer)
             {
-                cache.addAll(streamsContainer.streams);
+                if(streamsContainer.streams.size() != perRequestLimit) {
+
+                }
+                if(cache.size() + streamsContainer.streams.size() > resultLimit) {
+                    for (Stream stream : streamsContainer.streams)
+                    {
+                        cache.add(stream);
+                        if(cache.size() == resultLimit) {
+                            listener.onSuccess(cache);
+                            return;
+                        }
+                    }
+                }
+
                 if (cache.size() < resultLimit && streamsContainer.total > offset + perRequestLimit)
                 {
                     getAllStreamsRecursively(game, channels, perRequestLimit, offset + perRequestLimit, clientId, streamType, resultLimit, listener, cache);

@@ -1,20 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color0">#222222</color>
-    <color name="color1">#8b3e2f</color>
-    <color name="color2">#526f33</color>
-    <color name="color3">#665847</color>
-    <color name="color4">#4a708b</color>
-    <color name="color5">#7a378b</color>
-    <color name="color6">#528b8b</color>
-    <color name="color7">#999999</color>
+    <!--Color0-->
+    <color name="color0_100">#222222</color>
+    <color name="color0_87">#de222222</color>
+    <color name="color0_70">#b3222222</color>
+    <color name="color0_54">#91222222</color>
+    <color name="color0_50">#80222222</color>
+    <color name="color0_38">#61222222</color>
+    <color name="color0_12">#1f222222</color>
 
-    <color name="color8">#4c4c4c</color>
-    <color name="color9">#d75f00</color>
-    <color name="color10">#cee318</color>
-    <color name="color11">#eee685</color>
-    <color name="color12">#9ac0cd</color>
-    <color name="color13">#9f79ee</color>
-    <color name="color14">#79cdcd</color>
-    <color name="color15">#e8e9ca</color>
+    <!--Color1-->
+    <color name="color1_100">#8b3e2f</color>
+    <!--Color2-->
+    <color name="color2_100">#526f33</color>
+    <!--Color3-->
+    <color name="color3_100">#665847</color>
+    <!--Color4-->
+    <color name="color4_100">#4a708b</color>
+    <!--Color5-->
+    <color name="color5_100">#7a378b</color>
+
+    <!--Color6-->
+    <color name="color6_100">#528b8b</color>
+    <color name="color6_87">#de528b8b</color>
+    <color name="color6_70">#b3528b8b</color>
+    <color name="color6_54">#91528b8b</color>
+    <color name="color6_50">#80528b8b</color>
+    <color name="color6_38">#61528b8b</color>
+    <color name="color6_12">#1f528b8b</color>
+
+    <color name="color7_100">#999999</color>
+
+    <!--Color8-->
+    <color name="color8_100">#4c4c4c</color>
+    <color name="color8_87">#de4c4c4c</color>
+    <color name="color8_70">#b34c4c4c</color>
+    <color name="color8_54">#914c4c4c</color>
+    <color name="color8_50">#804c4c4c</color>
+    <color name="color8_38">#614c4c4c</color>
+    <color name="color8_12">#1f4c4c4c</color>
+
+    <!--Color9-->
+    <color name="color9_100">#d75f00</color>
+    <!--Color10-->
+    <color name="color10_100">#cee318</color>
+    <!--Color11-->
+    <color name="color11_100">#eee685</color>
+    <!--Color12-->
+    <color name="color12_100">#9ac0cd</color>
+    <!--Color13-->
+    <color name="color13_100">#9f79ee</color>
+    <!--Color14-->
+    <color name="color14_100">#79cdcd</color>
+
+    <!--Color15-->
+    <color name="color15_100">#e8e9ca</color>
+    <color name="color15_87">#dee8e9ca</color>
+    <color name="color15_70">#b3e8e9ca</color>
+    <color name="color15_54">#91e8e9ca</color>
+    <color name="color15_50">#80e8e9ca</color>
+    <color name="color15_38">#61e8e9ca</color>
+    <color name="color15_12">#1fe8e9ca</color>
+
 </resources>

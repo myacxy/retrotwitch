@@ -7,6 +7,7 @@ import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import net.myacxy.retrotwitch.sample.android.rxjava.R;
+import net.myacxy.retrotwitch.sample.android.rxjava.views.FragmentFactory.Type;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initToolbar();
         mDrawer.setScrimColor(Color.TRANSPARENT);
         mNavigation.setNavigationItemSelectedListener(this);
-        changeFragment(FragmentFactory.getFragment(this, FragmentFactory.Type.USER_FOLLOWS), FragmentFactory.Type.USER_FOLLOWS.getTag());
+        changeFragment(Type.USER_FOLLOWS, true);
     }
 
     @Override
@@ -58,11 +60,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private void changeFragment(Fragment fragment, String tag)
+    private void changeFragment(Type type, boolean tryReusingOldFragment)
     {
+        Fragment fragment = FragmentFactory.getFragment(this, type, tryReusingOldFragment);
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fl_main_container, fragment, tag)
+                .replace(R.id.fl_main_container, fragment, type.getTag())
                 .commit();
     }
 
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.app_name, R.string.app_name);
         mDrawer.setDrawerListener(mDrawerToggle);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_menu_black_24dp);
-        drawable.setTint(ContextCompat.getColor(this, R.color.color15));
+        drawable.setTint(ContextCompat.getColor(this, R.color.color15_100));
         mToolbar.setNavigationIcon(drawable);
     }
 
@@ -91,9 +95,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         switch (item.getItemId())
         {
+            case R.id.mi_nv_user_follows:
+                changeFragment(Type.USER_FOLLOWS, true);
+                mDrawer.closeDrawer(GravityCompat.START);
+                return true;
             case R.id.mi_nv_authentication:
-                changeFragment(FragmentFactory.getFragment(this, FragmentFactory.Type.AUTHENTICATION),
-                        FragmentFactory.Type.AUTHENTICATION.getTag());
+                changeFragment(Type.AUTHENTICATION, true);
+                mDrawer.closeDrawer(GravityCompat.START);
                 return true;
         }
         return false;

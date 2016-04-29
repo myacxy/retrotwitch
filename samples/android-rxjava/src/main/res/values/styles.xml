@@ -2,19 +2,21 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/color15</item>
-        <item name="colorPrimaryDark">@color/color8</item>
-        <item name="colorAccent">@color/color6</item>
+        <item name="colorPrimary">@color/color15_100</item>
+        <item name="colorPrimaryDark">@color/color8_100</item>
+        <item name="colorAccent">@color/color6_100</item>
 
         <item name="android:textColor">?colorPrimary</item>
-        <item name="android:statusBarColor">@color/color0</item>
+        <item name="android:statusBarColor">@color/color8_50</item>
         <item name="android:scrollbarThumbHorizontal">?colorAccent</item>
         <item name="android:scrollbarThumbVertical">?colorAccent</item>
-        <item name="android:background">@color/color0</item>
+        <item name="android:background">@color/color0_100</item>
+        <item name="colorControlHighlight">@color/color7_100</item>
 
         <item name="android:textViewStyle">@style/TextView</item>
         <item name="android:editTextStyle">@style/EditText</item>
         <item name="android:buttonStyle">@style/Button.Default</item>
+        <item name="android:borderlessButtonStyle">@style/Button.Borderless</item>
         <item name="android:toolbarStyle">@style/Toolbar</item>
     </style>
 
@@ -26,7 +28,7 @@
 
     <style name="EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">?colorPrimary</item>
-        <item name="android:textColorHint">?colorPrimaryDark</item>
+        <item name="android:textColorHint">@color/color8_50</item>
     </style>
 
     <style name="Button.Default" parent="Widget.AppCompat.Button">
@@ -39,6 +41,11 @@
         <item name="android:textColor">?colorPrimary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:background">@drawable/btn_ripple</item>
+    </style>
+
+    <style name="Button.Borderless" parent="Button.Default">
+        <item name="android:textColor">?colorAccent</item>
+        <item name="android:background">?selectableItemBackground</item>
     </style>
 
     <style name="Button.Dense" parent="Button.Default">

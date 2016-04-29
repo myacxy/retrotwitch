@@ -28,7 +28,7 @@
             android:maxLines="1"
             android:text="@={viewModel.userName}"
             android:inputType="textPersonName"
-            style="@style/EditText"
+            style="?android:attr/editTextStyle"
             />
 
         <!--Search-->
@@ -40,7 +40,8 @@
             android:text="@string/search"
             android:enabled="@{viewModel.loading ? false : true}"
             android:onClick="@{viewModel::onSearchClicked}"
-            style="@style/Button.Default"
+            android:alpha="@{viewModel.loading ? 0.38f : 1f}"
+            style="?android:attr/buttonStyle"
             />
 
         <!--Total-->

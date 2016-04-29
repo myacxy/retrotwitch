@@ -3,6 +3,8 @@ package net.myacxy.retrotwitch.sample.android.rxjava.views;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.orhanobut.logger.Logger;
+
 public class FragmentFactory
 {
     private FragmentFactory()
@@ -10,12 +12,15 @@ public class FragmentFactory
         throw new IllegalAccessError();
     }
 
-    public static Fragment getFragment(AppCompatActivity activity, Type type)
+    public static Fragment getFragment(AppCompatActivity activity, Type type, boolean tryReusingOldFragment)
     {
-        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(type.getTag());
-        if (fragment != null)
-        {
-            return fragment;
+        if (tryReusingOldFragment) {
+            Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(type.getTag());
+            if (fragment != null)
+            {
+                return fragment;
+            }
+            Logger.i("could not reuse fragment. (%s)", type);
         }
 
         switch (type)
