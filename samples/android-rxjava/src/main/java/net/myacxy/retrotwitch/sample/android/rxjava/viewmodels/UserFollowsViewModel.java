@@ -1,12 +1,9 @@
 package net.myacxy.retrotwitch.sample.android.rxjava.viewmodels;
 
-import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.view.View;
-import android.widget.Toast;
 
 import net.myacxy.retrotwitch.RxCaller;
 import net.myacxy.retrotwitch.api.SortBy;
@@ -27,9 +24,9 @@ public class UserFollowsViewModel
     public final ObservableInt currentlyLoadedCount = new ObservableInt();
     public final ObservableBoolean loading = new ObservableBoolean();
     public final ObservableField<String> userName = new ObservableField<>();
+    public final ObservableField<String> errorMessage = new ObservableField<>();
     public final ObservableArrayList<UserFollow> userFollows = new ObservableArrayList<>();
     private Subscription mSubscription;
-    private Context mContext;
     private UserFollowsContainer mUserFollowsContainer;
     private final Observer<UserFollowsContainer> mObserver = new Observer<UserFollowsContainer>()
     {
@@ -45,7 +42,7 @@ public class UserFollowsViewModel
             loading.set(false);
             setInformation(0, 0);
             Error error = RxErrorFactory.fromThrowable(t);
-            Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
+            errorMessage.set(error.message);
         }
 
         @Override
@@ -57,12 +54,7 @@ public class UserFollowsViewModel
         }
     };
 
-    public UserFollowsViewModel(Context context)
-    {
-        mContext = context;
-    }
-
-    public void onSearchClicked(View view)
+    public void search()
     {
         String user = userName.get() != null ? userName.get().trim() : null;
         if (!StringUtil.isBlank(user))
@@ -81,7 +73,7 @@ public class UserFollowsViewModel
                     .subscribe(mObserver);
         } else
         {
-            Toast.makeText(mContext, "user name must not be empty", Toast.LENGTH_SHORT).show();
+            errorMessage.set("user must must not be empty");
         }
     }
 

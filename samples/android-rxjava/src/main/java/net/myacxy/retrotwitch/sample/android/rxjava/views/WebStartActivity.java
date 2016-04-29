@@ -8,10 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.orhanobut.logger.Logger;
 
+import net.myacxy.retrotwitch.sample.android.rxjava.FragmentFactory;
+import net.myacxy.retrotwitch.sample.android.rxjava.SimpleViewModelLocator;
+
 public class WebStartActivity extends AppCompatActivity
 {
-    public static final String EXTRA_ACCESS_TOKEN = "extra.access.token";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -23,8 +24,10 @@ public class WebStartActivity extends AppCompatActivity
         String accessToken = uri.getQueryParameter("access_token");
         Logger.d(accessToken);
 
+        SimpleViewModelLocator.getInstance().getAuthentication().accessToken.set(accessToken);
+
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(EXTRA_ACCESS_TOKEN, accessToken);
+        intent.putExtra(MainActivity.EXTRA_FRAGMENT, FragmentFactory.Type.AUTHENTICATION);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

@@ -15,14 +15,17 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import net.myacxy.retrotwitch.sample.android.rxjava.FragmentFactory;
 import net.myacxy.retrotwitch.sample.android.rxjava.R;
-import net.myacxy.retrotwitch.sample.android.rxjava.views.FragmentFactory.Type;
+import net.myacxy.retrotwitch.sample.android.rxjava.FragmentFactory.Type;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
+    public static final String EXTRA_FRAGMENT = "extra.fragment";
+
     @Bind(R.id.dl_main_drawer)
     protected DrawerLayout mDrawer;
     @Bind(R.id.tb_main)
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected NavigationView mNavigation;
 
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private Type mType = Type.USER_FOLLOWS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,7 +48,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initToolbar();
         mDrawer.setScrimColor(Color.TRANSPARENT);
         mNavigation.setNavigationItemSelectedListener(this);
-        changeFragment(Type.USER_FOLLOWS, true);
+
+        Bundle extras = getIntent().getExtras();
+        if(savedInstanceState != null) {
+            mType = (Type) savedInstanceState.getSerializable(EXTRA_FRAGMENT);
+        } else if(extras != null) {
+            mType = (Type) extras.getSerializable(EXTRA_FRAGMENT);
+        } else {
+            mType = Type.USER_FOLLOWS;
+        }
+        changeFragment(mType, true);
     }
 
     @Override
@@ -51,6 +65,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         super.onPostCreate(savedInstanceState, persistentState);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(EXTRA_FRAGMENT, mType);
     }
 
     @Override
@@ -62,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void changeFragment(Type type, boolean tryReusingOldFragment)
     {
-        Fragment fragment = FragmentFactory.getFragment(this, type, tryReusingOldFragment);
+        Fragment fragment = FragmentFactory.getFragment(this, mType = type, tryReusingOldFragment);
 
         getSupportFragmentManager()
                 .beginTransaction()

@@ -1,5 +1,6 @@
 package net.myacxy.retrotwitch.sample.android.rxjava.views;
 
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,9 +10,15 @@ import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel;
 import net.myacxy.retrotwitch.sample.android.rxjava.databinding.FragmentUserFollowsBinding;
+import net.myacxy.retrotwitch.sample.android.rxjava.R;
+import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel;
+import net.myacxy.retrotwitch.sample.android.rxjava.SimpleViewModelLocator;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class UserFollowsFragment extends Fragment
 {
@@ -21,11 +28,19 @@ public class UserFollowsFragment extends Fragment
     private FragmentUserFollowsBinding mBinding;
     private UserFollowsViewModel mViewModel;
 
+    private Observable.OnPropertyChangedCallback mErrorCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i)
+        {
+            Toast.makeText(getContext(), mViewModel.errorMessage.get(), Toast.LENGTH_SHORT).show();
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        mViewModel = new UserFollowsViewModel(getContext());
+        mViewModel = SimpleViewModelLocator.getInstance().getUserFollows();
         mBinding = FragmentUserFollowsBinding.inflate(inflater, container, false);
         mBinding.setViewModel(mViewModel);
         mSearchResults = mBinding.rvUfResults;
@@ -36,18 +51,28 @@ public class UserFollowsFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
 
         mSearchResults.setLayoutManager(mLayoutManager = new LinearLayoutManager(getContext()));
         mSearchResults.setAdapter(mAdapter = new UserFollowsAdapter(mViewModel));
 
         mSearchResults.addOnScrollListener(new ScrollListener());
+
+        mViewModel.errorMessage.addOnPropertyChangedCallback(mErrorCallback);
     }
 
     @Override
     public void onDestroy()
     {
         super.onDestroy();
+        ButterKnife.unbind(this);
+        mViewModel.errorMessage.removeOnPropertyChangedCallback(mErrorCallback);
         mViewModel.reset();
+    }
+
+    @OnClick(R.id.btn_uf_search)
+    protected void onSearchClicked() {
+        mViewModel.search();
     }
 
     //<editor-fold desc="Inner Classes">

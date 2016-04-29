@@ -1,9 +1,12 @@
-package net.myacxy.retrotwitch.sample.android.rxjava.views;
+package net.myacxy.retrotwitch.sample.android.rxjava;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.orhanobut.logger.Logger;
+
+import net.myacxy.retrotwitch.sample.android.rxjava.views.AuthenticationFragment;
+import net.myacxy.retrotwitch.sample.android.rxjava.views.UserFollowsFragment;
 
 public class FragmentFactory
 {
@@ -34,7 +37,7 @@ public class FragmentFactory
         }
     }
 
-    enum Type
+    public enum Type
     {
         USER_FOLLOWS(UserFollowsFragment.class.getSimpleName()),
         AUTHENTICATION(AuthenticationFragment.class.getSimpleName());
