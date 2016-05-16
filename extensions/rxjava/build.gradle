@@ -23,3 +23,24 @@ dependencies {
     testCompile dependencies.junit
     testCompile dependencies.hamcrestAll
 }
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'net.myacxy.retrotwitch.RetroTwitch',
+        )
+    }
+}
+
+task fatJar(type: Jar) {
+    manifest.from jar.manifest
+    classifier = 'all'
+    from {
+        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+artifacts {
+    archives fatJar
+}

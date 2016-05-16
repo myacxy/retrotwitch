@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.common.base.Strings;
+
 import net.myacxy.retrotwitch.sample.android.rxjava.databinding.FragmentUserFollowsBinding;
 import net.myacxy.retrotwitch.sample.android.rxjava.R;
 import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel;
@@ -32,7 +34,11 @@ public class UserFollowsFragment extends Fragment
         @Override
         public void onPropertyChanged(Observable observable, int i)
         {
-            Toast.makeText(getContext(), mViewModel.errorMessage.get(), Toast.LENGTH_SHORT).show();
+            String errorMessage = mViewModel.errorMessage.get();
+            if (!Strings.isNullOrEmpty(errorMessage))
+            {
+                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            }
         }
     };
 

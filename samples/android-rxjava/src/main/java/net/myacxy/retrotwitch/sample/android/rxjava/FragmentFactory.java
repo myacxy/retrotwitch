@@ -21,9 +21,10 @@ public class FragmentFactory
             Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(type.getTag());
             if (fragment != null)
             {
+                Logger.t(0).i("reusing fragment. (%s)", type.getTag());
                 return fragment;
             }
-            Logger.i("could not reuse fragment. (%s)", type);
+            Logger.t(0).i("could not reuse fragment. (%s)", type.getTag());
         }
 
         switch (type)
