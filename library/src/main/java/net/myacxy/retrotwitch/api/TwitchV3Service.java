@@ -44,4 +44,26 @@ public interface TwitchV3Service
             @Query("offset") Integer offset,
             @Query("client_id") String clientId,
             @Query("stream_type") StreamType streamType);
+
+    @GET("users/{user}")
+    Call<User> getUser(@Path("user") String user);
+
+    /**
+     * requires Scope.USER_READ
+     *
+     * Note: If the user's Twitch registered Email Address is not verified, null will be returned.
+     *
+     * @return
+     */
+    @GET("user")
+    Call<User> getUser();
+
+    /**
+     * requires Scope.USER_SUBSCRIPTIONS
+     *
+     * @param user
+     * @return a list of emoticons that the user is authorized to use
+     */
+    @GET("users/{user}/emotes")
+    Call<User> getUserEmotes(@Path("user") String user);
 }

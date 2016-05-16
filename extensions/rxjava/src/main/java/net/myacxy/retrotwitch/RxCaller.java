@@ -8,6 +8,7 @@ import net.myacxy.retrotwitch.api.StreamType;
 import net.myacxy.retrotwitch.models.Channel;
 import net.myacxy.retrotwitch.models.StreamContainer;
 import net.myacxy.retrotwitch.models.StreamsContainer;
+import net.myacxy.retrotwitch.models.User;
 import net.myacxy.retrotwitch.models.UserFollowsContainer;
 import net.myacxy.retrotwitch.utils.StringUtil;
 
@@ -98,7 +99,8 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
                                         .concatMap(page ->
                                         {
                                             int limit = initialContainer.limit;
-                                            if(page == additionalPages) {
+                                            if (page == additionalPages)
+                                            {
                                                 limit = actualMaximum - page * initialContainer.limit;
                                             }
                                             System.out.println("limit=" + limit + ", page=" + page);
@@ -181,7 +183,8 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
                                         .concatMap(page ->
                                         {
                                             int limit = initialContainer.limit;
-                                            if(page == additionalPages) {
+                                            if (page == additionalPages)
+                                            {
                                                 limit = actualMaximum - page * initialContainer.limit;
                                             }
                                             System.out.println("limit=" + limit + ", page=" + page);
@@ -191,11 +194,18 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
                     return Observable.just(initialContainer);
                 });
     }
+
+    public Observable<User> getUser(String user)
+    {
+        return getService().getUser(user);
+    }
     //</editor-fold>
 
-    private int calculateAdditionalPages(int totalOrMaximum) {
+    private int calculateAdditionalPages(int totalOrMaximum)
+    {
         float allPages = totalOrMaximum / (float) TwitchV3Service.MAX_LIMIT;
-        if((allPages * 100) % 100 > 0) {
+        if ((allPages * 100) % 100 > 0)
+        {
             return (int) allPages;
         }
         return (int) (allPages - 1);

@@ -1,5 +1,8 @@
 package net.myacxy.retrotwitch;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import net.myacxy.retrotwitch.api.*;
 import net.myacxy.retrotwitch.helpers.Lock;
 import net.myacxy.retrotwitch.models.*;
@@ -15,6 +18,8 @@ import static org.junit.Assert.*;
 
 public class CallerTest
 {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
     @Test(timeout = 5000)
     public void getUserFollows() throws Exception
     {
@@ -184,5 +189,33 @@ public class CallerTest
         lock.await();
         System.out.println(lock.result.size());
         assertTrue(lock.result.size() == 500);
+    }
+
+    @Test(timeout = 5000)
+    public void getUser() throws Exception
+    {
+        final Lock<User> lock = new Lock<>();
+
+        Caller.getInstance().getUser("myacxy", new Caller.ResponseListener<User>()
+        {
+            @Override
+            public void onSuccess(User user)
+            {
+                lock.succeed(user);
+            }
+
+            @Override
+            public void onError(Error error)
+            {
+                System.err.println(error);
+                lock.fail();
+            }
+        });
+
+        lock.await();
+        System.out.println(GSON.toJson(lock.result));
+        assertNull(lock.result.bio);
+        assertNull(lock.result.logo);
+        assertEquals(lock.result.displayName, "myacxy");
     }
 }

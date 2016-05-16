@@ -277,6 +277,24 @@ public class Caller extends BaseCaller<TwitchV3Service>
             }
         });
     }
+
+    public void getUser(String user, final ResponseListener<User> listener)
+    {
+        getService().getUser(user).enqueue(new Callback<User>()
+        {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response)
+            {
+                listener.onSuccess(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t)
+            {
+                listener.onError(ErrorFactory.fromThrowable(t));
+            }
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="Inner Classes / Interfaces">

@@ -2,8 +2,10 @@ package net.myacxy.retrotwitch.api;
 
 import net.myacxy.retrotwitch.models.StreamContainer;
 import net.myacxy.retrotwitch.models.StreamsContainer;
+import net.myacxy.retrotwitch.models.User;
 import net.myacxy.retrotwitch.models.UserFollowsContainer;
 
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -50,4 +52,26 @@ public interface RxTwitchV3Service
             @Query("offset") Integer offset,
             @Query("client_id") String clientId,
             @Query("stream_type") StreamType streamType);
+
+    @GET("users/{user}")
+    Observable<User> getUser(@Path("user") String user);
+
+    /**
+     * requires Scope.USER_READ
+     *
+     * Note: If the user's Twitch registered Email Address is not verified, null will be returned.
+     *
+     * @return
+     */
+    @GET("user")
+    Observable<User> getUser();
+
+    /**
+     * requires Scope.USER_SUBSCRIPTIONS
+     *
+     * @param user
+     * @return a list of emoticons that the user is authorized to use
+     */
+    @GET("users/{user}/emotes")
+    Observable<User> getUserEmotes(@Path("user") String user);
 }
