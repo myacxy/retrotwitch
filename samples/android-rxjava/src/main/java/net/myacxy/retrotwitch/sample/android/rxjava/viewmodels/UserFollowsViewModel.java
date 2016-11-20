@@ -13,10 +13,10 @@ import net.myacxy.retrotwitch.models.UserFollow;
 import net.myacxy.retrotwitch.models.UserFollowsContainer;
 import net.myacxy.retrotwitch.utils.StringUtil;
 
-import rx.Observer;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class UserFollowsViewModel
 {
@@ -26,12 +26,12 @@ public class UserFollowsViewModel
     public final ObservableField<String> userName = new ObservableField<>();
     public final ObservableField<String> errorMessage = new ObservableField<>();
     public final ObservableArrayList<UserFollow> userFollows = new ObservableArrayList<>();
-    private Subscription mSubscription;
+    private Disposable mSubscription;
     private UserFollowsContainer mUserFollowsContainer;
     private final Observer<UserFollowsContainer> mObserver = new Observer<UserFollowsContainer>()
     {
         @Override
-        public void onCompleted()
+        public void onComplete()
         {
             loading.set(false);
         }
@@ -43,6 +43,12 @@ public class UserFollowsViewModel
             setInformation(0, 0);
             Error error = RxErrorFactory.fromThrowable(t);
             errorMessage.set(error.message);
+        }
+
+        @Override
+        public void onSubscribe(Disposable d)
+        {
+            mSubscription = d;
         }
 
         @Override
@@ -64,9 +70,9 @@ public class UserFollowsViewModel
             setInformation(0, 0);
             if (mSubscription != null)
             {
-                mSubscription.unsubscribe();
+                mSubscription.dispose();
             }
-            mSubscription = RxCaller.getInstance()
+            RxCaller.getInstance()
                     .getUserFollows(user, 100, null, null, SortBy.LAST_BROADCAST)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -87,7 +93,7 @@ public class UserFollowsViewModel
     {
         if (mSubscription != null)
         {
-            mSubscription.unsubscribe();
+            mSubscription.dispose();
         }
     }
 
@@ -98,10 +104,10 @@ public class UserFollowsViewModel
             return;
         } else if (mSubscription != null)
         {
-            mSubscription.unsubscribe();
+            mSubscription.dispose();
         }
         loading.set(true);
-        mSubscription = RxCaller.getInstance()
+        RxCaller.getInstance()
                 .getUserFollows(mUserFollowsContainer.user,
                         mUserFollowsContainer.limit,
                         mUserFollowsContainer.offset + mUserFollowsContainer.limit,

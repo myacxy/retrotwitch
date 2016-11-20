@@ -1,28 +1,31 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.api.*;
+import net.myacxy.retrotwitch.api.Direction;
+import net.myacxy.retrotwitch.api.SortBy;
+import net.myacxy.retrotwitch.api.StreamType;
+import net.myacxy.retrotwitch.api.TwitchV3Service;
 import net.myacxy.retrotwitch.helpers.ErrorFactory;
-import net.myacxy.retrotwitch.models.*;
+import net.myacxy.retrotwitch.models.Channel;
 import net.myacxy.retrotwitch.models.Error;
+import net.myacxy.retrotwitch.models.Stream;
+import net.myacxy.retrotwitch.models.StreamContainer;
+import net.myacxy.retrotwitch.models.StreamsContainer;
+import net.myacxy.retrotwitch.models.User;
+import net.myacxy.retrotwitch.models.UserFollowsContainer;
 import net.myacxy.retrotwitch.utils.StringUtil;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Caller extends BaseCaller<TwitchV3Service>
 {
-    private static Caller sInstance = new Caller(HttpLoggingInterceptor.Level.NONE);
+    private static Caller INSTANCE = new Caller(HttpLoggingInterceptor.Level.NONE);
 
     //<editor-fold desc="Constructor">
     Caller(HttpLoggingInterceptor.Level level)
@@ -33,7 +36,7 @@ public class Caller extends BaseCaller<TwitchV3Service>
 
     public static Caller getInstance()
     {
-        return sInstance;
+        return INSTANCE;
     }
 
     @Override
@@ -81,47 +84,6 @@ public class Caller extends BaseCaller<TwitchV3Service>
             }
         });
         return call;
-    }
-
-    public void getAllUserFollows(
-            String user,
-            Direction direction,
-            SortBy sortBy,
-            ResponseListener<List<UserFollow>> listener)
-    {
-        getAllUserFollowsRecursively(user, TwitchV3Service.MAX_LIMIT, 0, direction, sortBy, listener, new ArrayList<UserFollow>(TwitchV3Service.MAX_LIMIT));
-    }
-
-    private void getAllUserFollowsRecursively(
-            final String user,
-            final int limit,
-            final int offset,
-            final Direction direction,
-            final SortBy sortBy,
-            final ResponseListener<List<UserFollow>> listener,
-            final List<UserFollow> cache)
-    {
-        getUserFollows(user, limit, offset, direction, sortBy, new ResponseListener<UserFollowsContainer>()
-        {
-            @Override
-            public void onSuccess(UserFollowsContainer userFollowsContainer)
-            {
-                cache.addAll(userFollowsContainer.userFollows);
-                if (userFollowsContainer.total > offset + limit)
-                {
-                    getAllUserFollowsRecursively(user, limit, offset + limit, direction, sortBy, listener, cache);
-                } else
-                {
-                    listener.onSuccess(cache);
-                }
-            }
-
-            @Override
-            public void onError(Error error)
-            {
-                listener.onError(error);
-            }
-        });
     }
     //</editor-fold>
 
@@ -212,70 +174,6 @@ public class Caller extends BaseCaller<TwitchV3Service>
             }
         });
         return call;
-    }
-
-    public void getAllStreams(
-            String game,
-            List<Channel> channels,
-            String clientId,
-            StreamType streamType,
-            int resultLimit,
-            ResponseListener<List<Stream>> listener)
-    {
-        resultLimit = resultLimit < TwitchV3Service.DEFAULT_LIMIT ? TwitchV3Service.DEFAULT_LIMIT : resultLimit;
-        int perRequestLimit = TwitchV3Service.MAX_LIMIT;
-        if (resultLimit < perRequestLimit)
-        {
-            perRequestLimit = resultLimit;
-        }
-        getAllStreamsRecursively(game, channels, perRequestLimit, 0, clientId, streamType, resultLimit, listener, new ArrayList<Stream>(resultLimit));
-    }
-
-    private void getAllStreamsRecursively(
-            final String game,
-            final List<Channel> channels,
-            final int perRequestLimit,
-            final int offset,
-            final String clientId,
-            final StreamType streamType,
-            final int resultLimit,
-            final ResponseListener<List<Stream>> listener,
-            final List<Stream> cache)
-    {
-        getStreams(game, channels, perRequestLimit, offset, clientId, streamType, new ResponseListener<StreamsContainer>()
-        {
-            @Override
-            public void onSuccess(StreamsContainer streamsContainer)
-            {
-                if(streamsContainer.streams.size() != perRequestLimit) {
-
-                }
-                if(cache.size() + streamsContainer.streams.size() > resultLimit) {
-                    for (Stream stream : streamsContainer.streams)
-                    {
-                        cache.add(stream);
-                        if(cache.size() == resultLimit) {
-                            listener.onSuccess(cache);
-                            return;
-                        }
-                    }
-                }
-
-                if (cache.size() < resultLimit && streamsContainer.total > offset + perRequestLimit)
-                {
-                    getAllStreamsRecursively(game, channels, perRequestLimit, offset + perRequestLimit, clientId, streamType, resultLimit, listener, cache);
-                } else
-                {
-                    listener.onSuccess(cache);
-                }
-            }
-
-            @Override
-            public void onError(Error error)
-            {
-                listener.onError(error);
-            }
-        });
     }
 
     public void getUser(String user, final ResponseListener<User> listener)

@@ -5,12 +5,11 @@ import net.myacxy.retrotwitch.models.StreamsContainer;
 import net.myacxy.retrotwitch.models.User;
 import net.myacxy.retrotwitch.models.UserFollowsContainer;
 
-import retrofit2.Call;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
-import rx.Observable;
 
 public interface RxTwitchV3Service
 {
@@ -19,10 +18,10 @@ public interface RxTwitchV3Service
     int MAX_LIMIT = 100;
 
     /**
-     * @param limit default 25, max 100
-     * @param offset default 0
+     * @param limit     default 25, max 100
+     * @param offset    default 0
      * @param direction default desc
-     * @param sortBy default created_at
+     * @param sortBy    default created_at
      */
     @GET("users/{user}/follows/channels")
     Observable<UserFollowsContainer> getUserFollows(
@@ -35,8 +34,8 @@ public interface RxTwitchV3Service
     /**
      * used to move between paginated results
      *
-     * @param url   {@link UserFollowsContainer.Links#prev UserFollowsContainer.Links.prev}
-     *              or {@link UserFollowsContainer.Links#next UserFollowsContainer.Links.next}
+     * @param url {@link UserFollowsContainer.Links#prev UserFollowsContainer.Links.prev}
+     *            or {@link UserFollowsContainer.Links#next UserFollowsContainer.Links.next}
      */
     @GET
     Observable<UserFollowsContainer> getUserFollows(@Url String url);
@@ -58,7 +57,7 @@ public interface RxTwitchV3Service
 
     /**
      * requires Scope.USER_READ
-     *
+     * <p>
      * Note: If the user's Twitch registered Email Address is not verified, null will be returned.
      *
      * @return

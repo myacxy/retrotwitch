@@ -15,7 +15,7 @@ import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewMo
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class UserFollowsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -109,7 +109,7 @@ public class UserFollowsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     protected class UserFollowViewHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.tv_iuf_channel_name)
+        @BindView(R.id.tv_iuf_channel_name)
         protected TextView mChannelName;
 
         public UserFollowViewHolder(View itemView)
@@ -126,7 +126,7 @@ public class UserFollowsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     protected class RefreshViewHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.pb_progress)
+        @BindView(R.id.pb_progress)
         protected ProgressBar mProgress;
 
         public RefreshViewHolder(View itemView)

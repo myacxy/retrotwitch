@@ -1,8 +1,15 @@
 package net.myacxy.retrotwitch.api;
 
-import net.myacxy.retrotwitch.models.*;
+import net.myacxy.retrotwitch.models.StreamContainer;
+import net.myacxy.retrotwitch.models.StreamsContainer;
+import net.myacxy.retrotwitch.models.User;
+import net.myacxy.retrotwitch.models.UserFollowsContainer;
+
 import retrofit2.Call;
-import retrofit2.http.*;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface TwitchV3Service
 {
@@ -11,10 +18,10 @@ public interface TwitchV3Service
     int MAX_LIMIT = 100;
 
     /**
-     * @param limit default 25, max 100
-     * @param offset default 0
+     * @param limit     default 25, max 100
+     * @param offset    default 0
      * @param direction default desc
-     * @param sortBy default created_at
+     * @param sortBy    default created_at
      */
     @GET("users/{user}/follows/channels")
     Call<UserFollowsContainer> getUserFollows(
@@ -27,14 +34,14 @@ public interface TwitchV3Service
     /**
      * used to move between paginated results
      *
-     * @param url   {@link UserFollowsContainer.Links#prev UserFollowsContainer.Links.prev}
-     *              or {@link UserFollowsContainer.Links#next UserFollowsContainer.Links.next}
+     * @param url {@link UserFollowsContainer.Links#prev UserFollowsContainer.Links.prev}
+     *            or {@link UserFollowsContainer.Links#next UserFollowsContainer.Links.next}
      */
     @GET
     Call<UserFollowsContainer> getUserFollows(@Url String url);
 
     @GET("streams/{channel}")
-    Call<StreamContainer> getStream( @Path("channel") String channel);
+    Call<StreamContainer> getStream(@Path("channel") String channel);
 
     @GET("streams")
     Call<StreamsContainer> getStreams(
@@ -50,7 +57,7 @@ public interface TwitchV3Service
 
     /**
      * requires Scope.USER_READ
-     *
+     * <p>
      * Note: If the user's Twitch registered Email Address is not verified, null will be returned.
      *
      * @return

@@ -26,30 +26,32 @@ import net.myacxy.retrotwitch.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class UserFollowsFragment extends Fragment
 {
-    @Bind(R.id.et_uf_user_name)
+    @BindView(R.id.et_uf_user_name)
     protected EditText mUserName;
-    @Bind(R.id.btn_uf_search)
+    @BindView(R.id.btn_uf_search)
     protected Button mSearch;
 
-    @Bind(R.id.tv_uf_total)
+    @BindView(R.id.tv_uf_total)
     protected TextView mTotal;
-    @Bind(R.id.tv_uf_currently_loaded)
+    @BindView(R.id.tv_uf_currently_loaded)
     protected TextView mCurrentlyLoaded;
 
-    @Bind(R.id.tv_iuf_empty)
+    @BindView(R.id.tv_iuf_empty)
     protected TextView mEmpty;
-    @Bind(R.id.rv_uf_results)
+    @BindView(R.id.rv_uf_results)
     protected RecyclerView mSearchResults;
 
     private UserFollowAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private UserFollowsResource mUserFollowsResource;
+    private Unbinder unbinder;
 
     @Nullable
     @Override
@@ -62,7 +64,7 @@ public class UserFollowsFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         mAdapter = new UserFollowAdapter();
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -95,7 +97,7 @@ public class UserFollowsFragment extends Fragment
     public void onDestroyView()
     {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @OnClick(R.id.btn_uf_search)
@@ -236,7 +238,7 @@ public class UserFollowsFragment extends Fragment
 
         protected class UserFollowViewHolder extends RecyclerView.ViewHolder
         {
-            @Bind(R.id.tv_iuf_channel_name)
+            @BindView(R.id.tv_iuf_channel_name)
             protected TextView mChannelName;
 
             public UserFollowViewHolder(View itemView)
@@ -253,7 +255,7 @@ public class UserFollowsFragment extends Fragment
 
         protected class RefreshViewHolder extends RecyclerView.ViewHolder
         {
-            @Bind(R.id.pb_progress)
+            @BindView(R.id.pb_progress)
             protected ProgressBar mProgress;
 
             public RefreshViewHolder(View itemView)

@@ -12,15 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.common.base.Strings;
-
-import net.myacxy.retrotwitch.sample.android.rxjava.databinding.FragmentUserFollowsBinding;
 import net.myacxy.retrotwitch.sample.android.rxjava.R;
-import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel;
 import net.myacxy.retrotwitch.sample.android.rxjava.SimpleViewModelLocator;
+import net.myacxy.retrotwitch.sample.android.rxjava.databinding.FragmentUserFollowsBinding;
+import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel;
+import net.myacxy.retrotwitch.utils.StringUtil;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class UserFollowsFragment extends Fragment
 {
@@ -29,13 +29,14 @@ public class UserFollowsFragment extends Fragment
     private LinearLayoutManager mLayoutManager;
     private FragmentUserFollowsBinding mBinding;
     private UserFollowsViewModel mViewModel;
+    private Unbinder unbinder;
 
     private Observable.OnPropertyChangedCallback mErrorCallback = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable observable, int i)
         {
             String errorMessage = mViewModel.errorMessage.get();
-            if (!Strings.isNullOrEmpty(errorMessage))
+            if (!StringUtil.isBlank(errorMessage))
             {
                 Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
@@ -57,7 +58,7 @@ public class UserFollowsFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         mSearchResults.setLayoutManager(mLayoutManager = new LinearLayoutManager(getContext()));
         mSearchResults.setAdapter(mAdapter = new UserFollowsAdapter(mViewModel));
@@ -71,7 +72,7 @@ public class UserFollowsFragment extends Fragment
     public void onDestroy()
     {
         super.onDestroy();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         mViewModel.errorMessage.removeOnPropertyChangedCallback(mErrorCallback);
         mViewModel.reset();
     }

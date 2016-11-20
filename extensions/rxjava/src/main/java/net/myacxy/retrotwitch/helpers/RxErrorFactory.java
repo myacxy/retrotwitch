@@ -3,12 +3,12 @@ package net.myacxy.retrotwitch.helpers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 
 import net.myacxy.retrotwitch.models.Error;
 
 import java.io.IOException;
 
-import retrofit2.adapter.rxjava.HttpException;
 
 public class RxErrorFactory extends ErrorFactory
 {

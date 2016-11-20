@@ -3,6 +3,7 @@ package net.myacxy.retrotwitch.sample.android.rxjava.views;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,31 +12,30 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import net.myacxy.retrotwitch.sample.android.rxjava.FragmentFactory;
+import net.myacxy.retrotwitch.sample.android.rxjava.FragmentFactory.FragmentType;
 import net.myacxy.retrotwitch.sample.android.rxjava.R;
-import net.myacxy.retrotwitch.sample.android.rxjava.FragmentFactory.Type;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     public static final String EXTRA_FRAGMENT = "extra.fragment";
 
-    @Bind(R.id.dl_main_drawer)
+    @BindView(R.id.dl_main_drawer)
     protected DrawerLayout mDrawer;
-    @Bind(R.id.tb_main)
+    @BindView(R.id.tb_main)
     protected Toolbar mToolbar;
-    @Bind(R.id.nv_main)
+    @BindView(R.id.nv_main)
     protected NavigationView mNavigation;
 
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private Type mType = Type.USER_FOLLOWS;
+    private FragmentFactory.FragmentType mFragmentType = FragmentType.USER_FOLLOWS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,13 +51,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Bundle extras = getIntent().getExtras();
         if(savedInstanceState != null) {
-            mType = (Type) savedInstanceState.getSerializable(EXTRA_FRAGMENT);
+            mFragmentType = (FragmentType) savedInstanceState.getSerializable(EXTRA_FRAGMENT);
         } else if(extras != null) {
-            mType = (Type) extras.getSerializable(EXTRA_FRAGMENT);
+            mFragmentType = (FragmentFactory.FragmentType) extras.getSerializable(EXTRA_FRAGMENT);
         } else {
-            mType = Type.USER_FOLLOWS;
+            mFragmentType = FragmentFactory.FragmentType.USER_FOLLOWS;
         }
-        changeFragment(mType, true);
+        changeFragment(mFragmentType, true);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(EXTRA_FRAGMENT, mType);
+        outState.putSerializable(EXTRA_FRAGMENT, mFragmentType);
     }
 
     @Override
@@ -81,13 +81,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private void changeFragment(Type type, boolean tryReusingOldFragment)
+    private void changeFragment(FragmentType fragmentType, boolean tryReusingOldFragment)
     {
-        Fragment fragment = FragmentFactory.getFragment(this, mType = type, tryReusingOldFragment);
+        Fragment fragment = FragmentFactory.getFragment(this, mFragmentType = fragmentType, tryReusingOldFragment);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fl_main_container, fragment, type.getTag())
+                .replace(R.id.fl_main_container, fragment, fragmentType.getTag())
                 .commit();
     }
 
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         setSupportActionBar(mToolbar);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.app_name, R.string.app_name);
-        mDrawer.setDrawerListener(mDrawerToggle);
+        mDrawer.addDrawerListener(mDrawerToggle);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_menu_black_24dp);
         drawable.setTint(ContextCompat.getColor(this, R.color.color15_100));
         mToolbar.setNavigationIcon(drawable);
@@ -117,11 +117,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId())
         {
             case R.id.mi_nv_user_follows:
-                changeFragment(Type.USER_FOLLOWS, true);
+                changeFragment(FragmentType.USER_FOLLOWS, true);
                 mDrawer.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.mi_nv_authentication:
-                changeFragment(Type.AUTHENTICATION, true);
+                changeFragment(FragmentType.AUTHENTICATION, true);
                 mDrawer.closeDrawer(GravityCompat.START);
                 return true;
         }

@@ -3,27 +3,27 @@ package net.myacxy.retrotwitch.sample.android;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import net.myacxy.retrotwitch.RetroTwitch;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class MainActivity extends AppCompatActivity
 {
-    @Bind(R.id.dl_main_drawer)
+    @BindView(R.id.dl_main_drawer)
     protected DrawerLayout mDrawer;
-    @Bind(R.id.tb_main)
+    @BindView(R.id.tb_main)
     protected Toolbar mToolbar;
 
     private ActionBarDrawerToggle mDrawerToggle;

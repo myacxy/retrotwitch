@@ -1,27 +1,28 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.api.*;
 import net.myacxy.retrotwitch.helpers.RxErrorFactory;
-import net.myacxy.retrotwitch.models.*;
 import net.myacxy.retrotwitch.models.Error;
+import net.myacxy.retrotwitch.models.UserFollowsContainer;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import okhttp3.logging.HttpLoggingInterceptor;
-import rx.Observer;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class RxCallerUserFollowsTest
 {
     @Before
-    public void setUp() {
+    public void setUp()
+    {
         RxCaller.getInstance().setLoggingLevel(HttpLoggingInterceptor.Level.BASIC);
+        RxCaller.getInstance().setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr");
     }
 
     //<editor-fold desc="[ Get User Follows ]">
@@ -30,14 +31,16 @@ public class RxCallerUserFollowsTest
     {
         RxCaller.getInstance()
                 .getUserFollows("myacxy", null, null, null, null)
-                .toBlocking()
-                .subscribe(new Observer<UserFollowsContainer>()
+                .blockingSubscribe(new Observer<UserFollowsContainer>()
                 {
                     @Override
-                    public void onCompleted() { }
+                    public void onComplete()
+                    {
+                    }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(Throwable e)
+                    {
                         fail(RxErrorFactory.fromThrowable(e).toString());
                     }
 
@@ -45,6 +48,11 @@ public class RxCallerUserFollowsTest
                     public void onNext(UserFollowsContainer userFollowsContainer)
                     {
                         System.out.println(userFollowsContainer.userFollows.size());
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d)
+                    {
                     }
                 });
     }
@@ -54,11 +62,12 @@ public class RxCallerUserFollowsTest
     {
         RxCaller.getInstance()
                 .getUserFollows("userThatDoesNotExist", null, null, null, null)
-                .toBlocking()
-                .subscribe(new Observer<UserFollowsContainer>()
+                .blockingSubscribe(new Observer<UserFollowsContainer>()
                 {
                     @Override
-                    public void onCompleted() { }
+                    public void onComplete()
+                    {
+                    }
 
                     @Override
                     public void onError(Throwable e)
@@ -68,7 +77,15 @@ public class RxCallerUserFollowsTest
                     }
 
                     @Override
-                    public void onNext(UserFollowsContainer userFollowsContainer) { }
+                    public void onNext(UserFollowsContainer userFollowsContainer)
+                    {
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d)
+                    {
+
+                    }
                 });
 
     }
@@ -78,11 +95,12 @@ public class RxCallerUserFollowsTest
     {
         RxCaller.getInstance()
                 .getUserFollows("test", null, null, null, null)
-                .toBlocking()
-                .subscribe(new Observer<UserFollowsContainer>()
+                .blockingSubscribe(new Observer<UserFollowsContainer>()
                 {
                     @Override
-                    public void onCompleted() { }
+                    public void onSubscribe(Disposable d)
+                    {
+                    }
 
                     @Override
                     public void onError(Throwable e)
@@ -92,69 +110,16 @@ public class RxCallerUserFollowsTest
                     }
 
                     @Override
-                    public void onNext(UserFollowsContainer userFollowsContainer) { }
-                });
-
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="[ Get All User Follows ]">
-    @Test(timeout = 5000)
-    public void getAllUserFollows() throws Exception
-    {
-        List<UserFollow> follows = new ArrayList<>(300);
-        RxCaller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT, 500)
-                .toBlocking()
-                .subscribe(new Observer<UserFollowsContainer>()
-                {
-                    @Override
-                    public void onCompleted()
-                    {
-                        System.out.println(follows.size());
-                        assertThat(follows.size(), is(greaterThan(300)));
-                    }
-
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        fail(RxErrorFactory.fromThrowable(e).toString());
-                    }
-
-                    @Override
                     public void onNext(UserFollowsContainer userFollowsContainer)
                     {
-                        follows.addAll(userFollowsContainer.userFollows);
+                    }
+
+                    @Override
+                    public void onComplete()
+                    {
                     }
                 });
-    }
 
-    @Test(timeout = 5000)
-    public void getAllUserFollowsWithMaximum() throws Exception
-    {
-        List<UserFollow> follows = new ArrayList<>(300);
-        RxCaller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT, 300)
-                .toBlocking()
-                .subscribe(new Observer<UserFollowsContainer>()
-                {
-                    @Override
-                    public void onCompleted()
-                    {
-                        System.out.println(follows.size());
-                        assertThat(follows.size(), is(equalTo(300)));
-                    }
-
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        fail(RxErrorFactory.fromThrowable(e).toString());
-                    }
-
-                    @Override
-                    public void onNext(UserFollowsContainer userFollowsContainer)
-                    {
-                        follows.addAll(userFollowsContainer.userFollows);
-                    }
-                });
     }
     //</editor-fold>
 }

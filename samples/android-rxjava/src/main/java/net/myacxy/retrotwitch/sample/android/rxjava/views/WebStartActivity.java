@@ -27,7 +27,7 @@ public class WebStartActivity extends AppCompatActivity
         SimpleViewModelLocator.getInstance().getAuthentication().accessToken.set(accessToken);
 
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(MainActivity.EXTRA_FRAGMENT, FragmentFactory.Type.AUTHENTICATION);
+        intent.putExtra(MainActivity.EXTRA_FRAGMENT, FragmentFactory.FragmentType.AUTHENTICATION);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

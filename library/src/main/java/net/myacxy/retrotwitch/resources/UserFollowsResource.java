@@ -10,13 +10,13 @@ import net.myacxy.retrotwitch.models.Error;
 import net.myacxy.retrotwitch.models.UserFollow;
 import net.myacxy.retrotwitch.models.UserFollowsContainer;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, List<UserFollow>>
 {
@@ -198,24 +198,6 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
         }
     }
 
-    public static class Builder extends BuilderBase
-    {
-        public Builder(String user)
-        {
-            super(user);
-        }
-
-        public AllBuilder all()
-        {
-            return new AllBuilder(user);
-        }
-
-        public LimitedBuilder limited()
-        {
-            return new LimitedBuilder(user);
-        }
-    }
-
     public static class LimitedBuilder extends BuilderBase<LimitedBuilder>
     {
         public LimitedBuilder(String user)
@@ -237,6 +219,26 @@ public class UserFollowsResource extends BaseMultiResource<UserFollowsResource, 
         {
             this.maximum = maximum;
             return this;
+        }
+    }
+
+    public static class Builder
+    {
+        private String user;
+
+        public Builder(String user)
+        {
+            this.user = user;
+        }
+
+        public AllBuilder all()
+        {
+            return new AllBuilder(user);
+        }
+
+        public LimitedBuilder limited()
+        {
+            return new LimitedBuilder(user);
         }
     }
 }

@@ -2,10 +2,9 @@ package net.myacxy.retrotwitch;
 
 import net.myacxy.retrotwitch.helpers.Lock;
 import net.myacxy.retrotwitch.helpers.MultiLock;
-import net.myacxy.retrotwitch.models.*;
 import net.myacxy.retrotwitch.models.Error;
-
-import okhttp3.logging.HttpLoggingInterceptor;
+import net.myacxy.retrotwitch.models.Stream;
+import net.myacxy.retrotwitch.models.UserFollow;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +12,11 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import okhttp3.logging.HttpLoggingInterceptor;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -25,6 +27,7 @@ public class FluentCallerTest
     public void setUp()
     {
         RetroTwitch.getInstance().configure()
+                .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
                 .apply();
     }

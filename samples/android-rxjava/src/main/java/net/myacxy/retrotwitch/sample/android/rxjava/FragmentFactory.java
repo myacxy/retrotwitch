@@ -15,40 +15,49 @@ public class FragmentFactory
         throw new IllegalAccessError();
     }
 
-    public static Fragment getFragment(AppCompatActivity activity, Type type, boolean tryReusingOldFragment)
+    public static Fragment getFragment(AppCompatActivity activity, FragmentType fragmentType, boolean tryReusingOldFragment)
     {
-        if (tryReusingOldFragment) {
-            Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(type.getTag());
+        if (tryReusingOldFragment)
+        {
+            Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(fragmentType.getTag());
             if (fragment != null)
             {
-                Logger.t(0).i("reusing fragment. (%s)", type.getTag());
+                Logger.t(0).i("reusing fragment. (%s)", fragmentType.getTag());
                 return fragment;
             }
-            Logger.t(0).i("could not reuse fragment. (%s)", type.getTag());
+            Logger.t(0).i("could not reuse fragment. (%s)", fragmentType.getTag());
         }
 
-        switch (type)
-        {
-            case USER_FOLLOWS:
-                return new UserFollowsFragment();
-            case AUTHENTICATION:
-                return new AuthenticationFragment();
-            default:
-                throw new IllegalArgumentException();
-        }
+        return fragmentType.newInstance();
     }
 
-    public enum Type
+    public enum FragmentType
     {
-        USER_FOLLOWS(UserFollowsFragment.class.getSimpleName()),
-        AUTHENTICATION(AuthenticationFragment.class.getSimpleName());
+        USER_FOLLOWS(UserFollowsFragment.class.getSimpleName())
+                {
+                    @Override
+                    public Fragment newInstance()
+                    {
+                        return new UserFollowsFragment();
+                    }
+                },
+        AUTHENTICATION(AuthenticationFragment.class.getSimpleName())
+                {
+                    @Override
+                    public Fragment newInstance()
+                    {
+                        return new AuthenticationFragment();
+                    }
+                };
 
         private String tag;
 
-        Type(String tag)
+        FragmentType(String tag)
         {
             this.tag = tag;
         }
+
+        public abstract Fragment newInstance();
 
         public String getTag()
         {

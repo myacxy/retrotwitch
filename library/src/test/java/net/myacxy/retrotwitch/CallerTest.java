@@ -3,22 +3,38 @@ package net.myacxy.retrotwitch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.myacxy.retrotwitch.api.*;
 import net.myacxy.retrotwitch.helpers.Lock;
-import net.myacxy.retrotwitch.models.*;
+import net.myacxy.retrotwitch.models.Channel;
 import net.myacxy.retrotwitch.models.Error;
+import net.myacxy.retrotwitch.models.Stream;
+import net.myacxy.retrotwitch.models.StreamsContainer;
+import net.myacxy.retrotwitch.models.User;
+import net.myacxy.retrotwitch.models.UserFollow;
+import net.myacxy.retrotwitch.models.UserFollowsContainer;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import okhttp3.logging.HttpLoggingInterceptor;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class CallerTest
 {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    @Before
+    public void setUp() throws Exception
+    {
+        RetroTwitch.getInstance().configure()
+                .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
+                .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
+                .apply();
+    }
 
     @Test(timeout = 5000)
     public void getUserFollows() throws Exception
@@ -43,32 +59,6 @@ public class CallerTest
 
         lock.await();
         System.out.println(lock.result);
-    }
-
-    @Test(timeout = 10000)
-    public void getAllUserFollows() throws Exception
-    {
-        final Lock<List<UserFollow>> lock = new Lock<>();
-
-        Caller.getInstance().getAllUserFollows("sodapoppin", Direction.DEFAULT, SortBy.DEFAULT, new Caller.ResponseListener<List<UserFollow>>()
-        {
-            @Override
-            public void onSuccess(List<UserFollow> userFollows)
-            {
-                lock.succeed(userFollows);
-            }
-
-            @Override
-            public void onError(Error error)
-            {
-                System.err.println(error);
-                lock.fail();
-            }
-        });
-
-        lock.await();
-        System.out.println(lock.result.size());
-        assertTrue(lock.result.size() > 300);
     }
 
     @Test(timeout = 5000)
@@ -163,32 +153,6 @@ public class CallerTest
 
         lock.await();
         System.out.println(lock.result);
-    }
-
-    @Test
-    public void getAllStreams() throws Exception
-    {
-        final Lock<List<Stream>> lock = new Lock<>();
-
-        Caller.getInstance().getAllStreams(null, null, null, StreamType.LIVE, 500, new Caller.ResponseListener<List<Stream>>()
-        {
-            @Override
-            public void onSuccess(List<Stream> streams)
-            {
-                lock.succeed(streams);
-            }
-
-            @Override
-            public void onError(Error error)
-            {
-                System.err.println(error);
-                lock.fail();
-            }
-        });
-
-        lock.await();
-        System.out.println(lock.result.size());
-        assertTrue(lock.result.size() == 500);
     }
 
     @Test(timeout = 5000)

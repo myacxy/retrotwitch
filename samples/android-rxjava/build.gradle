@@ -9,19 +9,19 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
-        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
     }
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "net.myacxy.retrotwitch.sample.android.rxjava"
         minSdkVersion 21
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "0.1"
     }
@@ -41,6 +41,10 @@ android {
     dataBinding {
         enabled = true
     }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 dependencies {
@@ -48,11 +52,16 @@ dependencies {
 
     compile project(':extensions:rxjava')
     compile dependencies.butterKnife
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile dependencies.rxAndroid
-    compile dependencies.rxBinding
-    compile dependencies.rxBindingAppCompat
-    compile dependencies.rxBindingDesign
-    compile dependencies.rxBindingRecyclerView
+//    compile dependencies.rxBinding
+//    compile dependencies.rxBindingAppCompat
+//    compile dependencies.rxBindingDesign
+//    compile dependencies.rxBindingRecyclerView
+    compile dependencies.appCompat
+    compile dependencies.design
+    compile dependencies.recyclerView
     compile dependencies.logger
     testCompile dependencies.junit
+    compile 'com.android.support:support-fragment:25.0.0'
 }

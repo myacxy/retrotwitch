@@ -1,8 +1,9 @@
 package net.myacxy.retrotwitch;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 import net.myacxy.retrotwitch.api.Direction;
 import net.myacxy.retrotwitch.api.RxTwitchV3Service;
-import net.myacxy.retrotwitch.api.TwitchV3Service;
 import net.myacxy.retrotwitch.api.SortBy;
 import net.myacxy.retrotwitch.api.StreamType;
 import net.myacxy.retrotwitch.models.Channel;
@@ -15,15 +16,14 @@ import net.myacxy.retrotwitch.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 
 public class RxCaller extends BaseCaller<RxTwitchV3Service>
 {
-    private static RxCaller sInstance = new RxCaller(HttpLoggingInterceptor.Level.NONE);
+    private static RxCaller INSTANCE = new RxCaller(HttpLoggingInterceptor.Level.NONE);
 
     //<editor-fold desc="Constructor">
     RxCaller(HttpLoggingInterceptor.Level level)
@@ -34,7 +34,7 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
 
     public static RxCaller getInstance()
     {
-        return sInstance;
+        return INSTANCE;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
     {
         return new Retrofit.Builder()
                 .baseUrl(net.myacxy.retrotwitch.api.TwitchV3Service.BASE_URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(mClient)
                 .build();
@@ -63,6 +63,7 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
             final SortBy sortBy)
     {
         return getService().getUserFollows(user, limit, offset, direction, sortBy)
+                .doOnError(Throwable::printStackTrace)
                 .doOnNext(userFollowsContainer -> {
                     if (userFollowsContainer == null) return;
                     userFollowsContainer.user = user;
@@ -70,44 +71,6 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
                     userFollowsContainer.offset = offset == null ? 0 : offset;
                     userFollowsContainer.direction = direction == null ? Direction.DEFAULT : direction;
                     userFollowsContainer.sortBy = sortBy == null ? SortBy.DEFAULT : sortBy;
-                });
-    }
-
-    public Observable<UserFollowsContainer> getAllUserFollows(
-            String user,
-            Direction direction,
-            SortBy sortBy,
-            int maximum)
-    {
-        return getUserFollows(
-                user,
-                maximum > TwitchV3Service.MAX_LIMIT ? TwitchV3Service.MAX_LIMIT : maximum,
-                0,
-                direction,
-                sortBy)
-                .concatMap(initialContainer ->
-                {
-                    if (initialContainer == null) return Observable.empty();
-                    else if (initialContainer.limit != maximum)
-                    {
-                        int actualMaximum = maximum > initialContainer.total ? initialContainer.total : maximum;
-                        int additionalPages = calculateAdditionalPages(actualMaximum);
-                        System.out.println("additionalPages=" + additionalPages + ", maximum=" + maximum + ", actual=" + actualMaximum);
-
-                        return Observable.just(initialContainer)
-                                .concatWith(Observable.range(1, additionalPages)
-                                        .concatMap(page ->
-                                        {
-                                            int limit = initialContainer.limit;
-                                            if (page == additionalPages)
-                                            {
-                                                limit = actualMaximum - page * initialContainer.limit;
-                                            }
-                                            System.out.println("limit=" + limit + ", page=" + page);
-                                            return getUserFollows(user, limit, page * initialContainer.limit, direction, sortBy);
-                                        }));
-                    }
-                    return Observable.just(initialContainer);
                 });
     }
     //</editor-fold>
@@ -154,60 +117,9 @@ public class RxCaller extends BaseCaller<RxTwitchV3Service>
                 });
     }
 
-    public Observable<StreamsContainer> getAllStreams(
-            String game,
-            List<Channel> channels,
-            String clientId,
-            StreamType streamType,
-            int maximum)
-    {
-
-        return getStreams(
-                game,
-                channels,
-                maximum > TwitchV3Service.MAX_LIMIT ? TwitchV3Service.MAX_LIMIT : maximum,
-                0,
-                clientId,
-                streamType)
-                .concatMap(initialContainer ->
-                {
-                    if (initialContainer == null) return Observable.empty();
-                    else if (initialContainer.limit != maximum)
-                    {
-                        int actualMaximum = maximum > initialContainer.total ? initialContainer.total : maximum;
-                        int additionalPages = calculateAdditionalPages(actualMaximum);
-                        System.out.println("additionalPages=" + additionalPages + ", maximum=" + maximum + ", actual=" + actualMaximum);
-
-                        return Observable.just(initialContainer)
-                                .concatWith(Observable.range(1, additionalPages)
-                                        .concatMap(page ->
-                                        {
-                                            int limit = initialContainer.limit;
-                                            if (page == additionalPages)
-                                            {
-                                                limit = actualMaximum - page * initialContainer.limit;
-                                            }
-                                            System.out.println("limit=" + limit + ", page=" + page);
-                                            return getStreams(game, channels, limit, page * initialContainer.limit, clientId, streamType);
-                                        }));
-                    }
-                    return Observable.just(initialContainer);
-                });
-    }
-
     public Observable<User> getUser(String user)
     {
         return getService().getUser(user);
     }
     //</editor-fold>
-
-    private int calculateAdditionalPages(int totalOrMaximum)
-    {
-        float allPages = totalOrMaximum / (float) TwitchV3Service.MAX_LIMIT;
-        if ((allPages * 100) % 100 > 0)
-        {
-            return (int) allPages;
-        }
-        return (int) (allPages - 1);
-    }
 }

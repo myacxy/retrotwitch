@@ -7,17 +7,20 @@ public class StringUtil
     public static String joinStrings(List<String> strings, String separator)
     {
         StringBuilder separatedStrings = new StringBuilder();
-        boolean firstEntry = true;
-        for (String string : strings)
+
+        for (int i = 0; i < strings.size(); i++)
         {
-            if(firstEntry) firstEntry = false;
-            else separatedStrings.append(separator);
-            separatedStrings.append(string);
+            if (i > 0)
+            {
+                separatedStrings.append(separator);
+            }
+            separatedStrings.append(strings.get(i));
         }
         return separatedStrings.toString();
     }
 
-    public static boolean isBlank(String string) {
+    public static boolean isBlank(String string)
+    {
         return string == null || string.equals("");
     }
 }

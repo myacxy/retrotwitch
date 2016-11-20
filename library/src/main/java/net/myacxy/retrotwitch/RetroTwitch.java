@@ -3,21 +3,21 @@ package net.myacxy.retrotwitch;
 import net.myacxy.retrotwitch.api.Scope;
 import net.myacxy.retrotwitch.utils.StringUtil;
 
+import java.util.ArrayList;
+
 import okhttp3.HttpUrl;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-import java.util.ArrayList;
-
 public class RetroTwitch
 {
-    private static RetroTwitch sInstance;
+    private static RetroTwitch INSTANCE = new RetroTwitch();
 
     RetroTwitch() {
 
     }
 
     public static RetroTwitch getInstance() {
-        return sInstance == null ? sInstance = new RetroTwitch() : sInstance;
+        return INSTANCE;
     }
 
     public AuthenticationBuilder authenticate()
@@ -30,12 +30,15 @@ public class RetroTwitch
         return new ConfigurationBuilder();
     }
 
+    public Caller getDefault()
+    {
+        return Caller.getInstance();
+    }
+
     public FluentCaller getFluent()
     {
         return FluentCaller.getInstance();
     }
-
-    public Caller getDefault() { return Caller.getInstance(); }
 
     public static class AuthenticationBuilder
     {
@@ -64,7 +67,7 @@ public class RetroTwitch
         public RetroTwitch build(Callback callback)
         {
             callback.authenticate(buildUrl());
-            return getInstance();
+            return RetroTwitch.INSTANCE;
         }
 
         public String buildUrl()
@@ -97,6 +100,7 @@ public class RetroTwitch
     public static class ConfigurationBuilder
     {
         private HttpLoggingInterceptor.Level level = HttpLoggingInterceptor.Level.NONE;
+        private String clientId = "";
 
         public ConfigurationBuilder setLogLevel(HttpLoggingInterceptor.Level level)
         {
@@ -104,10 +108,17 @@ public class RetroTwitch
             return this;
         }
 
+        public ConfigurationBuilder setClientId(String clientId)
+        {
+            this.clientId = clientId;
+            return this;
+        }
+
         public RetroTwitch apply()
         {
-            Caller.getInstance().setLoggingLevel(level);
-            return getInstance();
+            RetroTwitch.INSTANCE.getDefault().setLoggingLevel(level);
+            RetroTwitch.INSTANCE.getDefault().setClientId(clientId);
+            return RetroTwitch.INSTANCE;
         }
     }
 }

@@ -13,41 +13,42 @@ import android.view.ViewGroup;
 import com.orhanobut.logger.Logger;
 
 import net.myacxy.retrotwitch.sample.android.rxjava.R;
+import net.myacxy.retrotwitch.sample.android.rxjava.SimpleViewModelLocator;
 import net.myacxy.retrotwitch.sample.android.rxjava.databinding.FragmentAuthenticationBinding;
 import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.AuthenticationViewModel;
-import net.myacxy.retrotwitch.sample.android.rxjava.SimpleViewModelLocator;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class AuthenticationFragment extends Fragment
 {
     private FragmentAuthenticationBinding mBinding;
     private AuthenticationViewModel mViewModel;
+    private Unbinder unbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_authentication, container, false);
-        mBinding = FragmentAuthenticationBinding.bind(view);
+        mBinding = FragmentAuthenticationBinding.inflate(inflater, container, false);
         mViewModel = SimpleViewModelLocator.getInstance().getAuthentication();
         mBinding.setViewModel(mViewModel);
-        return view;
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
     }
 
     @Override
     public void onDestroy()
     {
         super.onDestroy();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @OnClick(R.id.btn_a_authenticate)
