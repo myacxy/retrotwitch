@@ -1,10 +1,11 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.helpers.Lock;
-import net.myacxy.retrotwitch.helpers.MultiLock;
-import net.myacxy.retrotwitch.models.Error;
-import net.myacxy.retrotwitch.models.Stream;
-import net.myacxy.retrotwitch.models.UserFollow;
+import net.myacxy.retrotwitch.v3.Caller;
+import net.myacxy.retrotwitch.v3.models.Error;
+import net.myacxy.retrotwitch.v3.models.Stream;
+import net.myacxy.retrotwitch.v3.models.UserFollow;
+import net.myacxy.retrotwitch.v5.helpers.Lock;
+import net.myacxy.retrotwitch.v5.helpers.MultiLock;
 
 import org.junit.Before;
 import org.junit.Test;

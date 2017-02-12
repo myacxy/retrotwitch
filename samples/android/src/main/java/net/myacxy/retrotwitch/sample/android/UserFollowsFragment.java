@@ -15,13 +15,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.myacxy.retrotwitch.Caller;
 import net.myacxy.retrotwitch.RetroTwitch;
-import net.myacxy.retrotwitch.api.SortBy;
-import net.myacxy.retrotwitch.models.Error;
-import net.myacxy.retrotwitch.models.UserFollow;
-import net.myacxy.retrotwitch.resources.UserFollowsResource;
 import net.myacxy.retrotwitch.utils.StringUtil;
+import net.myacxy.retrotwitch.v3.Caller;
+import net.myacxy.retrotwitch.v3.models.Error;
+import net.myacxy.retrotwitch.v3.models.SortBy;
+import net.myacxy.retrotwitch.v3.models.UserFollow;
+import net.myacxy.retrotwitch.v3.resources.UserFollowsResource;
 
 import java.util.ArrayList;
 import java.util.List;

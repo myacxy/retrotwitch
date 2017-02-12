@@ -3,14 +3,15 @@ package net.myacxy.retrotwitch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.myacxy.retrotwitch.helpers.Lock;
-import net.myacxy.retrotwitch.models.Channel;
-import net.myacxy.retrotwitch.models.Error;
-import net.myacxy.retrotwitch.models.Stream;
-import net.myacxy.retrotwitch.models.StreamsContainer;
-import net.myacxy.retrotwitch.models.User;
-import net.myacxy.retrotwitch.models.UserFollow;
-import net.myacxy.retrotwitch.models.UserFollowsContainer;
+import net.myacxy.retrotwitch.v3.Caller;
+import net.myacxy.retrotwitch.v3.models.Channel;
+import net.myacxy.retrotwitch.v3.models.Error;
+import net.myacxy.retrotwitch.v3.models.Stream;
+import net.myacxy.retrotwitch.v3.models.StreamsContainer;
+import net.myacxy.retrotwitch.v3.models.User;
+import net.myacxy.retrotwitch.v3.models.UserFollow;
+import net.myacxy.retrotwitch.v3.models.UserFollowsContainer;
+import net.myacxy.retrotwitch.v5.helpers.Lock;
 
 import org.junit.Before;
 import org.junit.Test;

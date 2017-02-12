@@ -3,7 +3,8 @@ package net.myacxy.retrotwitch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.myacxy.retrotwitch.models.User;
+import net.myacxy.retrotwitch.v3.RxCaller;
+import net.myacxy.retrotwitch.v3.models.User;
 
 import org.junit.Before;
 import org.junit.Test;

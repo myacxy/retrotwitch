@@ -3,7 +3,7 @@ package net.myacxy.retrotwitch.sample.android.rxjava.viewmodels;
 import android.databinding.ObservableField;
 
 import net.myacxy.retrotwitch.RetroTwitch;
-import net.myacxy.retrotwitch.api.Scope;
+import net.myacxy.retrotwitch.v3.models.Scope;
 
 public class AuthenticationViewModel
 {
@@ -15,8 +15,8 @@ public class AuthenticationViewModel
                 .authenticate()
                 .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
-                .addScopes(Scope.USER_READ)
-                .addScopes()
+                .setScopes(Scope.USER_READ)
+                .setScopes()
                 .buildUrl();
     }
 }

@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.myacxy.retrotwitch.models.UserFollow;
 import net.myacxy.retrotwitch.sample.android.rxjava.R;
 import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel;
+import net.myacxy.retrotwitch.v3.models.UserFollow;
 
 import java.util.ArrayList;
 import java.util.List;

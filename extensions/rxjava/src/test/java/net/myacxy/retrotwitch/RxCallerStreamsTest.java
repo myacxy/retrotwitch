@@ -1,10 +1,11 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.api.TwitchV3Service;
-import net.myacxy.retrotwitch.helpers.RxErrorFactory;
-import net.myacxy.retrotwitch.models.Stream;
-import net.myacxy.retrotwitch.models.StreamContainer;
-import net.myacxy.retrotwitch.models.StreamsContainer;
+import net.myacxy.retrotwitch.v3.RxCaller;
+import net.myacxy.retrotwitch.v3.api.TwitchV3Service;
+import net.myacxy.retrotwitch.v3.models.Stream;
+import net.myacxy.retrotwitch.v3.models.StreamContainer;
+import net.myacxy.retrotwitch.v3.models.StreamsContainer;
+import net.myacxy.retrotwitch.v5.helpers.RxErrorFactory;
 
 import org.junit.Before;
 import org.junit.Test;

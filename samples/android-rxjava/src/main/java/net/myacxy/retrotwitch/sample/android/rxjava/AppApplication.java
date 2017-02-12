@@ -6,7 +6,7 @@ import com.orhanobut.logger.AndroidLogTool;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
-import net.myacxy.retrotwitch.RxCaller;
+import net.myacxy.retrotwitch.v3.RxCaller;
 
 import okhttp3.logging.HttpLoggingInterceptor;
 

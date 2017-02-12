@@ -1,6 +1,6 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.api.Scope;
+import net.myacxy.retrotwitch.v3.models.Scope;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class RetroTwitchTest
         RetroTwitch.getInstance().authenticate()
                 .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
-                .addScopes(Scope.USER_READ)
+                .setScopes(Scope.USER_READ)
                 .build(new RetroTwitch.AuthenticationBuilder.Callback()
                 {
                     @Override
@@ -45,7 +45,7 @@ public class RetroTwitchTest
         String url = RetroTwitch.getInstance().authenticate()
                 .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
-                .addScopes(Scope.USER_READ)
+                .setScopes(Scope.USER_READ)
                 .buildUrl();
 
         assertThat(url, equalTo(mAuthenticationUrl));

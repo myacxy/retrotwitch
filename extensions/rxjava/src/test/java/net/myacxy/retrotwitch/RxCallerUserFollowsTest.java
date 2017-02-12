@@ -1,8 +1,9 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.helpers.RxErrorFactory;
-import net.myacxy.retrotwitch.models.Error;
-import net.myacxy.retrotwitch.models.UserFollowsContainer;
+import net.myacxy.retrotwitch.v3.RxCaller;
+import net.myacxy.retrotwitch.v3.models.Error;
+import net.myacxy.retrotwitch.v3.models.UserFollowsContainer;
+import net.myacxy.retrotwitch.v5.helpers.RxErrorFactory;
 
 import org.junit.Before;
 import org.junit.Test;

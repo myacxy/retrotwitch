@@ -1,7 +1,9 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.api.Scope;
 import net.myacxy.retrotwitch.utils.StringUtil;
+import net.myacxy.retrotwitch.v3.Caller;
+import net.myacxy.retrotwitch.v3.FluentCaller;
+import net.myacxy.retrotwitch.v3.models.Scope;
 
 import java.util.ArrayList;
 
@@ -52,7 +54,7 @@ public class RetroTwitch
             return this;
         }
 
-        public AuthenticationBuilder addScopes(Scope... scopes)
+        public AuthenticationBuilder setScopes(Scope... scopes)
         {
             this.scopes = scopes;
             return this;

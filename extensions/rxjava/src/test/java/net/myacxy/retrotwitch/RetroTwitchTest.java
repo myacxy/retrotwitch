@@ -1,11 +1,12 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.api.Scope;
+import net.myacxy.retrotwitch.v3.models.Scope;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RetroTwitchTest
 {
@@ -27,7 +28,7 @@ public class RetroTwitchTest
         RetroTwitch.getInstance().authenticate()
                 .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
-                .addScopes(Scope.USER_READ)
+                .setScopes(Scope.USER_READ)
                 .build(url -> assertThat(url, equalTo(mAuthenticationUrl)));
     }
 
@@ -38,7 +39,7 @@ public class RetroTwitchTest
         String url = RetroTwitch.getInstance().authenticate()
                 .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
                 .setRedirectUri("http://localhost/retrotwitchtest")
-                .addScopes(Scope.USER_READ)
+                .setScopes(Scope.USER_READ)
                 .buildUrl();
 
         System.out.println(url);

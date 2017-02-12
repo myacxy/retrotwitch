@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.AuthenticationViewModel" />
-        <import type="android.view.View" />
-        <variable name="viewModel" type="AuthenticationViewModel" />
+
+        <import errorType="net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.AuthenticationViewModel" />
+
+        <import errorType="android.view.View" />
+
+        <variable
+            name="viewModel"
+            errorType="AuthenticationViewModel" />
     </data>
 
     <RelativeLayout
@@ -18,25 +20,25 @@
 
         <!--Acess Token-->
         <TextView
+            style="@style/Toolbar.TextAppearance.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_above="@+id/btn_a_authenticate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
             android:gravity="center_horizontal"
             android:text="@{@string/description_access_token(viewModel.accessToken)}"
             tools:text="Access Token\n=\nunknown"
-            style="@style/Toolbar.TextAppearance.Title"
             />
 
         <!--Search-->
         <Button
             android:id="@+id/btn_a_authenticate"
+            style="@style/Button.Default"
             android:layout_centerInParent="true"
             android:text="@string/action_authenticate"
-            style="@style/Button.Default"
             />
 
     </RelativeLayout>

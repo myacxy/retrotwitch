@@ -5,13 +5,13 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
-import net.myacxy.retrotwitch.RxCaller;
-import net.myacxy.retrotwitch.api.SortBy;
-import net.myacxy.retrotwitch.helpers.RxErrorFactory;
-import net.myacxy.retrotwitch.models.Error;
-import net.myacxy.retrotwitch.models.UserFollow;
-import net.myacxy.retrotwitch.models.UserFollowsContainer;
 import net.myacxy.retrotwitch.utils.StringUtil;
+import net.myacxy.retrotwitch.v3.RxCaller;
+import net.myacxy.retrotwitch.v3.models.Error;
+import net.myacxy.retrotwitch.v3.models.SortBy;
+import net.myacxy.retrotwitch.v3.models.UserFollow;
+import net.myacxy.retrotwitch.v3.models.UserFollowsContainer;
+import net.myacxy.retrotwitch.v5.helpers.RxErrorFactory;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
