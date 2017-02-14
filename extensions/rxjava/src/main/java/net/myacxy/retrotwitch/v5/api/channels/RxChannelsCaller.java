@@ -2,21 +2,21 @@ package net.myacxy.retrotwitch.v5.api.channels;
 
 import net.myacxy.retrotwitch.v5.api.BaseCaller;
 import net.myacxy.retrotwitch.v5.api.ResponseListener;
-import net.myacxy.retrotwitch.v5.api.SimpleRetroTwitchCallback;
 
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
-import retrofit2.Call;
 import retrofit2.Retrofit;
 
-public class ChannelsCaller extends BaseCaller<TwitchChannelsService> {
+// TODO: 14.02.2017
+public class RxChannelsCaller extends BaseCaller<RxTwitchChannelsService> {
 
-    public ChannelsCaller(OkHttpClient client) {
+    public RxChannelsCaller(OkHttpClient client) {
         super(client);
     }
 
     @Override
-    protected TwitchChannelsService createService(Retrofit retrofit) {
-        return retrofit.create(TwitchChannelsService.class);
+    protected RxTwitchChannelsService createService(Retrofit retrofit) {
+        return retrofit.create(RxTwitchChannelsService.class);
     }
 
     //<editor-fold desc="API Calls">
@@ -32,10 +32,10 @@ public class ChannelsCaller extends BaseCaller<TwitchChannelsService> {
      *
      * @return Get Channel returns more data than Get Channel by ID because Get Channel is privileged.
      */
-    public Call<PrivilegedChannel> getChannel(final ResponseListener<PrivilegedChannel> listener) {
-        Call<PrivilegedChannel> call = getService().getChannel();
-        call.enqueue(new SimpleRetroTwitchCallback<>(listener));
-        return call;
+    public Observable<PrivilegedChannel> getChannel(final ResponseListener<PrivilegedChannel> listener) {
+        Observable<PrivilegedChannel> observable = getService().getChannel();
+//        observable.enqueue(new SimpleRetroTwitchCallback<>(listener));
+        return observable;
     }
 
     /**
@@ -47,10 +47,10 @@ public class ChannelsCaller extends BaseCaller<TwitchChannelsService> {
      * <p><b>Optional Query String Parameters</b></p>
      * <p>None</p>
      */
-    public Call<SimpleChannel> getChannelById(long channelId, final ResponseListener<SimpleChannel> listener) {
-        Call<SimpleChannel> call = getService().getChannelById(channelId);
-        call.enqueue(new SimpleRetroTwitchCallback<>(listener));
-        return call;
+    public Observable<SimpleChannel> getChannelById(long channelId, final ResponseListener<SimpleChannel> listener) {
+        Observable<SimpleChannel> observable = getService().getChannelById(channelId);
+//        observable.enqueue(new SimpleRetroTwitchCallback<>(listener));
+        return observable;
     }
     //</editor-fold>
 }

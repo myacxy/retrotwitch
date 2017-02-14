@@ -16,7 +16,7 @@ buildscript {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         applicationId "net.myacxy.retrotwitch.sample.android.rxjava"
@@ -51,8 +51,8 @@ dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;
 
     compile project(':extensions:rxjava')
-    compile dependencies.butterKnife
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile dependencies.butterknife
+    annotationProcessor dependencies.butterknifeApt
     compile dependencies.rxAndroid
 //    compile dependencies.rxBinding
 //    compile dependencies.rxBindingAppCompat

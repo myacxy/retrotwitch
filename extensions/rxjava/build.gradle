@@ -35,7 +35,7 @@ dependencies {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'net.myacxy.retrotwitch.RetroTwitch',
+                'Main-Class': 'net.myacxy.retrotwitch.v5.RetroTwitch',
         )
     }
 }

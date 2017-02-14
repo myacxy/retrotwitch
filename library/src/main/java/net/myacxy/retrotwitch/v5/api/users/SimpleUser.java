@@ -20,6 +20,38 @@ public class SimpleUser {
     @SerializedName("updated_at")
     protected String updatedAt;
 
+    public long getId() {
+        return id;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SimpleUser{");

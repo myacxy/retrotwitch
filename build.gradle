@@ -12,7 +12,7 @@ ext {
     targetCompatibility = JavaVersion.VERSION_1_7
     sourceCompatibility = JavaVersion.VERSION_1_7
 
-    supportLibraryVersion = '25.0.0'
+    supportLibraryVersion = '25.1.0'
     retrofitVersion = '2.1.0'
     rxBindingVersion = '0.4.0'
 
@@ -28,7 +28,8 @@ ext {
             rxjava                  : 'io.reactivex.rxjava2:rxjava:2.0.1',
             retrofitAdapterRxJava   : "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0",
             // android
-            butterKnife             : 'com.jakewharton:butterknife:8.4.0',
+            butterknife             : 'com.jakewharton:butterknife:8.5.1',
+            butterknifeApt          : 'com.jakewharton:butterknife-compiler:8.5.1',
             appCompat               : "com.android.support:appcompat-v7:$supportLibraryVersion",
             design                  : "com.android.support:design:$supportLibraryVersion",
             recyclerView            : "com.android.support:recyclerview-v7:$supportLibraryVersion",

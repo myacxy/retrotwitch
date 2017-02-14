@@ -15,9 +15,10 @@ import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
-public class StreamsCaller extends BaseCaller<TwitchStreamsService> {
+// TODO: 14.02.2017
+public class RxStreamsCaller extends BaseCaller<TwitchStreamsService> {
 
-    public StreamsCaller(OkHttpClient client) {
+    public RxStreamsCaller(OkHttpClient client) {
         super(client);
     }
 

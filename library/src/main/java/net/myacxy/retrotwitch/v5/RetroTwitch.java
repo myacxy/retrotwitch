@@ -4,6 +4,7 @@ import net.myacxy.retrotwitch.utils.StringUtil;
 import net.myacxy.retrotwitch.v5.api.channels.ChannelsCaller;
 import net.myacxy.retrotwitch.v5.api.common.Scope;
 import net.myacxy.retrotwitch.v5.api.streams.StreamsCaller;
+import net.myacxy.retrotwitch.v5.api.users.UserFollowsResource;
 import net.myacxy.retrotwitch.v5.api.users.UsersCaller;
 
 import java.io.IOException;
@@ -59,6 +60,10 @@ public class RetroTwitch {
     public StreamsCaller streams() {
         return streams;
     }
+
+    public UserFollowsResource.Builder userFollows(long userId) {
+        return new UserFollowsResource.Builder(userId);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Private Methods">
@@ -102,11 +107,6 @@ public class RetroTwitch {
             return this;
         }
 
-        public RetroTwitch build(Callback callback) {
-            callback.authenticate(buildUrl());
-            return RetroTwitch.INSTANCE;
-        }
-
         public String buildUrl() {
             ArrayList<String> scopeStrings = new ArrayList<>(scopes.length);
             for (Scope scope : scopes) {
@@ -124,10 +124,6 @@ public class RetroTwitch {
                     .addQueryParameter("scope", scopesString)
                     .build()
                     .toString();
-        }
-
-        public interface Callback {
-            void authenticate(String url);
         }
     }
 

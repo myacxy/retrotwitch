@@ -4,13 +4,11 @@
 
     <data>
 
-        <import errorType="net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.AuthenticationViewModel" />
-
-        <import errorType="android.view.View" />
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
-            errorType="AuthenticationViewModel" />
+            type="net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.AuthenticationViewModel" />
     </data>
 
     <RelativeLayout
@@ -20,7 +18,6 @@
 
         <!--Acess Token-->
         <TextView
-            style="@style/Toolbar.TextAppearance.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/btn_a_authenticate"
@@ -31,14 +28,15 @@
             android:gravity="center_horizontal"
             android:text="@{@string/description_access_token(viewModel.accessToken)}"
             tools:text="Access Token\n=\nunknown"
+            style="@style/Toolbar.TextAppearance.Title"
             />
 
         <!--Search-->
         <Button
             android:id="@+id/btn_a_authenticate"
-            style="@style/Button.Default"
             android:layout_centerInParent="true"
             android:text="@string/action_authenticate"
+            style="@style/Button.Default"
             />
 
     </RelativeLayout>

@@ -1,5 +1,6 @@
 package net.myacxy.retrotwitch.v5;
 
+import net.myacxy.retrotwitch.helpers.TestConstants;
 import net.myacxy.retrotwitch.v5.api.common.Scope;
 
 import org.junit.Before;
@@ -11,45 +12,30 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RetroTwitchTest {
-    private static final String CLIENT_ID = "75gzbgqhk0tg6dhjbqtsphmy8sdayrr";
 
-    private String mAuthenticationUrl = "https://api.twitch.tv/kraken/oauth2/authorize"
+    private static final String URL_AUTHENTICATION = "https://api.twitch.tv/kraken/oauth2/authorize"
             + "?response_type=token"
-            + "&redirect_uri=http://localhost/retrotwitchtest"
-            + "&client_id=75gzbgqhk0tg6dhjbqtsphmy8sdayrr"
+            + "&redirect_uri=" + TestConstants.TEST_REDIRECT_URI
+            + "&client_id=" + TestConstants.TEST_CLIENT_ID
             + "&scope=user_read";
 
     @Before
     public void setUp() throws Exception {
         RetroTwitch.getInstance()
                 .configure()
-                .setClientId(CLIENT_ID)
+                .setClientId(TestConstants.TEST_CLIENT_ID)
                 .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
                 .apply();
     }
 
     @Test
-    public void authenticateWithCallback() throws Exception {
-        RetroTwitch.getInstance().authenticate()
-                .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
-                .setRedirectUri("http://localhost/retrotwitchtest")
-                .setScopes(Scope.USER_READ)
-                .build(new RetroTwitch.AuthenticationBuilder.Callback() {
-                    @Override
-                    public void authenticate(String url) {
-                        assertThat(url, equalTo(mAuthenticationUrl));
-                    }
-                });
-    }
-
-    @Test
     public void authenticate() throws Exception {
         String url = RetroTwitch.getInstance().authenticate()
-                .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
-                .setRedirectUri("http://localhost/retrotwitchtest")
+                .setClientId(TestConstants.TEST_CLIENT_ID)
+                .setRedirectUri(TestConstants.TEST_REDIRECT_URI)
                 .setScopes(Scope.USER_READ)
                 .buildUrl();
 
-        assertThat(url, equalTo(mAuthenticationUrl));
+        assertThat(url, equalTo(URL_AUTHENTICATION));
     }
 }

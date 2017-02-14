@@ -2,7 +2,7 @@ package net.myacxy.retrotwitch.sample.android.rxjava.viewmodels;
 
 import android.databinding.ObservableField;
 
-import net.myacxy.retrotwitch.RetroTwitch;
+import net.myacxy.retrotwitch.v3.RetroTwitch;
 import net.myacxy.retrotwitch.v3.models.Scope;
 
 public class AuthenticationViewModel

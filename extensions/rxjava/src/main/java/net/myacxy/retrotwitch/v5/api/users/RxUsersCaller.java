@@ -14,10 +14,11 @@ import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
-public class UsersCaller extends BaseCaller<TwitchUsersService> {
+// TODO: 14.02.2017
+public class RxUsersCaller extends BaseCaller<TwitchUsersService> {
 
     //<editor-fold desc="Constructor">
-    public UsersCaller(OkHttpClient client) {
+    public RxUsersCaller(OkHttpClient client) {
         super(client);
     }
     //</editor-fold>

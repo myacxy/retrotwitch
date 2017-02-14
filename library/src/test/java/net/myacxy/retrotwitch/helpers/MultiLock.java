@@ -1,4 +1,4 @@
-package net.myacxy.retrotwitch.v5.helpers;
+package net.myacxy.retrotwitch.helpers;
 
 import net.myacxy.retrotwitch.v3.models.BaseModel;
 

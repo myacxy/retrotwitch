@@ -2,16 +2,17 @@ package net.myacxy.retrotwitch.utils;
 
 import java.util.List;
 
-public class StringUtil
-{
-    public static String joinStrings(List<String> strings, String separator)
-    {
+public class StringUtil {
+
+    private StringUtil() {
+        throw new IllegalAccessError();
+    }
+
+    public static String joinStrings(List<String> strings, String separator) {
         StringBuilder separatedStrings = new StringBuilder();
 
-        for (int i = 0; i < strings.size(); i++)
-        {
-            if (i > 0)
-            {
+        for (int i = 0; i < strings.size(); i++) {
+            if (i > 0) {
                 separatedStrings.append(separator);
             }
             separatedStrings.append(strings.get(i));
@@ -19,8 +20,7 @@ public class StringUtil
         return separatedStrings.toString();
     }
 
-    public static boolean isBlank(String string)
-    {
+    public static boolean isBlank(String string) {
         return string == null || string.equals("");
     }
 }

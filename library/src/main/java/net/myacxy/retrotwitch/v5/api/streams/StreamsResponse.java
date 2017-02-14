@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import net.myacxy.retrotwitch.v5.api.channels.SimpleChannel;
 import net.myacxy.retrotwitch.v5.api.common.StreamType;
-import net.myacxy.retrotwitch.v5.api.common.TwitchDefaults;
+import net.myacxy.retrotwitch.v5.api.common.TwitchConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,9 @@ public class StreamsResponse {
     public transient List<SimpleChannel> channels = null;
     public transient String game = null;
     public transient String language = null;
-    public transient int limit = TwitchDefaults.DEFAULT_LIMIT;
-    public transient int offset = TwitchDefaults.DEFAULT_OFFSET;
-    public transient StreamType streamType = TwitchDefaults.DEFAULT_STREAM_TYPE;
+    public transient int limit = TwitchConstants.DEFAULT_LIMIT;
+    public transient int offset = TwitchConstants.DEFAULT_OFFSET;
+    public transient StreamType streamType = TwitchConstants.DEFAULT_STREAM_TYPE;
 
     @SerializedName("_total")
     private Integer total;

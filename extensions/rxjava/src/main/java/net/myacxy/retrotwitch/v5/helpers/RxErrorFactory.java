@@ -3,11 +3,11 @@ package net.myacxy.retrotwitch.v5.helpers;
 import com.google.gson.JsonSyntaxException;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 
-import net.myacxy.retrotwitch.v3.models.Error;
+import net.myacxy.retrotwitch.v5.api.common.Error;
 
 import java.io.IOException;
 
-public class RxErrorFactory extends net.myacxy.retrotwitch.v3.helpers.ErrorFactory
+public class RxErrorFactory extends ErrorFactory
 {
     public static Error fromJson(String json)
     {

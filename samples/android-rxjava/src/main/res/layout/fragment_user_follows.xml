@@ -6,13 +6,11 @@
 
     <data>
 
-        <import errorType="net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel" />
-
-        <import errorType="android.view.View" />
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
-            errorType="UserFollowsViewModel" />
+            type="net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel" />
     </data>
 
     <RelativeLayout
@@ -23,7 +21,6 @@
         <!--User Name-->
         <EditText
             android:id="@+id/et_uf_user_name"
-            style="?android:attr/editTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -34,18 +31,19 @@
             android:inputType="textPersonName"
             android:maxLines="1"
             android:text="@={viewModel.userName}"
+            style="?android:attr/editTextStyle"
             />
 
         <!--Search-->
         <Button
             android:id="@+id/btn_uf_search"
-            style="?android:attr/buttonStyle"
             android:layout_alignParentRight="true"
             android:layout_below="@id/et_uf_user_name"
             android:layout_marginRight="8dp"
             android:alpha="@{viewModel.loading ? 0.38f : 1f}"
             android:enabled="@{viewModel.loading ? false : true}"
             android:text="@string/search"
+            style="?android:attr/buttonStyle"
             />
 
         <!--Total-->

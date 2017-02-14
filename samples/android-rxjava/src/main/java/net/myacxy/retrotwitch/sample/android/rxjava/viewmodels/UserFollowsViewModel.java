@@ -6,11 +6,10 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
 import net.myacxy.retrotwitch.utils.StringUtil;
-import net.myacxy.retrotwitch.v3.RxCaller;
-import net.myacxy.retrotwitch.v3.models.Error;
 import net.myacxy.retrotwitch.v3.models.SortBy;
 import net.myacxy.retrotwitch.v3.models.UserFollow;
 import net.myacxy.retrotwitch.v3.models.UserFollowsContainer;
+import net.myacxy.retrotwitch.v5.RxCaller;
 import net.myacxy.retrotwitch.v5.helpers.RxErrorFactory;
 
 import io.reactivex.Observer;
