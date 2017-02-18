@@ -20,7 +20,7 @@ public class StringUtil {
         return separatedStrings.toString();
     }
 
-    public static boolean isBlank(String string) {
+    public static boolean isEmpty(String string) {
         return string == null || string.equals("");
     }
 }

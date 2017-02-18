@@ -97,7 +97,7 @@ public class UserFollowsFragment extends Fragment {
     @OnClick(R.id.btn_uf_search)
     public void onSearchClicked() {
         String userName = mUserName.getText().toString().trim();
-        if (!StringUtil.isBlank(userName)) {
+        if (!StringUtil.isEmpty(userName)) {
             showProgress(true);
             mAdapter.getUserFollows().clear();
             setInformation(0, 0);

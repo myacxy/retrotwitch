@@ -62,7 +62,7 @@ public class UserFollowsViewModel
     public void search()
     {
         String user = userName.get() != null ? userName.get().trim() : null;
-        if (!StringUtil.isBlank(user))
+        if (!StringUtil.isEmpty(user))
         {
             userFollows.clear();
             loading.set(true);

@@ -36,7 +36,7 @@ public class UserFollowsFragment extends Fragment
         public void onPropertyChanged(Observable observable, int i)
         {
             String errorMessage = mViewModel.errorMessage.get();
-            if (!StringUtil.isBlank(errorMessage))
+            if (!StringUtil.isEmpty(errorMessage))
             {
                 Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
