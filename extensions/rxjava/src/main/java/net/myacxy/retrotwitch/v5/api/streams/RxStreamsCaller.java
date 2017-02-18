@@ -1,7 +1,7 @@
 package net.myacxy.retrotwitch.v5.api.streams;
 
 import net.myacxy.retrotwitch.utils.StringUtil;
-import net.myacxy.retrotwitch.v5.api.BaseCaller;
+import net.myacxy.retrotwitch.v5.api.RxBaseCaller;
 import net.myacxy.retrotwitch.v5.api.channels.SimpleChannel;
 import net.myacxy.retrotwitch.v5.api.common.StreamType;
 
@@ -14,7 +14,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 // TODO: 14.02.2017
-public class RxStreamsCaller extends BaseCaller<RxTwitchStreamsService> {
+public class RxStreamsCaller extends RxBaseCaller<RxTwitchStreamsService> {
 
     public RxStreamsCaller(OkHttpClient client) {
         super(client);

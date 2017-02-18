@@ -1,7 +1,7 @@
 package net.myacxy.retrotwitch.v5.api.users;
 
-import net.myacxy.retrotwitch.v5.api.BaseCaller;
 import net.myacxy.retrotwitch.v5.api.ResponseListener;
+import net.myacxy.retrotwitch.v5.api.RxBaseCaller;
 import net.myacxy.retrotwitch.v5.api.common.Direction;
 import net.myacxy.retrotwitch.v5.api.common.SortBy;
 
@@ -11,7 +11,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 // TODO: 14.02.2017
-public class RxUsersCaller extends BaseCaller<RxTwitchUsersService> {
+public class RxUsersCaller extends RxBaseCaller<RxTwitchUsersService> {
 
     //<editor-fold desc="Constructor">
     public RxUsersCaller(OkHttpClient client) {

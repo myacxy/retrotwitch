@@ -1,6 +1,6 @@
 package net.myacxy.retrotwitch.v5.api.channels;
 
-import net.myacxy.retrotwitch.v5.api.BaseCaller;
+import net.myacxy.retrotwitch.v5.api.RxBaseCaller;
 
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
@@ -8,7 +8,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 // TODO: 14.02.2017
-public class RxChannelsCaller extends BaseCaller<RxTwitchChannelsService> {
+public class RxChannelsCaller extends RxBaseCaller<RxTwitchChannelsService> {
 
     public RxChannelsCaller(OkHttpClient client) {
         super(client);
