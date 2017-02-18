@@ -1,6 +1,7 @@
 package net.myacxy.retrotwitch.v5.api.channels;
 
 import io.reactivex.Observable;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
@@ -18,7 +19,7 @@ public interface RxTwitchChannelsService {
      * @return Get Channel returns more data than Get Channel by ID because Get Channel is privileged.
      */
     @GET("channels")
-    Observable<PrivilegedChannel> getChannel();
+    Observable<Response<PrivilegedChannel>> getChannel();
 
     /**
      * <p>Gets a specified channel object.</p>
@@ -30,5 +31,5 @@ public interface RxTwitchChannelsService {
      * <p>None</p>
      */
     @GET("channels/{channel_id}")
-    Observable<SimpleChannel> getChannelById(@Path("channel_id") long channelId);
+    Observable<Response<SimpleChannel>> getChannelById(@Path("channel_id") long channelId);
 }

@@ -76,7 +76,7 @@ public class RetroTwitch {
                                 .newBuilder()
                                 .header("Accept", "application/vnd.twitchtv.v5+json")
                                 .header("Client-ID", configuration.clientId)
-                                .header("Authentication", configuration.authToken)
+                                .header("Authorization", String.format("OAuth %s", configuration.authToken))
                                 .build();
                         return chain.proceed(request);
                     }

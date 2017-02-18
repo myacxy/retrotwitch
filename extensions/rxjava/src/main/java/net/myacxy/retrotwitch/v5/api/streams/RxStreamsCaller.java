@@ -2,51 +2,47 @@ package net.myacxy.retrotwitch.v5.api.streams;
 
 import net.myacxy.retrotwitch.utils.StringUtil;
 import net.myacxy.retrotwitch.v5.api.BaseCaller;
-import net.myacxy.retrotwitch.v5.api.ResponseListener;
-import net.myacxy.retrotwitch.v5.api.RetroTwitchCallback;
 import net.myacxy.retrotwitch.v5.api.channels.SimpleChannel;
 import net.myacxy.retrotwitch.v5.api.common.StreamType;
-import net.myacxy.retrotwitch.v5.api.common.TwitchConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
-import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 // TODO: 14.02.2017
-public class RxStreamsCaller extends BaseCaller<TwitchStreamsService> {
+public class RxStreamsCaller extends BaseCaller<RxTwitchStreamsService> {
 
     public RxStreamsCaller(OkHttpClient client) {
         super(client);
     }
 
     @Override
-    protected TwitchStreamsService createService(Retrofit retrofit) {
-        return retrofit.create(TwitchStreamsService.class);
+    protected RxTwitchStreamsService createService(Retrofit retrofit) {
+        return retrofit.create(RxTwitchStreamsService.class);
     }
 
     //<editor-fold desc="API Calls">
-    public Call<StreamResponse> getStreamByUser(long channelId, StreamType streamType, final ResponseListener<Stream> listener) {
-        Call<StreamResponse> call = getService().getStreamByUser(channelId, streamType);
-        call.enqueue(new RetroTwitchCallback<StreamResponse, Stream>(listener) {
-            @Override
-            public Stream beforeOnSuccess(StreamResponse streamResponse) {
-                return streamResponse.stream;
-            }
-        });
-        return call;
+    public Observable<Response<StreamResponse>> getStreamByUser(long channelId, StreamType streamType) {
+//        call.enqueue(new RetroTwitchCallback<StreamResponse, Stream>(listener) {
+//            @Override
+//            public Stream beforeOnSuccess(StreamResponse streamResponse) {
+//                return streamResponse.stream;
+//            }
+//        });
+        return getService().getStreamByUser(channelId, streamType);
     }
 
-    public Call<StreamsResponse> getStreams(
+    public Observable<Response<StreamsResponse>> getStreams(
             final List<SimpleChannel> channels,
             final String game,
             final String language,
             final StreamType streamType,
             final Integer limit,
-            final Integer offset,
-            final ResponseListener<StreamsResponse> listener) {
+            final Integer offset) {
 
         List<String> channelNames = null;
         if (channels != null) {
@@ -56,24 +52,24 @@ public class RxStreamsCaller extends BaseCaller<TwitchStreamsService> {
             }
         }
 
-        Call<StreamsResponse> call = getService().getLiveStreams(
+//        call.enqueue(new RetroTwitchCallback<StreamsResponse, StreamsResponse>(listener) {
+//
+//            @Override
+//            public StreamsResponse beforeOnSuccess(StreamsResponse streamsResponse) {
+//                streamsResponse.channels = channels;
+//                streamsResponse.game = game;
+//                streamsResponse.language = language;
+//                streamsResponse.limit = limit == null ? TwitchConstants.DEFAULT_LIMIT : limit;
+//                streamsResponse.offset = offset == null ? TwitchConstants.DEFAULT_OFFSET : offset;
+//                streamsResponse.streamType = streamType == null ? StreamType.DEFAULT : streamType;
+//                return streamsResponse;
+//            }
+//        });
+
+        return getService().getLiveStreams(
                 channelNames != null ? StringUtil.joinStrings(channelNames, ",") : null,
-                game, language, streamType, limit, offset);
-
-        call.enqueue(new RetroTwitchCallback<StreamsResponse, StreamsResponse>(listener) {
-
-            @Override
-            public StreamsResponse beforeOnSuccess(StreamsResponse streamsResponse) {
-                streamsResponse.channels = channels;
-                streamsResponse.game = game;
-                streamsResponse.language = language;
-                streamsResponse.limit = limit == null ? TwitchConstants.DEFAULT_LIMIT : limit;
-                streamsResponse.offset = offset == null ? TwitchConstants.DEFAULT_OFFSET : offset;
-                streamsResponse.streamType = streamType == null ? StreamType.DEFAULT : streamType;
-                return streamsResponse;
-            }
-        });
-        return call;
+                game, language, streamType, limit, offset
+        );
     }
     //</editor-fold>
 }

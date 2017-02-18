@@ -3,6 +3,7 @@ package net.myacxy.retrotwitch.v5.api.streams;
 import net.myacxy.retrotwitch.v5.api.common.StreamType;
 
 import io.reactivex.Observable;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -17,7 +18,7 @@ public interface RxTwitchStreamsService {
      * @param streamType Constrains the type of streams returned. Valid values: live, playlist, all. Playlists are offline streams of VODs (Video on Demand) that appear live. Default: live.
      */
     @GET("streams/{channel_id}")
-    Observable<StreamResponse> getStreamByUser(@Path("channel_id") long channelId, @Query("stream_type") StreamType streamType);
+    Observable<Response<StreamResponse>> getStreamByUser(@Path("channel_id") long channelId, @Query("stream_type") StreamType streamType);
 
     /**
      * <p>Gets a list of live streams.</p>
@@ -33,7 +34,7 @@ public interface RxTwitchStreamsService {
      * @param offset     Object offset for pagination of results. Default: 0.
      */
     @GET("streams")
-    Observable<StreamsResponse> getLiveStreams(
+    Observable<Response<StreamsResponse>> getLiveStreams(
             @Query("channel") String channel,
             @Query("game") String game,
             @Query("language") String language,

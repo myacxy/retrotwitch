@@ -4,6 +4,7 @@ import net.myacxy.retrotwitch.v5.api.common.Direction;
 import net.myacxy.retrotwitch.v5.api.common.SortBy;
 
 import io.reactivex.Observable;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -20,7 +21,7 @@ public interface RxTwitchUsersService {
      * @return Get User returns more data than Get User by ID, because Get User is privileged.
      */
     @GET("user")
-    Observable<PrivilegedUser> getUser();
+    Observable<Response<PrivilegedUser>> getUser();
 
     /**
      * <p>Gets a specified user object.</p>
@@ -29,10 +30,10 @@ public interface RxTwitchUsersService {
      * <p>None</p>
      */
     @GET("users/{user_id}")
-    Observable<SimpleUser> getUserById(@Path("user_id") long userId);
+    Observable<Response<SimpleUser>> getUserById(@Path("user_id") long userId);
 
     @GET("users")
-    Observable<SimpleUsersResponse> translateUserNameToUserId(@Query("login") String userName);
+    Observable<Response<SimpleUsersResponse>> translateUserNameToUserId(@Query("login") String userName);
 
     /**
      * <p>Gets a list of all channels followed by a specified user, sorted by the date when they
@@ -47,7 +48,7 @@ public interface RxTwitchUsersService {
      * @param sortBy    Sorting key. Valid values: created_at, last_broadcast, login. Default: created_at.
      */
     @GET("users/{user_id}/follows/channels")
-    Observable<UserFollowsResponse> getUserFollows(
+    Observable<Response<UserFollowsResponse>> getUserFollows(
             @Path("user_id") long userId,
             @Query("limit") Integer limit,
             @Query("offset") Integer offset,
