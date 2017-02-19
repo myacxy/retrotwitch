@@ -3,44 +3,45 @@ package net.myacxy.retrotwitch.v5.api.channels;
 import com.google.gson.annotations.SerializedName;
 
 public class SimpleChannel {
-    @SerializedName("_id")
-    private Integer id;
-    @SerializedName("broadcaster_language")
-    private String broadcasterLanguage;
-    @SerializedName("created_at")
-    private String createdAt;
-    @SerializedName("display_name")
-    private String displayName;
-    @SerializedName("followers")
-    private Integer followers;
-    @SerializedName("game")
-    private String game;
-    @SerializedName("language")
-    private String language;
-    @SerializedName("logo")
-    private String logo;
-    @SerializedName("mature")
-    private Boolean mature;
-    @SerializedName("name")
-    private String name;
-    @SerializedName("partner")
-    private Boolean partner;
-    @SerializedName("profile_banner")
-    private String profileBanner;
-    @SerializedName("profile_banner_background_color")
-    private String profileBannerBackgroundColor;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("updated_at")
-    private String updatedAt;
-    @SerializedName("url")
-    private String url;
-    @SerializedName("video_banner")
-    private String videoBanner;
-    @SerializedName("views")
-    private Integer views;
 
-    public Integer getId() {
+    @SerializedName("_id")
+    protected long id;
+    @SerializedName("broadcaster_language")
+    protected String broadcasterLanguage;
+    @SerializedName("created_at")
+    protected String createdAt;
+    @SerializedName("display_name")
+    protected String displayName;
+    @SerializedName("followers")
+    protected long followers;
+    @SerializedName("game")
+    protected String game;
+    @SerializedName("language")
+    protected String language;
+    @SerializedName("logo")
+    protected String logo;
+    @SerializedName("mature")
+    protected boolean mature;
+    @SerializedName("name")
+    protected String name;
+    @SerializedName("partner")
+    protected boolean partner;
+    @SerializedName("profile_banner")
+    protected String profileBanner;
+    @SerializedName("profile_banner_background_color")
+    protected String profileBannerBackgroundColor;
+    @SerializedName("status")
+    protected String status;
+    @SerializedName("updated_at")
+    protected String updatedAt;
+    @SerializedName("url")
+    protected String url;
+    @SerializedName("video_banner")
+    protected String videoBanner;
+    @SerializedName("views")
+    protected long views;
+
+    public long getId() {
         return id;
     }
 
@@ -56,7 +57,7 @@ public class SimpleChannel {
         return displayName;
     }
 
-    public Integer getFollowers() {
+    public long getFollowers() {
         return followers;
     }
 
@@ -72,7 +73,7 @@ public class SimpleChannel {
         return logo;
     }
 
-    public Boolean getMature() {
+    public boolean getMature() {
         return mature;
     }
 
@@ -80,7 +81,7 @@ public class SimpleChannel {
         return name;
     }
 
-    public Boolean getPartner() {
+    public boolean getPartner() {
         return partner;
     }
 
@@ -108,8 +109,62 @@ public class SimpleChannel {
         return videoBanner;
     }
 
-    public Integer getViews() {
+    public long getViews() {
         return views;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SimpleChannel that = (SimpleChannel) o;
+
+        if (id != that.id) return false;
+        if (followers != that.followers) return false;
+        if (mature != that.mature) return false;
+        if (partner != that.partner) return false;
+        if (views != that.views) return false;
+        if (broadcasterLanguage != null ? !broadcasterLanguage.equals(that.broadcasterLanguage) : that.broadcasterLanguage != null)
+            return false;
+        if (!createdAt.equals(that.createdAt)) return false;
+        if (!displayName.equals(that.displayName)) return false;
+        if (game != null ? !game.equals(that.game) : that.game != null) return false;
+        if (language != null ? !language.equals(that.language) : that.language != null)
+            return false;
+        if (logo != null ? !logo.equals(that.logo) : that.logo != null) return false;
+        if (!name.equals(that.name)) return false;
+        if (profileBanner != null ? !profileBanner.equals(that.profileBanner) : that.profileBanner != null)
+            return false;
+        if (profileBannerBackgroundColor != null ? !profileBannerBackgroundColor.equals(that.profileBannerBackgroundColor) : that.profileBannerBackgroundColor != null)
+            return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (!updatedAt.equals(that.updatedAt)) return false;
+        if (!url.equals(that.url)) return false;
+        return videoBanner != null ? videoBanner.equals(that.videoBanner) : that.videoBanner == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (broadcasterLanguage != null ? broadcasterLanguage.hashCode() : 0);
+        result = 31 * result + createdAt.hashCode();
+        result = 31 * result + displayName.hashCode();
+        result = 31 * result + (int) (followers ^ (followers >>> 32));
+        result = 31 * result + (game != null ? game.hashCode() : 0);
+        result = 31 * result + (language != null ? language.hashCode() : 0);
+        result = 31 * result + (logo != null ? logo.hashCode() : 0);
+        result = 31 * result + (mature ? 1 : 0);
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (partner ? 1 : 0);
+        result = 31 * result + (profileBanner != null ? profileBanner.hashCode() : 0);
+        result = 31 * result + (profileBannerBackgroundColor != null ? profileBannerBackgroundColor.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + updatedAt.hashCode();
+        result = 31 * result + url.hashCode();
+        result = 31 * result + (videoBanner != null ? videoBanner.hashCode() : 0);
+        result = 31 * result + (int) (views ^ (views >>> 32));
+        return result;
     }
 
     @Override

@@ -22,7 +22,7 @@ public abstract class BaseRetroTwitch<SELF extends BaseRetroTwitch<SELF>> {
 
     //<editor-fold desc="Constructor">
     public BaseRetroTwitch() {
-        client = createClient(configuration);
+        client = createClient();
     }
     //</editor-fold>
 
@@ -33,6 +33,7 @@ public abstract class BaseRetroTwitch<SELF extends BaseRetroTwitch<SELF>> {
 
     public SELF configure(Configuration configuration) {
         this.configuration = configuration;
+        httpLoggingInterceptor.setLevel(configuration.level);
         // noinspection unchecked
         return (SELF) this;
     }
@@ -47,7 +48,7 @@ public abstract class BaseRetroTwitch<SELF extends BaseRetroTwitch<SELF>> {
     //</editor-fold>
 
     //<editor-fold desc="Private Methods">
-    private OkHttpClient createClient(final Configuration configuration) {
+    private OkHttpClient createClient() {
         return new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
                     @Override
@@ -62,7 +63,7 @@ public abstract class BaseRetroTwitch<SELF extends BaseRetroTwitch<SELF>> {
                         return chain.proceed(builder.build());
                     }
                 })
-                .addInterceptor(httpLoggingInterceptor.setLevel(configuration.level))
+                .addInterceptor(httpLoggingInterceptor)
                 .build();
     }
     //</editor-fold>

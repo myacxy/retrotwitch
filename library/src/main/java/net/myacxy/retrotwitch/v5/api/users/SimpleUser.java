@@ -3,6 +3,7 @@ package net.myacxy.retrotwitch.v5.api.users;
 import com.google.gson.annotations.SerializedName;
 
 public class SimpleUser {
+
     @SerializedName("_id")
     protected long id;
     @SerializedName("bio")
@@ -50,6 +51,36 @@ public class SimpleUser {
 
     public String getUpdatedAt() {
         return updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SimpleUser that = (SimpleUser) o;
+
+        if (id != that.id) return false;
+        if (bio != null ? !bio.equals(that.bio) : that.bio != null) return false;
+        if (!createdAt.equals(that.createdAt)) return false;
+        if (!displayName.equals(that.displayName)) return false;
+        if (logo != null ? !logo.equals(that.logo) : that.logo != null) return false;
+        if (!name.equals(that.name)) return false;
+        if (!type.equals(that.type)) return false;
+        return updatedAt.equals(that.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (bio != null ? bio.hashCode() : 0);
+        result = 31 * result + createdAt.hashCode();
+        result = 31 * result + displayName.hashCode();
+        result = 31 * result + (logo != null ? logo.hashCode() : 0);
+        result = 31 * result + name.hashCode();
+        result = 31 * result + type.hashCode();
+        result = 31 * result + updatedAt.hashCode();
+        return result;
     }
 
     @Override
