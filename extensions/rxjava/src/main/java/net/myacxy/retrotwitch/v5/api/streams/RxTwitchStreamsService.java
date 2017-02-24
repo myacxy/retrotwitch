@@ -26,7 +26,7 @@ public interface RxTwitchStreamsService {
      * <p><b>Authentication</b></p>
      * <p>None</p>
      *
-     * @param channel    Comma-separated list of channel IDs that constrains the channel(s) of the streams returned.
+     * @param channelIds Comma-separated list of channel IDs that constrains the channel(s) of the streams returned.
      * @param game       Constrains the game of the streams returned.
      * @param language   Constrains the language of the streams returned. Valid value: a locale ID string; for example, en, fi, es-mx. Only one language can be specified. Default: all languages.
      * @param streamType Constrains the type of streams returned. Valid values: live, playlist, all. Playlists are offline streams of VODs (Video on Demand) that appear live. Default: live.
@@ -35,7 +35,7 @@ public interface RxTwitchStreamsService {
      */
     @GET("streams")
     Observable<Response<StreamsResponse>> getLiveStreams(
-            @Query("channel") String channel,
+            @Query("channel") String channelIds,
             @Query("game") String game,
             @Query("language") String language,
             @Query("stream_type") StreamType streamType,

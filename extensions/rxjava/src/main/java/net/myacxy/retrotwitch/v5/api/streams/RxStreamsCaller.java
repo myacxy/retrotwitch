@@ -44,30 +44,16 @@ public class RxStreamsCaller extends RxBaseCaller<RxTwitchStreamsService> {
             final Integer limit,
             final Integer offset) {
 
-        List<String> channelNames = null;
+        List<String> channelIds = null;
         if (channels != null) {
-            channelNames = new ArrayList<>(channels.size());
+            channelIds = new ArrayList<>(channels.size());
             for (SimpleChannel channel : channels) {
-                channelNames.add(channel.getName());
+                channelIds.add(String.valueOf(channel.getId()));
             }
         }
 
-//        call.enqueue(new RetroTwitchCallback<StreamsResponse, StreamsResponse>(listener) {
-//
-//            @Override
-//            public StreamsResponse beforeOnSuccess(StreamsResponse streamsResponse) {
-//                streamsResponse.channels = channels;
-//                streamsResponse.game = game;
-//                streamsResponse.language = language;
-//                streamsResponse.limit = limit == null ? TwitchConstants.DEFAULT_LIMIT : limit;
-//                streamsResponse.offset = offset == null ? TwitchConstants.DEFAULT_OFFSET : offset;
-//                streamsResponse.streamType = streamType == null ? StreamType.DEFAULT : streamType;
-//                return streamsResponse;
-//            }
-//        });
-
         return getService().getLiveStreams(
-                channelNames != null ? StringUtil.joinStrings(channelNames, ",") : null,
+                channelIds != null ? StringUtil.joinStrings(channelIds, ",") : null,
                 game, language, streamType, limit, offset
         );
     }
