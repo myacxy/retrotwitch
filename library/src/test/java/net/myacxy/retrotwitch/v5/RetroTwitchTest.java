@@ -1,5 +1,6 @@
 package net.myacxy.retrotwitch.v5;
 
+import net.myacxy.retrotwitch.Configuration;
 import net.myacxy.retrotwitch.helpers.TestConstants;
 import net.myacxy.retrotwitch.v5.api.common.Scope;
 
@@ -22,10 +23,11 @@ public class RetroTwitchTest {
     @Before
     public void setUp() throws Exception {
         RetroTwitch.getInstance()
-                .configure()
-                .setClientId(TestConstants.TEST_CLIENT_ID)
-                .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
-                .apply();
+                .configure(new Configuration.ConfigurationBuilder()
+                        .setClientId(TestConstants.TEST_CLIENT_ID)
+                        .setLogLevel(HttpLoggingInterceptor.Level.BODY)
+                        .build()
+                );
     }
 
     @Test

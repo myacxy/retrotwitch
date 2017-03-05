@@ -2,6 +2,7 @@ package net.myacxy.retrotwitch.v5;
 
 import net.myacxy.retrotwitch.BaseRetroTwitch;
 import net.myacxy.retrotwitch.v5.api.channels.RxChannelsCaller;
+import net.myacxy.retrotwitch.v5.api.games.games.RxGamesCaller;
 import net.myacxy.retrotwitch.v5.api.streams.RxStreamsCaller;
 import net.myacxy.retrotwitch.v5.api.users.RxUsersCaller;
 
@@ -11,8 +12,9 @@ public class RxRetroTwitch extends BaseRetroTwitch<RxRetroTwitch> {
 
     //<editor-fold desc="Member">
     private RxChannelsCaller channels;
-    private RxUsersCaller users;
+    private RxGamesCaller games;
     private RxStreamsCaller streams;
+    private RxUsersCaller users;
     //</editor-fold>
 
     //<editor-fold desc="Constructor">
@@ -20,8 +22,9 @@ public class RxRetroTwitch extends BaseRetroTwitch<RxRetroTwitch> {
         super();
 
         channels = new RxChannelsCaller(client);
-        users = new RxUsersCaller(client);
+        games = new RxGamesCaller(client);
         streams = new RxStreamsCaller(client);
+        users = new RxUsersCaller(client);
     }
     //</editor-fold>
 
@@ -36,13 +39,18 @@ public class RxRetroTwitch extends BaseRetroTwitch<RxRetroTwitch> {
     }
 
     @Override
-    public RxUsersCaller users() {
-        return users;
+    public RxGamesCaller games() {
+        return games;
     }
 
     @Override
     public RxStreamsCaller streams() {
         return streams;
+    }
+
+    @Override
+    public RxUsersCaller users() {
+        return users;
     }
     //</editor-fold>
 }

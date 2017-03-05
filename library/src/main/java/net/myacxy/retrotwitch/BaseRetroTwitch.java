@@ -42,9 +42,11 @@ public abstract class BaseRetroTwitch<SELF extends BaseRetroTwitch<SELF>> {
     //<editor-fold desc="Abstract Methods">
     public abstract BaseCaller<?> channels();
 
-    public abstract BaseCaller<?> users();
-
     public abstract BaseCaller<?> streams();
+
+    public abstract BaseCaller<?> games();
+
+    public abstract BaseCaller<?> users();
     //</editor-fold>
 
     //<editor-fold desc="Private Methods">

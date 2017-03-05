@@ -2,6 +2,7 @@ package net.myacxy.retrotwitch.v5;
 
 import net.myacxy.retrotwitch.BaseRetroTwitch;
 import net.myacxy.retrotwitch.v5.api.channels.ChannelsCaller;
+import net.myacxy.retrotwitch.v5.api.games.GamesCaller;
 import net.myacxy.retrotwitch.v5.api.streams.StreamsCaller;
 import net.myacxy.retrotwitch.v5.api.users.UserFollowsResource;
 import net.myacxy.retrotwitch.v5.api.users.UsersCaller;
@@ -12,16 +13,18 @@ public class RetroTwitch extends BaseRetroTwitch<RetroTwitch> {
 
     //<editor-fold desc="Member">
     private ChannelsCaller channels;
-    private UsersCaller users;
+    private GamesCaller games;
     private StreamsCaller streams;
+    private UsersCaller users;
     //</editor-fold>
 
     protected RetroTwitch() {
         super();
 
         channels = new ChannelsCaller(client);
-        users = new UsersCaller(client);
+        games = new GamesCaller(client);
         streams = new StreamsCaller(client);
+        users = new UsersCaller(client);
     }
 
     public static RetroTwitch getInstance() {
@@ -35,13 +38,18 @@ public class RetroTwitch extends BaseRetroTwitch<RetroTwitch> {
     }
 
     @Override
-    public UsersCaller users() {
-        return users;
+    public GamesCaller games() {
+        return games;
     }
 
     @Override
     public StreamsCaller streams() {
         return streams;
+    }
+
+    @Override
+    public UsersCaller users() {
+        return users;
     }
 
     public UserFollowsResource.Builder userFollows(long userId) {
