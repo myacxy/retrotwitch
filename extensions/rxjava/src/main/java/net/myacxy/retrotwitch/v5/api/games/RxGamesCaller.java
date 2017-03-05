@@ -1,7 +1,6 @@
-package net.myacxy.retrotwitch.v5.api.games.games;
+package net.myacxy.retrotwitch.v5.api.games;
 
 import net.myacxy.retrotwitch.v5.api.BaseCaller;
-import net.myacxy.retrotwitch.v5.api.games.TopGamesResponse;
 
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
@@ -20,7 +19,6 @@ public class RxGamesCaller extends BaseCaller<RxTwitchGamesService> {
     }
 
     //<editor-fold desc="API Calls">
-
     /**
      * <p>Gets games sorted by number of current viewers on Twitch, most popular first.</p>
      * <p>

@@ -1,6 +1,4 @@
-package net.myacxy.retrotwitch.v5.api.games.games;
-
-import net.myacxy.retrotwitch.v5.api.games.TopGamesResponse;
+package net.myacxy.retrotwitch.v5.api.games;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
