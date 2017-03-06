@@ -6,11 +6,10 @@ import com.google.gson.JsonSyntaxException;
 
 import net.myacxy.retrotwitch.v5.api.common.Error;
 
-import java.io.IOException;
-
 import retrofit2.Response;
 
 public class ErrorFactory {
+
     protected static Gson GSON = new GsonBuilder().create();
 
     public static Error fromJson(String json) {
@@ -27,8 +26,7 @@ public class ErrorFactory {
         }
         try {
             return fromJson(response.errorBody().string());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             return unexpected(response.code(), response.message());
         }
     }
