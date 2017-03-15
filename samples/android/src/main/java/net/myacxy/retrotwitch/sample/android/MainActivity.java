@@ -32,10 +32,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         RetroTwitch.getInstance()
-                .configure()
-                .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
-                .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
-                .apply();
+                .configure(new net.myacxy.retrotwitch.Configuration.ConfigurationBuilder()
+                        .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
+                        .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
+                        .build()
+                );
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

@@ -10,7 +10,7 @@ import net.myacxy.retrotwitch.v3.models.SortBy;
 import net.myacxy.retrotwitch.v3.models.UserFollow;
 import net.myacxy.retrotwitch.v3.models.UserFollowsContainer;
 import net.myacxy.retrotwitch.v5.RxCaller;
-import net.myacxy.retrotwitch.v5.helpers.RxErrorFactory;
+import net.myacxy.retrotwitch.v5.helpers.RxRetroTwitchErrorFactory;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,7 +40,7 @@ public class UserFollowsViewModel
         {
             loading.set(false);
             setInformation(0, 0);
-            Error error = RxErrorFactory.fromThrowable(t);
+            Error error = RxRetroTwitchErrorFactory.fromThrowable(t);
             errorMessage.set(error.message);
         }
 

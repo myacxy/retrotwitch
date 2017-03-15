@@ -2,7 +2,7 @@ package net.myacxy.retrotwitch;
 
 import net.myacxy.retrotwitch.v3.models.UserFollowsContainer;
 import net.myacxy.retrotwitch.v5.RxCaller;
-import net.myacxy.retrotwitch.v5.helpers.RxErrorFactory;
+import net.myacxy.retrotwitch.v5.helpers.RxRetroTwitchErrorFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class RxCallerUserFollowsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        fail(RxErrorFactory.fromThrowable(e).toString());
+                        fail(RxRetroTwitchErrorFactory.fromThrowable(e).toString());
                     }
 
                     @Override
@@ -72,7 +72,7 @@ public class RxCallerUserFollowsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        Error error = RxErrorFactory.fromThrowable(e);
+                        Error error = RxRetroTwitchErrorFactory.fromThrowable(e);
                         assertThat(error.getType(), is(equalTo(Error.Type.NOT_FOUND)));
                     }
 
@@ -105,7 +105,7 @@ public class RxCallerUserFollowsTest
                     @Override
                     public void onError(Throwable e)
                     {
-                        Error error = RxErrorFactory.fromThrowable(e);
+                        Error error = RxRetroTwitchErrorFactory.fromThrowable(e);
                         assertThat(error.getType(), is(equalTo(Error.Type.UNPROCESSABLE_ENTITY)));
                     }
 
