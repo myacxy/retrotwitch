@@ -32,7 +32,7 @@ jar {
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
-    from files(project(':library').sourceSets.main.java.srcDirs)
+//    from files(project(':library').sourceSets.main.java.srcDirs)
 }
 
 task fatJar(type: Jar) {
