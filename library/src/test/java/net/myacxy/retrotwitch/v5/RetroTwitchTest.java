@@ -20,9 +20,11 @@ public class RetroTwitchTest {
             + "&client_id=" + TestConstants.TEST_CLIENT_ID
             + "&scope=user_read";
 
+    RetroTwitch retroTwitch;
+
     @Before
     public void setUp() throws Exception {
-        RetroTwitch.getInstance()
+        retroTwitch = new RetroTwitch()
                 .configure(new Configuration.ConfigurationBuilder()
                         .setClientId(TestConstants.TEST_CLIENT_ID)
                         .setLogLevel(HttpLoggingInterceptor.Level.BODY)
@@ -32,7 +34,7 @@ public class RetroTwitchTest {
 
     @Test
     public void authenticate() throws Exception {
-        String url = RetroTwitch.getInstance().authenticate()
+        String url = retroTwitch.authenticate()
                 .setClientId(TestConstants.TEST_CLIENT_ID)
                 .setRedirectUri(TestConstants.TEST_REDIRECT_URI)
                 .setScopes(Scope.USER_READ)

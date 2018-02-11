@@ -14,9 +14,11 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class SearchCallerTest {
 
+    private RetroTwitch retroTwitch;
+
     @Before
     public void setUp() throws Exception {
-        RetroTwitch.getInstance()
+        retroTwitch = new RetroTwitch()
                 .configure(new Configuration.ConfigurationBuilder()
                         .setClientId(TestConstants.TEST_CLIENT_ID)
                         .setLogLevel(HttpLoggingInterceptor.Level.BODY)
@@ -27,8 +29,7 @@ public class SearchCallerTest {
     @Test
     public void searchChannels() throws Exception {
         final Lock<SearchChannelsResponse> lock = new Lock<>();
-        RetroTwitch.getInstance()
-                .search()
+        retroTwitch.search()
                 .searchChannels("Zelda", 100, 0, new ResponseListener<SearchChannelsResponse>() {
                     @Override
                     public void onSuccess(SearchChannelsResponse response) {
@@ -48,8 +49,7 @@ public class SearchCallerTest {
     @Test
     public void searchGames() throws Exception {
         final Lock<SearchGamesResponse> lock = new Lock<>();
-        RetroTwitch.getInstance()
-                .search()
+        retroTwitch.search()
                 .searchGames("Zelda", true, new ResponseListener<SearchGamesResponse>() {
                     @Override
                     public void onSuccess(SearchGamesResponse response) {
@@ -69,8 +69,7 @@ public class SearchCallerTest {
     @Test
     public void searchStreams() throws Exception {
         final Lock<SearchStreamsResponse> lock = new Lock<>();
-        RetroTwitch.getInstance()
-                .search()
+        retroTwitch.search()
                 .searchStreams("Zelda", null, 100, 0, new ResponseListener<SearchStreamsResponse>() {
                     @Override
                     public void onSuccess(SearchStreamsResponse response) {

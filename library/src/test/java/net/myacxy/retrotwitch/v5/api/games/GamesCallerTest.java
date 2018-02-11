@@ -14,9 +14,11 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class GamesCallerTest {
 
+    private RetroTwitch retroTwitch;
+
     @Before
     public void setUp() throws Exception {
-        RetroTwitch.getInstance()
+        retroTwitch = new RetroTwitch()
                 .configure(new Configuration.ConfigurationBuilder()
                         .setClientId(TestConstants.TEST_CLIENT_ID)
                         .setLogLevel(HttpLoggingInterceptor.Level.BODY)
@@ -27,8 +29,7 @@ public class GamesCallerTest {
     @Test
     public void getTopGames() throws Exception {
         final Lock<TopGamesResponse> lock = new Lock<>();
-        RetroTwitch.getInstance()
-                .games()
+        retroTwitch.games()
                 .getTopGames(100, 0, new ResponseListener<TopGamesResponse>() {
                     @Override
                     public void onSuccess(TopGamesResponse topGamesResponse) {
