@@ -1,6 +1,6 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-allprojects {
+subprojects {
     repositories {
+        google()
         jcenter()
         mavenCentral()
         maven { url = "https://jitpack.io" }
@@ -9,10 +9,10 @@ allprojects {
 }
 
 ext {
-    targetCompatibility = JavaVersion.VERSION_1_7
-    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
 
-    supportLibraryVersion = '25.1.0'
+    supportLibraryVersion = '27.0.2'
     retrofitVersion = '2.1.0'
     rxBindingVersion = '0.4.0'
 
@@ -42,4 +42,10 @@ ext {
             rxBindingRecyclerView   : "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$rxBindingVersion",
             logger                  : 'com.github.orhanobut:logger:1.12'
     ]
+}
+
+buildscript {
+    repositories {
+        google()
+    }
 }

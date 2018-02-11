@@ -1,18 +1,21 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 group 'net.myacxy'
 version '0.1'
 
-targetCompatibility = rootProject.ext.targetCompatibility
-sourceCompatibility = rootProject.ext.sourceCompatibility
+compileJava {
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
 
 dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;
 
-    compile dependencies.gson
-    compile dependencies.retrofit
-    compile dependencies.retrofitConverterGson
-    compile dependencies.okHttpLoggingInterceptor
-    testCompile dependencies.junit
-    testCompile dependencies.hamcrestAll
+    implementation dependencies.gson
+    implementation dependencies.retrofit
+    implementation dependencies.retrofitConverterGson
+    implementation dependencies.okHttpLoggingInterceptor
+
+    testImplementation dependencies.junit
+    testImplementation dependencies.hamcrestAll
 }

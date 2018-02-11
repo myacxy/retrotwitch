@@ -1,51 +1,53 @@
-apply plugin: 'java'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'java-library'
+
+compileJava {
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
 
 buildscript {
     repositories {
         mavenCentral()
-    }
-
-    dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
     }
 }
 
 dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;
 
-    compile project(':library')
-    compile dependencies.rxjava
-    compile dependencies.retrofitAdapterRxJava
-    testCompile dependencies.junit
-    testCompile dependencies.hamcrestAll
+    api project(':library')
+    implementation dependencies.retrofitAdapterRxJava
+
+    compileOnly dependencies.rxjava
+
+    testImplementation dependencies.junit
+    testImplementation dependencies.hamcrestAll
 }
 
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'net.myacxy.retrotwitch.v5.RxRetroTwitch',
-        )
-    }
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-    from files(project(':library').sourceSets.main.java.srcDirs)
-}
-
-task fatJar(type: Jar) {
-    manifest.from jar.manifest
-    archivesBaseName = 'retrotwitch'
-    classifier = 'rxjava'
-    from {
-        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    with jar, sourcesJar
-}
-
-artifacts {
-    archives fatJar
-    archives sourcesJar
-}
+//jar {
+//    manifest {
+//        attributes(
+//                'Main-Class': 'net.myacxy.retrotwitch.v5.RxRetroTwitch',
+//        )
+//    }
+//}
+//
+//task sourcesJar(type: Jar) {
+//    classifier = 'sources'
+//    from sourceSets.main.allSource
+//    from files(project(':library').sourceSets.main.java.srcDirs)
+//}
+//
+//task fatJar(type: Jar) {
+//    manifest.from jar.manifest
+//    archivesBaseName = 'retrotwitch'
+//    classifier = 'rxjava'
+//    from {
+//        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+//    with jar, sourcesJar
+//}
+//
+//artifacts {
+//    archives fatJar
+//    archives sourcesJar
+//}

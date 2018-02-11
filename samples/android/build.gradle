@@ -1,19 +1,14 @@
 apply plugin: 'com.android.application'
 
 buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
-    }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "net.myacxy.retrotwitch.sample.android"
@@ -33,12 +28,15 @@ android {
 dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;
 
-    compile project(':library')
-    compile dependencies.butterknife
+    implementation project(':library')
+
+    implementation dependencies.butterknife
     annotationProcessor dependencies.butterknifeApt
-    compile dependencies.appCompat
-    compile dependencies.design
-    compile dependencies.recyclerView
-    compile dependencies.materialEditText
-    testCompile dependencies.junit
+
+    implementation dependencies.appCompat
+    implementation dependencies.design
+    implementation dependencies.recyclerView
+    implementation dependencies.materialEditText
+
+    testImplementation dependencies.junit
 }

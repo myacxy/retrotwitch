@@ -1,22 +1,14 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
-    }
-
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
-        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "net.myacxy.retrotwitch.sample.android.rxjava"
