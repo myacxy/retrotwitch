@@ -8,13 +8,13 @@ import android.text.TextUtils;
 
 import net.myacxy.retrotwitch.v5.RxRetroTwitch;
 import net.myacxy.retrotwitch.v5.api.common.Direction;
-import net.myacxy.retrotwitch.v5.api.common.Error;
+import net.myacxy.retrotwitch.v5.api.common.RetroTwitchError;
 import net.myacxy.retrotwitch.v5.api.common.SortBy;
 import net.myacxy.retrotwitch.v5.api.common.TwitchConstants;
 import net.myacxy.retrotwitch.v5.api.users.SimpleUser;
 import net.myacxy.retrotwitch.v5.api.users.UserFollow;
 import net.myacxy.retrotwitch.v5.api.users.UserFollowsResponse;
-import net.myacxy.retrotwitch.v5.helpers.RxErrorFactory;
+import net.myacxy.retrotwitch.v5.helpers.RxRetroTwitchErrorFactory;
 
 import java.util.List;
 
@@ -84,7 +84,7 @@ public class UserFollowsViewModel {
                         public void onError(Throwable e) {
                             userFollowsMeta = null;
                             setInformation(0, 0);
-                            Error error = RxErrorFactory.fromThrowable(e);
+                            RetroTwitchError error = RxRetroTwitchErrorFactory.fromThrowable(e);
                             errorMessage.set(error.getMessage());
                         }
                     });
@@ -134,7 +134,7 @@ public class UserFollowsViewModel {
 
                     @Override
                     public void onError(Throwable e) {
-                        Error error = RxErrorFactory.fromThrowable(e);
+                        RetroTwitchError error = RxRetroTwitchErrorFactory.fromThrowable(e);
                         errorMessage.set(error.getMessage());
                     }
                 });
