@@ -8,7 +8,7 @@ import net.myacxy.retrotwitch.v5.api.common.StreamType;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -26,7 +26,7 @@ public class RxStreamsCaller extends RxBaseCaller<RxTwitchStreamsService> {
     }
 
     //<editor-fold desc="API Calls">
-    public Observable<Response<StreamResponse>> getStreamByUser(long channelId, StreamType streamType) {
+    public Single<Response<StreamResponse>> getStreamByUser(long channelId, StreamType streamType) {
 //        call.enqueue(new RetroTwitchCallback<StreamResponse, Stream>(listener) {
 //            @Override
 //            public Stream beforeOnSuccess(StreamResponse streamResponse) {
@@ -36,7 +36,7 @@ public class RxStreamsCaller extends RxBaseCaller<RxTwitchStreamsService> {
         return getService().getStreamByUser(channelId, streamType);
     }
 
-    public Observable<Response<StreamsResponse>> getStreams(
+    public Single<Response<StreamsResponse>> getStreams(
             final List<SimpleChannel> channels,
             final String game,
             final String language,

@@ -7,35 +7,27 @@ import net.myacxy.retrotwitch.v5.api.common.Error;
 
 import java.io.IOException;
 
-public class RxErrorFactory extends ErrorFactory
-{
-    public static Error fromJson(String json)
-    {
-        try
-        {
+public class RxErrorFactory extends ErrorFactory {
+
+    public static Error fromJson(String json) {
+        try {
             return GSON.fromJson(json, Error.class);
-        } catch (JsonSyntaxException e)
-        {
+        } catch (JsonSyntaxException e) {
             return unexpected();
         }
     }
 
-    public static Error fromHttpException(HttpException exception)
-    {
-        try
-        {
+    public static Error fromHttpException(HttpException exception) {
+        try {
             return fromJson(exception.response().errorBody().string());
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             return unexpected();
         }
     }
 
-    public static Error fromThrowable(Throwable throwable)
-    {
-        if (throwable instanceof HttpException)
-        {
+    public static Error fromThrowable(Throwable throwable) {
+        if (throwable instanceof HttpException) {
             return fromHttpException((HttpException) throwable);
         }
         return unexpected(-1, throwable.toString());

@@ -9,8 +9,6 @@ import net.myacxy.retrotwitch.v5.api.users.RxUsersCaller;
 
 public class RxRetroTwitch extends BaseRetroTwitch<RxRetroTwitch> {
 
-    private static RxRetroTwitch INSTANCE = new RxRetroTwitch();
-
     //<editor-fold desc="Member">
     private RxChannelsCaller channels;
     private RxGamesCaller games;
@@ -29,10 +27,6 @@ public class RxRetroTwitch extends BaseRetroTwitch<RxRetroTwitch> {
         users = new RxUsersCaller(client);
     }
     //</editor-fold>
-
-    public static RxRetroTwitch getInstance() {
-        return INSTANCE;
-    }
 
     //<editor-fold desc="Public Methods">
     @Override

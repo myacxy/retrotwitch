@@ -11,11 +11,10 @@ compileJava {
 dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;
 
+    api dependencies.gson
     api dependencies.okHttpLoggingInterceptor
+    api dependencies.retrofitConverterGson
     api dependencies.retrofit
-
-    implementation dependencies.gson
-    implementation dependencies.retrofitConverterGson
 
     testImplementation dependencies.junit
     testImplementation dependencies.hamcrestAll

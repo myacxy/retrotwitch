@@ -32,7 +32,7 @@ public class StreamsCaller extends BaseCaller<TwitchStreamsService> {
         call.enqueue(new RetroTwitchCallback<StreamResponse, Stream>(listener) {
             @Override
             public Stream beforeOnSuccess(StreamResponse streamResponse) {
-                return streamResponse.stream;
+                return streamResponse.getStream();
             }
         });
         return call;

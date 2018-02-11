@@ -1,125 +1,60 @@
 package net.myacxy.retrotwitch;
 
-import net.myacxy.retrotwitch.v3.models.UserFollowsContainer;
-import net.myacxy.retrotwitch.v5.RxCaller;
-import net.myacxy.retrotwitch.v5.helpers.RxErrorFactory;
+import net.myacxy.retrotwitch.v5.RxRetroTwitch;
+import net.myacxy.retrotwitch.v5.api.common.Direction;
+import net.myacxy.retrotwitch.v5.api.common.SortBy;
+import net.myacxy.retrotwitch.v5.api.users.SimpleUsersResponse;
+import net.myacxy.retrotwitch.v5.api.users.UserFollow;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import okhttp3.logging.HttpLoggingInterceptor;
+import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
-public class RxCallerUserFollowsTest
-{
+public class RxCallerUserFollowsTest {
+
+    private RxRetroTwitch retroTwitch;
+
     @Before
-    public void setUp()
-    {
-        RxCaller.getInstance().setLoggingLevel(HttpLoggingInterceptor.Level.BASIC);
-        RxCaller.getInstance().setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr");
+    public void setUp() {
+        retroTwitch = new RxRetroTwitch()
+                .configure(new Configuration.ConfigurationBuilder()
+                        .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
+                        .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
+                        .build()
+                );
     }
 
     //<editor-fold desc="[ Get User Follows ]">
     @Test(timeout = 5000)
-    public void getUserFollows() throws Exception
-    {
-        RxCaller.getInstance()
-                .getUserFollows("myacxy", null, null, null, null)
-                .blockingSubscribe(new Observer<UserFollowsContainer>()
-                {
-                    @Override
-                    public void onComplete()
-                    {
-                    }
+    public void getUserFollows() throws Exception {
+        List<UserFollow> userFollows = retroTwitch.users().translateUserNameToUserId("myacxy")
+                .map(response -> response.body().getUsers().get(0).getId())
+                .flatMap(userId -> retroTwitch.users().getUserFollows(userId, 100, 0, Direction.DEFAULT, SortBy.DEFAULT))
+                .blockingGet()
+                .body()
+                .getUserFollows();
 
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        fail(RxErrorFactory.fromThrowable(e).toString());
-                    }
-
-                    @Override
-                    public void onNext(UserFollowsContainer userFollowsContainer)
-                    {
-                        System.out.println(userFollowsContainer.userFollows.size());
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d)
-                    {
-                    }
-                });
+        System.out.println(userFollows);
+        assertThat(userFollows.size(), Matchers.greaterThan(0));
     }
 
     @Test
-    public void notFoundErrorGetUserFollows() throws Exception
-    {
-        RxCaller.getInstance()
-                .getUserFollows("userThatDoesNotExist", null, null, null, null)
-                .blockingSubscribe(new Observer<UserFollowsContainer>()
-                {
-                    @Override
-                    public void onComplete()
-                    {
-                    }
+    public void notFoundErrorGetUserFollows() throws Exception {
+        Response<SimpleUsersResponse> response = retroTwitch.users()
+                .translateUserNameToUserId("userThatDoesNotExist")
+                .blockingGet();
 
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        Error error = RxErrorFactory.fromThrowable(e);
-                        assertThat(error.getType(), is(equalTo(Error.Type.NOT_FOUND)));
-                    }
-
-                    @Override
-                    public void onNext(UserFollowsContainer userFollowsContainer)
-                    {
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d)
-                    {
-
-                    }
-                });
-
-    }
-
-    @Test
-    public void unprocessableEntityErrorGetUserFollows() throws Exception
-    {
-        RxCaller.getInstance()
-                .getUserFollows("test", null, null, null, null)
-                .blockingSubscribe(new Observer<UserFollowsContainer>()
-                {
-                    @Override
-                    public void onSubscribe(Disposable d)
-                    {
-                    }
-
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        Error error = RxErrorFactory.fromThrowable(e);
-                        assertThat(error.getType(), is(equalTo(Error.Type.UNPROCESSABLE_ENTITY)));
-                    }
-
-                    @Override
-                    public void onNext(UserFollowsContainer userFollowsContainer)
-                    {
-                    }
-
-                    @Override
-                    public void onComplete()
-                    {
-                    }
-                });
-
+        assertThat(response.isSuccessful(), is(true));
+        assertThat(response.body().getUsers(), hasSize(0));
     }
     //</editor-fold>
 }

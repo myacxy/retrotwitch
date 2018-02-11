@@ -4,7 +4,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class StreamResponse {
     @SerializedName("stream")
-    public Stream stream;
+    private Stream stream;
+
+    public StreamResponse(Stream stream) {
+        this.stream = stream;
+    }
+
+    public Stream getStream() {
+        return stream;
+    }
 
     @Override
     public String toString() {

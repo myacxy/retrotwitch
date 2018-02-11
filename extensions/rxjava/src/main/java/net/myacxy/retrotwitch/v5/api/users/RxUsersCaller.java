@@ -5,7 +5,7 @@ import net.myacxy.retrotwitch.v5.api.RxBaseCaller;
 import net.myacxy.retrotwitch.v5.api.common.Direction;
 import net.myacxy.retrotwitch.v5.api.common.SortBy;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -25,15 +25,15 @@ public class RxUsersCaller extends RxBaseCaller<RxTwitchUsersService> {
     }
 
     //<editor-fold desc="API Calls">
-    public Observable<Response<PrivilegedUser>> getUser(final ResponseListener<PrivilegedUser> listener) {
+    public Single<Response<PrivilegedUser>> getUser(final ResponseListener<PrivilegedUser> listener) {
         return getService().getUser();
     }
 
-    public Observable<Response<SimpleUser>> getUserById(long userId) {
+    public Single<Response<SimpleUser>> getUserById(long userId) {
         return getService().getUserById(userId);
     }
 
-    public Observable<Response<SimpleUsersResponse>> translateUserNameToUserId(String userName) {
+    public Single<Response<SimpleUsersResponse>> translateUserNameToUserId(String userName) {
 //        call.enqueue(new RetroTwitchCallback<SimpleUsersResponse, List<SimpleUser>>(listener) {
 //            @Override
 //            public List<SimpleUser> beforeOnSuccess(SimpleUsersResponse simpleUsersResponse) {
@@ -43,7 +43,7 @@ public class RxUsersCaller extends RxBaseCaller<RxTwitchUsersService> {
         return getService().translateUserNameToUserId(userName);
     }
 
-    public Observable<Response<UserFollowsResponse>> getUserFollows(
+    public Single<Response<UserFollowsResponse>> getUserFollows(
             final long userId,
             final Integer limit,
             final Integer offset,
