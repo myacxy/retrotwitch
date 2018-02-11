@@ -2,23 +2,23 @@ package net.myacxy.retrotwitch.sample.android.rxjava;
 
 import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.AuthenticationViewModel;
 import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel;
+import net.myacxy.retrotwitch.v5.RxRetroTwitch;
 
-public class SimpleViewModelLocator
-{
-    private final static SimpleViewModelLocator INSTANCE = new SimpleViewModelLocator();
+public class SimpleViewModelLocator {
 
-    private UserFollowsViewModel mUserFollowsViewModel;
-    private AuthenticationViewModel mAuthenticationViewModel;
+    private final RxRetroTwitch retroTwitch;
+    private UserFollowsViewModel userFollowsViewModel;
+    private AuthenticationViewModel authenticationViewModel;
 
-    public static SimpleViewModelLocator getInstance() {
-        return INSTANCE;
+    public SimpleViewModelLocator(RxRetroTwitch retroTwitch) {
+        this.retroTwitch = retroTwitch;
     }
 
     public UserFollowsViewModel getUserFollows() {
-        return mUserFollowsViewModel == null ? mUserFollowsViewModel = new UserFollowsViewModel() : mUserFollowsViewModel;
+        return userFollowsViewModel == null ? userFollowsViewModel = new UserFollowsViewModel(retroTwitch) : userFollowsViewModel;
     }
 
     public AuthenticationViewModel getAuthentication() {
-        return mAuthenticationViewModel == null ? mAuthenticationViewModel = new AuthenticationViewModel() : mAuthenticationViewModel;
+        return authenticationViewModel == null ? authenticationViewModel = new AuthenticationViewModel(retroTwitch) : authenticationViewModel;
     }
 }

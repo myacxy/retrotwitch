@@ -10,7 +10,8 @@
 
         <variable
             name="viewModel"
-            type="net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel" />
+            type="net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel"
+            />
     </data>
 
     <RelativeLayout
@@ -21,6 +22,7 @@
         <!--User Name-->
         <EditText
             android:id="@+id/et_uf_user_name"
+            style="?android:attr/editTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -30,20 +32,19 @@
             android:hint="@string/user_name"
             android:inputType="textPersonName"
             android:maxLines="1"
-            android:text="@={viewModel.userName}"
-            style="?android:attr/editTextStyle"
+            android:text="@={ viewModel.twitchUserName }"
             />
 
         <!--Search-->
         <Button
             android:id="@+id/btn_uf_search"
+            style="?android:attr/buttonStyle"
             android:layout_alignParentRight="true"
             android:layout_below="@id/et_uf_user_name"
             android:layout_marginRight="8dp"
-            android:alpha="@{viewModel.loading ? 0.38f : 1f}"
-            android:enabled="@{viewModel.loading ? false : true}"
+            android:alpha="@{ viewModel.loading ? 0.38f : 1f }"
+            android:enabled="@{ viewModel.loading ? false : true }"
             android:text="@string/search"
-            style="?android:attr/buttonStyle"
             />
 
         <!--Total-->
@@ -54,7 +55,7 @@
             android:layout_below="@id/btn_uf_search"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:text="@{@string/total(viewModel.totalCount)}"
+            android:text="@{ @string/total(viewModel.totalCount) }"
             tools:text="Total: 9"
             />
 
@@ -67,7 +68,7 @@
             android:layout_below="@id/btn_uf_search"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:text="@{@string/currently_loaded(viewModel.currentlyLoadedCount)}"
+            android:text="@{ @string/currently_loaded(viewModel.currentlyLoadedCount) }"
             tools:text="Currently loaded: 9"
             />
 
@@ -97,7 +98,7 @@
                 android:layout_gravity="center"
                 android:text="@string/no_search_results"
                 android:textColor="?colorPrimaryDark"
-                android:visibility="@{!viewModel.loading &amp;&amp; viewModel.totalCount == 0 ? View.VISIBLE : View.GONE}"
+                android:visibility="@{ !viewModel.loading &amp;&amp; viewModel.totalCount == 0 ? View.VISIBLE : View.GONE }"
                 />
 
         </FrameLayout>

@@ -12,10 +12,10 @@ buildscript {
 }
 
 dependencies {
-    Map<String, String> dependencies = rootProject.ext.dependencies;
+    Map<String, String> dependencies = rootProject.ext.dependencies
 
     api project(':library')
-    implementation dependencies.retrofitAdapterRxJava
+    api dependencies.retrofitAdapterRxJava
 
     compileOnly dependencies.rxjava
 

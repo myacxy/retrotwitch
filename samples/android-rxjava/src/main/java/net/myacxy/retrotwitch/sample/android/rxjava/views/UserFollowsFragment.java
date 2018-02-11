@@ -2,29 +2,31 @@ package net.myacxy.retrotwitch.sample.android.rxjava.views;
 
 import android.databinding.Observable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import net.myacxy.retrotwitch.sample.android.rxjava.AppApplication;
 import net.myacxy.retrotwitch.sample.android.rxjava.R;
-import net.myacxy.retrotwitch.sample.android.rxjava.SimpleViewModelLocator;
 import net.myacxy.retrotwitch.sample.android.rxjava.databinding.FragmentUserFollowsBinding;
 import net.myacxy.retrotwitch.sample.android.rxjava.viewmodels.UserFollowsViewModel;
-import net.myacxy.retrotwitch.utils.StringUtil;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class UserFollowsFragment extends Fragment
-{
+public class UserFollowsFragment extends Fragment {
+
     protected RecyclerView mSearchResults;
+
     private UserFollowsAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private FragmentUserFollowsBinding mBinding;
@@ -33,11 +35,9 @@ public class UserFollowsFragment extends Fragment
 
     private Observable.OnPropertyChangedCallback mErrorCallback = new Observable.OnPropertyChangedCallback() {
         @Override
-        public void onPropertyChanged(Observable observable, int i)
-        {
+        public void onPropertyChanged(Observable observable, int i) {
             String errorMessage = mViewModel.errorMessage.get();
-            if (!StringUtil.isEmpty(errorMessage))
-            {
+            if (!TextUtils.isEmpty(errorMessage)) {
                 Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
         }
@@ -45,9 +45,8 @@ public class UserFollowsFragment extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
-        mViewModel = SimpleViewModelLocator.getInstance().getUserFollows();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mViewModel = AppApplication.getViewModelLocator().getUserFollows();
         mBinding = FragmentUserFollowsBinding.inflate(inflater, container, false);
         mBinding.setViewModel(mViewModel);
         mSearchResults = mBinding.rvUfResults;
@@ -55,8 +54,7 @@ public class UserFollowsFragment extends Fragment
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
 
@@ -69,8 +67,7 @@ public class UserFollowsFragment extends Fragment
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
         mViewModel.errorMessage.removeOnPropertyChangedCallback(mErrorCallback);
@@ -83,21 +80,16 @@ public class UserFollowsFragment extends Fragment
     }
 
     //<editor-fold desc="Inner Classes">
-    private class ScrollListener extends OnScrollListener
-    {
+    private class ScrollListener extends OnScrollListener {
         @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-        {
-            if (dy > 0)
-            {
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (dy > 0) {
                 int visibleItems = mLayoutManager.getChildCount();
                 int totalItems = mAdapter.getRealItemCount();
                 int pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
 
-                if (!mViewModel.loading.get())
-                {
-                    if (visibleItems + pastVisibleItems >= totalItems - visibleItems / 3)
-                    {
+                if (!mViewModel.loading.get()) {
+                    if (visibleItems + pastVisibleItems >= totalItems - visibleItems / 3) {
                         mViewModel.loadNext();
                     }
                 }

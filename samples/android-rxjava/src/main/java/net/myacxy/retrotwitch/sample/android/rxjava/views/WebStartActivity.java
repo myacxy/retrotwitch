@@ -8,14 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.orhanobut.logger.Logger;
 
+import net.myacxy.retrotwitch.sample.android.rxjava.AppApplication;
 import net.myacxy.retrotwitch.sample.android.rxjava.FragmentFactory;
-import net.myacxy.retrotwitch.sample.android.rxjava.SimpleViewModelLocator;
 
-public class WebStartActivity extends AppCompatActivity
-{
+public class WebStartActivity extends AppCompatActivity {
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         String dataString = getIntent().getDataString();
@@ -24,7 +23,7 @@ public class WebStartActivity extends AppCompatActivity
         String accessToken = uri.getQueryParameter("access_token");
         Logger.d(accessToken);
 
-        SimpleViewModelLocator.getInstance().getAuthentication().accessToken.set(accessToken);
+        AppApplication.getViewModelLocator().getAuthentication().accessToken.set(accessToken);
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(MainActivity.EXTRA_FRAGMENT, FragmentFactory.FragmentType.AUTHENTICATION);

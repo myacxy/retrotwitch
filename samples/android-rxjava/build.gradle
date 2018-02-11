@@ -42,18 +42,17 @@ android {
 dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;
 
-    compile project(':extensions:rxjava')
-    compile dependencies.butterknife
+    implementation project(':extensions:rxjava')
+
+    implementation dependencies.butterknife
     annotationProcessor dependencies.butterknifeApt
-    compile dependencies.rxAndroid
-//    compile dependencies.rxBinding
-//    compile dependencies.rxBindingAppCompat
-//    compile dependencies.rxBindingDesign
-//    compile dependencies.rxBindingRecyclerView
-    compile dependencies.appCompat
-    compile dependencies.design
-    compile dependencies.recyclerView
-    compile dependencies.logger
-    testCompile dependencies.junit
-    compile 'com.android.support:support-fragment:25.0.0'
+
+    implementation dependencies.rxAndroid
+
+    implementation dependencies.appCompat
+    implementation dependencies.design
+    implementation dependencies.recyclerView
+    implementation dependencies.logger
+
+    testImplementation dependencies.junit
 }

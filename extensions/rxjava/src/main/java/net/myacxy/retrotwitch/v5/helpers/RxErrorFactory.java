@@ -13,7 +13,7 @@ public class RxErrorFactory extends ErrorFactory {
         try {
             return GSON.fromJson(json, Error.class);
         } catch (JsonSyntaxException e) {
-            return unexpected();
+            return unexpected(-1, e.getMessage());
         }
     }
 
@@ -21,8 +21,7 @@ public class RxErrorFactory extends ErrorFactory {
         try {
             return fromJson(exception.response().errorBody().string());
         } catch (IOException e) {
-            e.printStackTrace();
-            return unexpected();
+            return unexpected(-1, exception.message());
         }
     }
 
@@ -30,6 +29,6 @@ public class RxErrorFactory extends ErrorFactory {
         if (throwable instanceof HttpException) {
             return fromHttpException((HttpException) throwable);
         }
-        return unexpected(-1, throwable.toString());
+        return unexpected(-1, throwable.getMessage());
     }
 }

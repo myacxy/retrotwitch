@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -22,8 +23,7 @@ import net.myacxy.retrotwitch.sample.android.rxjava.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
-{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String EXTRA_FRAGMENT = "extra.fragment";
 
     @BindView(R.id.dl_main_drawer)
@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentFactory.FragmentType mFragmentType = FragmentType.USER_FOLLOWS;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -50,9 +49,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation.setNavigationItemSelectedListener(this);
 
         Bundle extras = getIntent().getExtras();
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mFragmentType = (FragmentType) savedInstanceState.getSerializable(EXTRA_FRAGMENT);
-        } else if(extras != null) {
+        } else if (extras != null) {
             mFragmentType = (FragmentFactory.FragmentType) extras.getSerializable(EXTRA_FRAGMENT);
         } else {
             mFragmentType = FragmentFactory.FragmentType.USER_FOLLOWS;
@@ -61,28 +60,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState)
-    {
+    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
         mDrawerToggle.syncState();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(EXTRA_FRAGMENT, mFragmentType);
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private void changeFragment(FragmentType fragmentType, boolean tryReusingOldFragment)
-    {
+    private void changeFragment(FragmentType fragmentType, boolean tryReusingOldFragment) {
         Fragment fragment = FragmentFactory.getFragment(this, mFragmentType = fragmentType, tryReusingOldFragment);
 
         getSupportFragmentManager()
@@ -91,31 +86,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .commit();
     }
 
-    private void initToolbar()
-    {
+    private void initToolbar() {
         setSupportActionBar(mToolbar);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.app_name, R.string.app_name);
         mDrawer.addDrawerListener(mDrawerToggle);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_menu_black_24dp);
-        drawable.setTint(ContextCompat.getColor(this, R.color.color15_100));
-        mToolbar.setNavigationIcon(drawable);
+        if (drawable != null) {
+            int color15_100 = ContextCompat.getColor(this, R.color.color15_100);
+            drawable.mutate().setTint(color15_100);
+            mToolbar.setNavigationIcon(drawable);
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if (mDrawerToggle.onOptionsItemSelected(item))
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.mi_nv_user_follows:
                 changeFragment(FragmentType.USER_FOLLOWS, true);
                 mDrawer.closeDrawer(GravityCompat.START);
