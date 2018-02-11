@@ -1,4 +1,4 @@
-apply plugin: 'java-library'
+apply plugin: 'java'
 apply plugin: 'maven-publish'
 
 compileJava {
@@ -9,10 +9,10 @@ compileJava {
 dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;
 
-    api dependencies.gson
-    api dependencies.okHttpLoggingInterceptor
-    api dependencies.retrofitConverterGson
-    api dependencies.retrofit
+    compile dependencies.gson
+    compile dependencies.okHttpLoggingInterceptor
+    compile dependencies.retrofitConverterGson
+    compile dependencies.retrofit
 
     testImplementation dependencies.junit
     testImplementation dependencies.hamcrestAll
