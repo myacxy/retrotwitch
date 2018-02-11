@@ -5,7 +5,7 @@ import net.myacxy.retrotwitch.helpers.Lock;
 import net.myacxy.retrotwitch.helpers.TestConstants;
 import net.myacxy.retrotwitch.v5.RetroTwitch;
 import net.myacxy.retrotwitch.v5.api.ResponseListener;
-import net.myacxy.retrotwitch.v5.api.common.Error;
+import net.myacxy.retrotwitch.v5.api.common.RetroTwitchError;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class SearchCallerTest {
                     }
 
                     @Override
-                    public void onError(Error error) {
+                    public void onError(RetroTwitchError error) {
                         System.out.println(error.toString());
                         lock.fail();
                     }
@@ -58,7 +58,7 @@ public class SearchCallerTest {
                     }
 
                     @Override
-                    public void onError(Error error) {
+                    public void onError(RetroTwitchError error) {
                         System.out.println(error.toString());
                         lock.fail();
                     }
@@ -78,7 +78,7 @@ public class SearchCallerTest {
                     }
 
                     @Override
-                    public void onError(Error error) {
+                    public void onError(RetroTwitchError error) {
                         System.out.println(error.toString());
                         lock.fail();
                     }

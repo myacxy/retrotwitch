@@ -19,7 +19,7 @@ import android.widget.Toast;
 import net.myacxy.retrotwitch.utils.StringUtil;
 import net.myacxy.retrotwitch.v5.RetroTwitch;
 import net.myacxy.retrotwitch.v5.api.ResponseListener;
-import net.myacxy.retrotwitch.v5.api.common.Error;
+import net.myacxy.retrotwitch.v5.api.common.RetroTwitchError;
 import net.myacxy.retrotwitch.v5.api.common.SortBy;
 import net.myacxy.retrotwitch.v5.api.users.SimpleUser;
 import net.myacxy.retrotwitch.v5.api.users.UserFollow;
@@ -129,7 +129,7 @@ public class UserFollowsFragment extends Fragment {
                         }
 
                         @Override
-                        public void onError(Error error) {
+                        public void onError(RetroTwitchError error) {
                             showProgress(false);
                             Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -137,7 +137,7 @@ public class UserFollowsFragment extends Fragment {
                 }
 
                 @Override
-                public void onError(Error error) {
+                public void onError(RetroTwitchError error) {
                     showProgress(false);
                     Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -279,7 +279,7 @@ public class UserFollowsFragment extends Fragment {
                             }
 
                             @Override
-                            public void onError(Error error) {
+                            public void onError(RetroTwitchError error) {
                                 showProgress(false);
                                 Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                             }

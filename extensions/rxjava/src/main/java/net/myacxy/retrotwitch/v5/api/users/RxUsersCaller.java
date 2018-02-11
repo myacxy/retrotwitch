@@ -10,7 +10,6 @@ import okhttp3.OkHttpClient;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-// TODO: 14.02.2017
 public class RxUsersCaller extends RxBaseCaller<RxTwitchUsersService> {
 
     //<editor-fold desc="Constructor">
@@ -49,20 +48,6 @@ public class RxUsersCaller extends RxBaseCaller<RxTwitchUsersService> {
             final Integer offset,
             final Direction direction,
             final SortBy sortBy) {
-
-//        call.enqueue(new RetroTwitchCallback<UserFollowsResponse, UserFollowsResponse>(listener) {
-//
-//            @Override
-//            public UserFollowsResponse beforeOnSuccess(UserFollowsResponse userFollowsResponse) {
-//                userFollowsResponse.userId = userId;
-//                userFollowsResponse.limit = limit == null ? TwitchConstants.DEFAULT_LIMIT : limit;
-//                userFollowsResponse.offset = offset == null ? TwitchConstants.DEFAULT_OFFSET : offset;
-//                userFollowsResponse.direction = direction == null ? TwitchConstants.DEFAULT_DIRECTION : direction;
-//                userFollowsResponse.sortBy = sortBy == null ? TwitchConstants.DEFAULT_SORT_BY : sortBy;
-//                return userFollowsResponse;
-//            }
-//        });
-
         return getService().getUserFollows(userId, limit, offset, direction, sortBy);
     }
     //</editor-fold>

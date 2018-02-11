@@ -1,7 +1,7 @@
 package net.myacxy.retrotwitch.v5.api;
 
-import net.myacxy.retrotwitch.v5.api.common.Error;
-import net.myacxy.retrotwitch.v5.helpers.ErrorFactory;
+import net.myacxy.retrotwitch.v5.api.common.RetroTwitchError;
+import net.myacxy.retrotwitch.v5.helpers.RetroTwitchErrorFactory;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,7 +17,7 @@ public abstract class RetroTwitchCallback<I, O> implements Callback<I>, Response
 
     @Override
     public void onResponse(Call<I> call, Response<I> response) {
-        Error error = ErrorFactory.fromResponse(response);
+        RetroTwitchError error = RetroTwitchErrorFactory.fromResponse(response);
         if (error == null) {
             onSuccess(beforeOnSuccess(response.body()));
         } else {
@@ -27,7 +27,7 @@ public abstract class RetroTwitchCallback<I, O> implements Callback<I>, Response
 
     @Override
     public void onFailure(Call<I> call, Throwable t) {
-        onError(ErrorFactory.fromThrowable(t));
+        onError(RetroTwitchErrorFactory.fromThrowable(t));
     }
 
     @Override
@@ -36,7 +36,7 @@ public abstract class RetroTwitchCallback<I, O> implements Callback<I>, Response
     }
 
     @Override
-    public void onError(Error error) {
+    public void onError(RetroTwitchError error) {
         listener.onError(error);
     }
 

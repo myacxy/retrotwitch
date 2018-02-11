@@ -3,7 +3,7 @@ package net.myacxy.retrotwitch.v5.api.users;
 import net.myacxy.retrotwitch.v5.RetroTwitch;
 import net.myacxy.retrotwitch.v5.api.ResponseListener;
 import net.myacxy.retrotwitch.v5.api.common.Direction;
-import net.myacxy.retrotwitch.v5.api.common.Error;
+import net.myacxy.retrotwitch.v5.api.common.RetroTwitchError;
 import net.myacxy.retrotwitch.v5.api.common.SortBy;
 import net.myacxy.retrotwitch.v5.api.common.TwitchConstants;
 
@@ -41,7 +41,7 @@ public class UserFollowsResource implements Serializable {
                 }
 
                 @Override
-                public void onError(Error error) {
+                public void onError(RetroTwitchError error) {
                     listener.onError(error);
                 }
             });
@@ -103,7 +103,7 @@ public class UserFollowsResource implements Serializable {
             }
 
             @Override
-            public void onError(Error error) {
+            public void onError(RetroTwitchError error) {
                 listener.onError(error);
             }
         });

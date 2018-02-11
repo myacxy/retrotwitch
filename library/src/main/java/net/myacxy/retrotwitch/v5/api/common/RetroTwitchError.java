@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Locale;
 
-public class Error {
+public class RetroTwitchError {
     //<editor-fold desc="Member">
     @SerializedName("error")
     private String error;
@@ -12,13 +12,19 @@ public class Error {
     private int status;
     @SerializedName("message")
     private String message;
+    private Throwable cause;
     //</editor-fold>
 
     //<editor-fold desc="Constructor">
-    public Error(String error, int status, String message) {
+    public RetroTwitchError(String error, int status, String message) {
         this.error = error;
         this.status = status;
         this.message = message;
+    }
+
+    public RetroTwitchError(String error, int status, String message, Throwable cause) {
+        this(error, status, message);
+        this.cause = cause;
     }
     //</editor-fold>
 
@@ -38,6 +44,14 @@ public class Error {
     public ErrorType getErrorType() {
         return ErrorType.fromStatus(status);
     }
+
+    public Throwable getCause() {
+        return cause;
+    }
+
+    public void setCause(Throwable cause) {
+        this.cause = cause;
+    }
     //</editor-fold>
 
     @Override
@@ -47,16 +61,17 @@ public class Error {
 
     //<editor-fold desc="Inner Classes">
     public enum ErrorType {
+        UNEXPECTED(-100),
+        UNKNOWN_HOST(-99),
+        BAD_REQUEST(400),
         NOT_FOUND(404),
-        UNKNOWN_HOST(0),
         UNPROCESSABLE_ENTITY(422),
-        SERVICE_UNAVAILABLE(503),
-        UNEXPECTED(-1);
+        SERVICE_UNAVAILABLE(503);
 
-        private int mStatus;
+        private int status;
 
         ErrorType(int status) {
-            mStatus = status;
+            this.status = status;
         }
 
         public static ErrorType fromStatus(int status) {
@@ -67,7 +82,7 @@ public class Error {
         }
 
         public int getStatus() {
-            return mStatus;
+            return status;
         }
     }
     //</editor-fold>
