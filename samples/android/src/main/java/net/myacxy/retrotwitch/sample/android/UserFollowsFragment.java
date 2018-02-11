@@ -115,6 +115,11 @@ public class UserFollowsFragment extends Fragment {
             retroTwitch.users().translateUserNameToUserId(userName, new ResponseListener<List<SimpleUser>>() {
                 @Override
                 public void onSuccess(List<SimpleUser> simpleUsers) {
+                    if (simpleUsers.size() == 0) {
+                        showProgress(false);
+                        Toast.makeText(getContext(), "Invalid user name", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     mUserFollowsResource = retroTwitch.userFollows(simpleUsers.get(0).getId())
                             .limited()
                             .withSortBy(SortBy.LAST_BROADCAST)
@@ -143,7 +148,7 @@ public class UserFollowsFragment extends Fragment {
                 }
             });
         } else {
-            Toast.makeText(getContext(), "user name must not be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "User name must not be empty", Toast.LENGTH_SHORT).show();
         }
     }
 
