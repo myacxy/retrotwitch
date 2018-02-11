@@ -12,9 +12,9 @@ dependencies {
     Map<String, String> dependencies = rootProject.ext.dependencies;
 
     api dependencies.okHttpLoggingInterceptor
+    api dependencies.retrofit
 
     implementation dependencies.gson
-    implementation dependencies.retrofit
     implementation dependencies.retrofitConverterGson
 
     testImplementation dependencies.junit

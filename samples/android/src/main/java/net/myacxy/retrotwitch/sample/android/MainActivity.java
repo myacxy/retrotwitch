@@ -13,11 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import net.myacxy.retrotwitch.v5.RetroTwitch;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.dl_main_drawer)
@@ -30,12 +27,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        RetroTwitch.getInstance()
-                .configure()
-                .setClientId("75gzbgqhk0tg6dhjbqtsphmy8sdayrr")
-                .setLogLevel(HttpLoggingInterceptor.Level.BASIC)
-                .apply();
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

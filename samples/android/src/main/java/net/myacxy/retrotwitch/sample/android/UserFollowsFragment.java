@@ -1,6 +1,7 @@
 package net.myacxy.retrotwitch.sample.android;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,9 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class UserFollowsFragment extends Fragment {
+    private static final String EXTRA_USER_FOLLOWS = "extra.user.follows";
+    private static final String EXTRA_USER_FOLLOWS_RESOURCE = "extra.user.follows.resource";
+
     @BindView(R.id.et_uf_user_name)
     protected EditText mUserName;
     @BindView(R.id.btn_uf_search)
@@ -48,19 +52,26 @@ public class UserFollowsFragment extends Fragment {
     @BindView(R.id.rv_uf_results)
     protected RecyclerView mSearchResults;
 
+    private RetroTwitch retroTwitch;
     private UserFollowAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private UserFollowsResource mUserFollowsResource;
     private Unbinder unbinder;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        retroTwitch = AppApplication.getRetroTwitch();
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_user_follows, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
 
@@ -72,9 +83,9 @@ public class UserFollowsFragment extends Fragment {
         mSearchResults.addOnScrollListener(new ScrollListener());
 
         if (savedInstanceState != null) {
-            ArrayList<UserFollow> userFollows = (ArrayList<UserFollow>) savedInstanceState.getSerializable("test");
+            ArrayList<UserFollow> userFollows = (ArrayList<UserFollow>) savedInstanceState.getSerializable(EXTRA_USER_FOLLOWS);
             mAdapter.setUserFollows(userFollows);
-            mUserFollowsResource = (UserFollowsResource) savedInstanceState.getSerializable("test2");
+            mUserFollowsResource = (UserFollowsResource) savedInstanceState.getSerializable(EXTRA_USER_FOLLOWS_RESOURCE);
             setInformation(mUserFollowsResource.getTotal(), userFollows.size());
         } else {
             setInformation(0, 0);
@@ -82,10 +93,10 @@ public class UserFollowsFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("test", mAdapter.getUserFollows());
-        outState.putSerializable("test2", mUserFollowsResource);
+        outState.putSerializable(EXTRA_USER_FOLLOWS, mAdapter.getUserFollows());
+        outState.putSerializable(EXTRA_USER_FOLLOWS_RESOURCE, mUserFollowsResource);
     }
 
     @Override
@@ -101,16 +112,15 @@ public class UserFollowsFragment extends Fragment {
             showProgress(true);
             mAdapter.getUserFollows().clear();
             setInformation(0, 0);
-            RetroTwitch.getInstance().users().translateUserNameToUserId(userName, new ResponseListener<List<SimpleUser>>() {
+            retroTwitch.users().translateUserNameToUserId(userName, new ResponseListener<List<SimpleUser>>() {
                 @Override
                 public void onSuccess(List<SimpleUser> simpleUsers) {
-                    mUserFollowsResource = RetroTwitch.getInstance()
-                            .userFollows(simpleUsers.get(0).getId())
+                    mUserFollowsResource = retroTwitch.userFollows(simpleUsers.get(0).getId())
                             .limited()
                             .withSortBy(SortBy.LAST_BROADCAST)
                             .build();
 
-                    mUserFollowsResource.enqueue(RetroTwitch.getInstance(), new ResponseListener<List<UserFollow>>() {
+                    mUserFollowsResource.enqueue(retroTwitch, new ResponseListener<List<UserFollow>>() {
                         @Override
                         public void onSuccess(List<UserFollow> userFollows) {
                             showProgress(false);
@@ -235,8 +245,8 @@ public class UserFollowsFragment extends Fragment {
         }
 
         protected class RefreshViewHolder extends RecyclerView.ViewHolder {
-            @BindView(R.id.pb_progress)
-            protected ProgressBar mProgress;
+            @BindView(R.id.fl_progress)
+            protected FrameLayout progress;
 
             public RefreshViewHolder(View itemView) {
                 super(itemView);
@@ -244,7 +254,7 @@ public class UserFollowsFragment extends Fragment {
             }
 
             public void showProgress(boolean show) {
-                ((ViewGroup) mProgress.getParent()).setVisibility(show ? View.VISIBLE : View.GONE);
+                progress.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         }
     }
@@ -260,7 +270,7 @@ public class UserFollowsFragment extends Fragment {
                 if (mSearch.isEnabled()) {
                     if (mUserFollowsResource.hasNext() && visibleItems + pastVisibleItems >= totalItems - visibleItems / 3) {
                         showProgress(true);
-                        mUserFollowsResource.getNext(RetroTwitch.getInstance(), new ResponseListener<List<UserFollow>>() {
+                        mUserFollowsResource.getNext(retroTwitch, new ResponseListener<List<UserFollow>>() {
                             @Override
                             public void onSuccess(List<UserFollow> userFollows) {
                                 mAdapter.addUserFollows(userFollows);
